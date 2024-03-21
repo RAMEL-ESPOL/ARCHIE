@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<robot name="manipulator_main" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find manipulator_gazebo)/urdf/gazebo.xacro"/>
+
+</robot>

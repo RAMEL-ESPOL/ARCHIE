@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: manipulator_gazebo
+    relative_path: urdf/manipulator_main.xacro
+    xacro_args: ""
+  SRDF:
+    relative_path: config/manipulator_main.srdf
+  CONFIG:
+    author_name: Juan Saeteros/Erick Mendoza
+    author_email: jumasaet@espol.edu.ec
+    generated_timestamp: 1709324951

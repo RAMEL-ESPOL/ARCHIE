@@ -1,0 +1,20 @@
+<launch>
+	
+	<param name="robot_description" textfile="$(find manipulator_description)/urdf/manipulator.urdf"/>
+	<!--param name="robot_description" command="cat '$(find yaren_description)/urdf/yaren_description.urdf'"/>-->
+	<!-- Setting gui parameter to true for display joint slider -->
+	<param name="use_gui" value="true"/>
+
+	<!-- Starting Joint state publisher node which will publish the joint values -->
+	<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" >
+		<remap from="/joint_states" to="/joints_goals" /> 
+  	</node> 
+	  
+	<!-- Starting robot state publish which will publish tf -->
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+	<!-- Launch visualization in rviz -->
+	<!-- <node name="rviz" pkg="rviz" type="rviz"/> -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find manipulator_description)/config/manipulator.rviz" required="true" />
+
+</launch>

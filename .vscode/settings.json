@@ -1,0 +1,9 @@
+{
+    "python.analysis.extraPaths": [
+        "./submodules/DynamixelSDK/ros/dynamixel_sdk/src"
+    ],
+    "python.autoComplete.extraPaths": [
+        "/home/juan/catkin_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ]
+}

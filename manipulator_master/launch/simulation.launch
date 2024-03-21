@@ -1,0 +1,11 @@
+<launch>
+
+    <include file="$(find manipulator_description)/launch/display1.launch"/>
+ 
+    <node name="communication" pkg="manipulator_master" type="communication.py" output="screen"/>
+
+    <node name="manipulator_rviz" pkg="rviz" type="rviz" args="-d $(find manipulator_description)/config/manipulator.rviz" required="true" />
+
+    <node name="motion_goal" pkg="manipulator_master" type="movement.py" output="screen"/>
+
+</launch>
