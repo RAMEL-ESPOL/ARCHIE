@@ -9,13 +9,11 @@ import geometry_msgs.msg
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from moveit_commander.conversions import pose_to_list
+import math
 
-
-# Altura de la base
-h_base = 0
 # Altura del lapiz
 global pen 
-pen = 0.2 - h_base
+pen = 0.2 
 
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
@@ -72,8 +70,6 @@ def triangle():
     figure = "Triangle (h=0.1   b=0.2)"
     waypoints = []
 
-    #Se copia la pose actual para únicamente modificar las coordenadas cartesianas y que la orientación
-    #del efector final no se vea modificada, de esta manera mantenemos el lápiz perpendicular al suelo
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen  # First move up (z)
@@ -92,18 +88,82 @@ def triangle():
     wpose.position.x = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
-    # We want the Cartesian path to be interpolated at a resolution of 1 cm
-    # which is why we will specify 0.01 as the eef_step in Cartesian
-    # translation.  We will disable the jump threshold by setting it to 0.0,
-    # ignoring the check for infeasible jumps in joint space, which is sufficient
-    # for this tutorial.
     (plan, fraction) = group.compute_cartesian_path(
         waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
-    # Note: We are just planning, not asking move_group to actually move the robot yet:
     return plan, fraction
+
+def circle():
+    figure = "Circle (r=0.1)"
+    r = 0.1
+    center_x = 0.25
+    center_y = 0 
+    waypoints = []
+
+    wpose = group.get_current_pose().pose
+    
+    wpose.position.z = pen  # First move up (z)
+    wpose.position.x = center_x
+    wpose.position.y = center_y
+    waypoints.append(copy.deepcopy(wpose))
+
+    for theta in range(361):
+        wpose.position. y = center_y + r*math.sin(theta*math.pi/180)
+        wpose.position. x = center_x + r*math.cos(theta*math.pi/180)
+        waypoints.append(copy.deepcopy(wpose))
+
+    (plan, fraction) = group.compute_cartesian_path(
+        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+    )  # jump_threshold
+
+    print_plan(waypoints, figure)
+    return plan, fraction
+
+def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float ):
+
+    circle_waypoints = []
+
+    wpose = group.get_current_pose().pose
+    
+    wpose.position.z = pen  # First move up (z)
+    circle_waypoints.append(copy.deepcopy(wpose)) 
+
+    for theta in range(theta_o, theta_f + 1):
+        wpose.position. y = center_y + r*math.sin(theta*math.pi/180)
+        wpose.position. x = center_x + r*math.cos(theta*math.pi/180)
+        circle_waypoints.append(copy.deepcopy(wpose))
+    
+    return group.compute_cartesian_path(circle_waypoints, 0.01, 0.0)[0]
+
+def espol():
+    figure = "ESPOL"
+
+    waypoints = []
+
+    wpose = group.get_current_pose().pose
+    
+    wpose.position.z = pen  # First move up (z)
+    wpose.position.x = 0.3
+    wpose.position.y = 0.0
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y = -0.255
+    wpose.position.x = 0.3
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y = 0.255
+    wpose.position.x = 0.3
+    waypoints.append(copy.deepcopy(wpose))
+
+    (plan, fraction) = group.compute_cartesian_path(
+        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+    )  # jump_threshold
+
+    print_plan(waypoints, figure)
+    return plan, fraction
+
 
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
@@ -153,7 +213,7 @@ rospy.loginfo("El brazo se encuentra en la posicion inicial")
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
-plan = triangle()[0]
+plan = espol()[0]
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
