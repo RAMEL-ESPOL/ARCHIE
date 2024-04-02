@@ -76,23 +76,23 @@ def triangle():
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen  # First move up (z)
-    wpose.position.x = 0.3
-    wpose.position.y = 0.0
+    wpose.position.y = 0.3
+    wpose.position.x = 0.0
     waypoints.append(copy.deepcopy(wpose))    
 
-    wpose.position.y = 0.1
-    wpose.position.x = 0.2
+    wpose.position.x = 0.1
+    wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.1
+    wpose.position.x = -0.1
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.0
-    wpose.position.x = 0.3
+    wpose.position.x = 0.0
+    wpose.position.y = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -101,8 +101,8 @@ def triangle():
 def circle():
     figure = "Circle (r=0.1)"
     r = 0.1
-    center_x = 0.25
-    center_y = 0 
+    center_y = 0.25
+    center_x = 0 
     waypoints = []
 
     wpose = group.get_current_pose().pose
@@ -118,7 +118,7 @@ def circle():
         waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.1, 0.01  # waypoints to follow  # eef_step
+        waypoints, 0.0001, 0.00  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -134,8 +134,8 @@ def plan_circle( center_x : float , center_y : float , r : float , theta_o : flo
     circle_waypoints.append(copy.deepcopy(wpose)) 
 
     for theta in range(theta_o, theta_f + 1):
-        wpose.position. y = center_y + r*math.sin(theta*math.pi/180)
-        wpose.position. x = center_x + r*math.cos(theta*math.pi/180)
+        wpose.position.x = center_y + r*math.sin(theta*math.pi/180)
+        wpose.position.y = center_x + r*math.cos(theta*math.pi/180)
         circle_waypoints.append(copy.deepcopy(wpose))
     
     return group.compute_cartesian_path(circle_waypoints, 0.01, 0.0)[0]
@@ -216,7 +216,7 @@ rospy.loginfo("El brazo se encuentra en la posicion inicial")
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
-plan = square()[0]
+plan = triangle()[0]
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
