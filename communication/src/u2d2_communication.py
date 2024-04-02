@@ -38,7 +38,7 @@ Lista de motores
                 print("Dynamixel has successfully set the initial position")
             else:
                 new_angle = motor.angleConversion(data.position[id], False,id) 
-                print("The new angle is " + str(new_angle))
+                print("The new angle is " + str(new_angle*180/2048))
                 dxl_comm_result, dxl_error = motor.packetHandler.write4ByteTxRx(motor.portHandler, id, motor.addr_goal_position, new_angle)
             if dxl_comm_result != COMM_SUCCESS:
                 print("%s" % motor.packetHandler.getTxRxResult(dxl_comm_result))
@@ -46,7 +46,6 @@ Lista de motores
                 print("%s" % motor.packetHandler.getRxPacketError(dxl_error))
     print("=====================================================================================")
     
-    #joint_state_publisher(list_motors,num_joints,joint_state_pub)
 
 
 

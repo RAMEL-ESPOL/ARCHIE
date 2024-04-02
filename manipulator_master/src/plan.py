@@ -37,21 +37,24 @@ def square():
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen  # First move up (z)
-    wpose.position.x = 0.4
-    wpose.position.y = 0.1
+    wpose.position.x = 0.3
+    wpose.position.y = 0.2
+    
     waypoints.append(copy.deepcopy(wpose))    
 
-    wpose.position.y = -0.1
+    wpose.position.y = 0.15
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = 0.2
+    wpose.position.x = -0.3
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.1
+    wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = 0.4
+    
+    wpose.position.x = 0.3
     waypoints.append(copy.deepcopy(wpose))
+
 
     # We want the Cartesian path to be interpolated at a resolution of 1 cm
     # which is why we will specify 0.01 as the eef_step in Cartesian
@@ -59,7 +62,7 @@ def square():
     # ignoring the check for infeasible jumps in joint space, which is sufficient
     # for this tutorial.
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.001, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -115,7 +118,7 @@ def circle():
         waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.1, 0.01  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -188,7 +191,7 @@ print("============ End effector link: %s" % eef_link)
 group_names = robot.get_group_names()
 print("============ Available Planning Groups:", robot.get_group_names())
 
-# Sometimes for debugging it is useful to print the entire state of the
+#Sometimes for debugging it is useful to print the entire state of the
 # robot:
 print("============ Printing robot state")
 print(robot.get_current_state())
@@ -213,7 +216,7 @@ rospy.loginfo("El brazo se encuentra en la posicion inicial")
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
-plan = espol()[0]
+plan = square()[0]
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
