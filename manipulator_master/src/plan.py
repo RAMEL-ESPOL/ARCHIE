@@ -106,16 +106,22 @@ def triangle():
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
     return plan, fraction
 
 def circle():
+<<<<<<< HEAD
     figure = "Circle (r=0.15)"
     r = 0.05
     center_y = 0.2
+=======
+    figure = "Circle (r=0.1)"
+    r = 0.1
+    center_y = 0.25
+>>>>>>> c83137f38714f4d63c53c212e5955f07a8c9adde
     center_x = 0 
     waypoints = []
 
@@ -132,7 +138,11 @@ def circle():
         waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
+<<<<<<< HEAD
         waypoints, 0.01, 0.0 # waypoints to follow  # eef_step
+=======
+        waypoints, 0.0001, 0.00  # waypoints to follow  # eef_step
+>>>>>>> c83137f38714f4d63c53c212e5955f07a8c9adde
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -140,9 +150,18 @@ def circle():
 
 def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , wpose, circle_waypoints : list ):
     
+<<<<<<< HEAD
     for theta in range(theta_o, theta_f + 1, 2):
         wpose.position.y = center_y + r*math.sin(theta*math.pi/180)
         wpose.position.x = center_x + r*math.cos(theta*math.pi/180)
+=======
+    wpose.position.z = pen  # First move up (z)
+    circle_waypoints.append(copy.deepcopy(wpose)) 
+
+    for theta in range(theta_o, theta_f + 1):
+        wpose.position.x = center_y + r*math.sin(theta*math.pi/180)
+        wpose.position.y = center_x + r*math.cos(theta*math.pi/180)
+>>>>>>> c83137f38714f4d63c53c212e5955f07a8c9adde
         circle_waypoints.append(copy.deepcopy(wpose))
     
     return circle_waypoints, wpose
@@ -219,7 +238,11 @@ home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
+<<<<<<< HEAD
 plan = espol()[0]
+=======
+plan = triangle()[0]
+>>>>>>> c83137f38714f4d63c53c212e5955f07a8c9adde
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
