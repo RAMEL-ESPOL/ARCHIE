@@ -138,13 +138,28 @@ def circle():
     print_plan(waypoints, figure)
     return plan, fraction
 
-def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , wpose, circle_waypoints : list ):
-    
-    for theta in range(theta_o, theta_f + 1, 2):
-        wpose.position.y = center_y + r*math.sin(theta*math.pi/180)
-        wpose.position.x = center_x + r*math.cos(theta*math.pi/180)
-        circle_waypoints.append(copy.deepcopy(wpose))
-    
+def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , wpose, circle_waypoints : list , sentido_x : bool, sentido_y : bool):
+    if (sentido_x and sentido_y):
+        for theta in range(theta_o, theta_f + 1, 2):
+            wpose.position.y = center_y + r*math.sin(theta*math.pi/180)
+            wpose.position.x = center_x + r*math.cos(theta*math.pi/180)
+            circle_waypoints.append(copy.deepcopy(wpose))
+    elif (not(sentido_x) and sentido_y):
+        for theta in range(theta_o, theta_f + 1, 2):
+            wpose.position.y = center_y + r*math.sin(theta*math.pi/180)
+            wpose.position.x = center_x - r*math.cos(theta*math.pi/180)
+            circle_waypoints.append(copy.deepcopy(wpose))
+    elif (sentido_x and not(sentido_y)):
+        for theta in range(theta_o, theta_f + 1, 2):
+            wpose.position.y = center_y - r*math.sin(theta*math.pi/180)
+            wpose.position.x = center_x + r*math.cos(theta*math.pi/180)
+            circle_waypoints.append(copy.deepcopy(wpose))
+    else:
+        for theta in range(theta_o, theta_f + 1, 2):
+            wpose.position.y = center_y - r*math.sin(theta*math.pi/180)
+            wpose.position.x = center_x - r*math.cos(theta*math.pi/180)
+            circle_waypoints.append(copy.deepcopy(wpose))
+
     return circle_waypoints, wpose
 
 def espol():
@@ -155,23 +170,26 @@ def espol():
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen + 0.05 # First move up (z)
-    wpose.position.y = 0.25
-    wpose.position.x = -0.265
+    wpose.position.y = 0.2
+    wpose.position.x = -0.1325
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = -0.215
+    wpose.position.x = -0.1075
     waypoints.append(copy.deepcopy(wpose))
 
-    (waypoints, wpose) = plan_circle(-0.215, 0.25, 0.05, 45, 270, wpose, waypoints)
+    (waypoints, wpose) = plan_circle(-0.1075, 0.2, 0.025, 45, 270, wpose, waypoints , 1 , 1)
 
-    wpose.position.x += 0.12
-    wpose.position.y += 0.1
+    wpose.position.x += 0.06
+    wpose.position.y += 0.05
     waypoints.append(copy.deepcopy(wpose))
 
+    (waypoints, wpose) = plan_circle(wpose.position.x, wpose.position.y - 0.025, 0.025, 90, 270, wpose, waypoints , 0 , 1)
     
+    wpose.position.z = 0.255
+    waypoints.append(copy.deepcopy(wpose))
 
 
 
