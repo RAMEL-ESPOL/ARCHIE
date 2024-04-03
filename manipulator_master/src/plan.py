@@ -15,6 +15,21 @@ import math
 global pen 
 pen = 0.2 
 
+def home():
+    # We get the joint values from the group and change some of the values:
+    joint_goal = group.get_current_joint_values()
+    joint_goal[0] = 0
+    joint_goal[1] = 0
+    joint_goal[2] = 0
+    joint_goal[3] = 0
+    joint_goal[4] = 0
+    joint_goal[5] = 0
+
+    # The go command can be called with joint values, poses, or without any
+    # parameters if you have already set the pose or joint target for the group
+    group.go(joint_goal, wait=True)
+    rospy.loginfo("El brazo se encuentra en la posicion inicial")
+
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
 
@@ -37,22 +52,21 @@ def square():
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen  # First move up (z)
-    wpose.position.x = 0.3
-    wpose.position.y = 0.2
+    wpose.position.y = 0.4
+    wpose.position.x = 0.2
     
     waypoints.append(copy.deepcopy(wpose))    
 
-    wpose.position.y = 0.15
+    wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = -0.3
+    wpose.position.x = -0.2
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
 
-    
-    wpose.position.x = 0.3
+    wpose.position.x = 0.4
     waypoints.append(copy.deepcopy(wpose))
 
 
@@ -62,7 +76,7 @@ def square():
     # ignoring the check for infeasible jumps in joint space, which is sufficient
     # for this tutorial.
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.001, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -76,19 +90,19 @@ def triangle():
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen  # First move up (z)
-    wpose.position.x = 0.3
-    wpose.position.y = 0.0
+    wpose.position.y = 0.3
+    wpose.position.x = 0.0
     waypoints.append(copy.deepcopy(wpose))    
 
-    wpose.position.y = 0.1
-    wpose.position.x = 0.2
+    wpose.position.x = 0.1
+    wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.1
+    wpose.position.x = -0.1
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.0
-    wpose.position.x = 0.3
+    wpose.position.x = 0.0
+    wpose.position.y = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
@@ -99,10 +113,10 @@ def triangle():
     return plan, fraction
 
 def circle():
-    figure = "Circle (r=0.1)"
-    r = 0.1
-    center_x = 0.25
-    center_y = 0 
+    figure = "Circle (r=0.15)"
+    r = 0.05
+    center_y = 0.2
+    center_x = 0 
     waypoints = []
 
     wpose = group.get_current_pose().pose
@@ -112,33 +126,26 @@ def circle():
     wpose.position.y = center_y
     waypoints.append(copy.deepcopy(wpose))
 
-    for theta in range(361):
+    for theta in range(0, 91, 2):
         wpose.position. y = center_y + r*math.sin(theta*math.pi/180)
         wpose.position. x = center_x + r*math.cos(theta*math.pi/180)
         waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.1, 0.01  # waypoints to follow  # eef_step
+        waypoints, 0.01, 0.0 # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
     return plan, fraction
 
-def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float ):
-
-    circle_waypoints = []
-
-    wpose = group.get_current_pose().pose
+def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , wpose, circle_waypoints : list ):
     
-    wpose.position.z = pen  # First move up (z)
-    circle_waypoints.append(copy.deepcopy(wpose)) 
-
-    for theta in range(theta_o, theta_f + 1):
-        wpose.position. y = center_y + r*math.sin(theta*math.pi/180)
-        wpose.position. x = center_x + r*math.cos(theta*math.pi/180)
+    for theta in range(theta_o, theta_f + 1, 2):
+        wpose.position.y = center_y + r*math.sin(theta*math.pi/180)
+        wpose.position.x = center_x + r*math.cos(theta*math.pi/180)
         circle_waypoints.append(copy.deepcopy(wpose))
     
-    return group.compute_cartesian_path(circle_waypoints, 0.01, 0.0)[0]
+    return circle_waypoints, wpose
 
 def espol():
     figure = "ESPOL"
@@ -147,19 +154,29 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.z = pen  # First move up (z)
-    wpose.position.x = 0.3
-    wpose.position.y = 0.0
+    wpose.position.z = pen + 0.05 # First move up (z)
+    wpose.position.y = 0.25
+    wpose.position.x = -0.265
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.255
-    wpose.position.x = 0.3
+    wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.255
-    wpose.position.x = 0.3
+    wpose.position.x = -0.215
     waypoints.append(copy.deepcopy(wpose))
 
+    (waypoints, wpose) = plan_circle(-0.215, 0.25, 0.05, 45, 270, wpose, waypoints)
+
+    wpose.position.x += 0.12
+    wpose.position.y += 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    
+
+
+
+    wpose.position.z = 0.255
+    waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = group.compute_cartesian_path(
         waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
@@ -198,25 +215,11 @@ print(robot.get_current_state())
 print("")
 '''
 
-# We get the joint values from the group and change some of the values:
-joint_goal = group.get_current_joint_values()
-joint_goal[0] = 0
-joint_goal[1] = 0
-joint_goal[2] = 0
-joint_goal[3] = 0
-joint_goal[4] = 0
-joint_goal[5] = 0
-
-# The go command can be called with joint values, poses, or without any
-# parameters if you have already set the pose or joint target for the group
-group.go(joint_goal, wait=True)
-rospy.loginfo("El brazo se encuentra en la posicion inicial")
-
-
+home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
-plan = square()[0]
+plan = espol()[0]
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
@@ -226,3 +229,4 @@ display_trajectory_publisher.publish(display_trajectory)
 
 group.execute(plan, wait=True)
 rospy.loginfo("Planning succesfully executed")
+home()
