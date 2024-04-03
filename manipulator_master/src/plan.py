@@ -196,7 +196,7 @@ def espol():
     wpose.position.z = 0.255
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.0001, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
