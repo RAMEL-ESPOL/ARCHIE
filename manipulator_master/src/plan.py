@@ -169,7 +169,7 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.z = pen + 0.05 # First move up (z)
+    wpose.position.z = pen + 0.055 # First move up (z)
     wpose.position.y = 0.2
     wpose.position.x = -0.1325
     waypoints.append(copy.deepcopy(wpose))
@@ -177,26 +177,69 @@ def espol():
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
+    #Planeamiento de la "e"
     wpose.position.x = -0.1075
     waypoints.append(copy.deepcopy(wpose))
 
-    (waypoints, wpose) = plan_circle(-0.1075, 0.2, 0.025, 45, 270, wpose, waypoints , 1 , 1)
+    (waypoints, wpose) = plan_circle(wpose.position.x, wpose.position.y, 0.025, 45, 270, wpose, waypoints , 1 , 1)
 
-    wpose.position.x += 0.06
+    #Planemiento de la "s"
+    wpose.position.x += 0.035
     wpose.position.y += 0.05
     waypoints.append(copy.deepcopy(wpose))
 
-    (waypoints, wpose) = plan_circle(wpose.position.x, wpose.position.y - 0.025, 0.025, 90, 270, wpose, waypoints , 0 , 1)
+    (waypoints, wpose) = plan_circle(wpose.position.x, wpose.position.y - 0.025, 0.025, 90, 290, wpose, waypoints , 0 , 1)
     
-    wpose.position.z = 0.255
+    wpose.position.z = pen + 0.055
     waypoints.append(copy.deepcopy(wpose))
 
-
-
-    wpose.position.z = 0.255
+    wpose.position.y = 0.2
+    wpose.position.x = -0.0375
     waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Planeamiento de la "p"
+    (waypoints, wpose) = plan_circle(wpose.position.x + 0.025, wpose.position.y, 0.025, 0, 360, wpose, waypoints, 0, 0)
+
+    wpose.position.y -= 0.07
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += 0.06
+    wpose.position.y = 0.2
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen 
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Planeamiento de la "o"
+    (waypoints, wpose) = plan_circle(wpose.position.x + 0.025, wpose.position.y, 0.025, 0, 360, wpose, waypoints, 0, 1)
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += 0.085
+    wpose.position.y -= 0.025
+    waypoints.append(copy.deepcopy(wpose)) 
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose)) 
+
+    #Planeamiento de la "l"
+    (waypoints, wpose) = plan_circle(wpose.position.x, wpose.position.y + 0.025, 0.025, 90, 180, wpose, waypoints, 1, 0)
+
+    wpose.position.y += 0.07
+    waypoints.append(copy.deepcopy(wpose)) 
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.0001, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
