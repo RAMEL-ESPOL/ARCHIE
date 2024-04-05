@@ -104,8 +104,8 @@ if __name__ == '__main__':
 
     #Last value is the max desired speed: value*0.229rpm is the speed in rpm
     print(dxl_baud_rate)
-    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[300,500,2000],1:[1800,550,4000]})
-    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[1500,550,2000],3:[300,300,500]})
+    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[300,500,2000],1:[2000,500,3000]})
+    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[900,550,1000],3:[300,300,500]})
     ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[700,500,2000],5:[200,200,2000]})
 
     list_motors = [base,codo,ee]
@@ -120,12 +120,12 @@ if __name__ == '__main__':
     print("subcribir")
 
     while not rospy.is_shutdown():  
-        if ({0:[300,500,2000],1:[1500,550,4000]} != base.get_pid_list):
+        if ({0:[300,500,2000],1:[2000,500,3000]} != base.get_pid_list):
             rospy.logwarn("El PID de la base cambió a " + str(base.get_pid_list))
-            base.config_pid_cts({0:[300,500,2000],1:[1500,550,4000]})    
-        if ({2:[1500,550,2000],3:[300,300,500]} != codo.get_pid_list):
+            base.config_pid_cts({0:[300,500,2000],1:[2000,500,3000]})    
+        if ({2:[900,550,1000],3:[300,300,500]} != codo.get_pid_list):
             rospy.logwarn("El PID del codo cambió a " + str(codo.get_pid_list))
-            codo.config_pid_cts({2:[1500,550,2000],3:[300,300,500]})
+            codo.config_pid_cts({2:[900,550,1000],3:[300,300,500]})
         if ({4:[700,500,2000],5:[200,200,2000]} != ee.get_pid_list):
             rospy.logwarn("El PID del ee cambió a " + str(ee.get_pid_list))
             ee.config_pid_cts({4:[700,500,2000],5:[200,200,2000]})

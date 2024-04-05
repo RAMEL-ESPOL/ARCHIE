@@ -1,9 +1,5 @@
 <launch>
-  <arg
-    name="model" />
-  <param
-    name="robot_description"
-    textfile="$(find manipulator_description)/urdf/manipulator.urdf" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find manipulator_description)/urdf/manipulator.xacro" />
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
@@ -16,5 +12,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find manipulator_description)/config/manipulator.rviz" />
+    args="-d $(find manipulator_moveit)/launch/moveit.rviz" />
 </launch>
