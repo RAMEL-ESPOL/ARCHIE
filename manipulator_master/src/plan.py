@@ -52,21 +52,21 @@ def square():
     wpose = group.get_current_pose().pose
     
     wpose.position.z = pen  # First move up (z)
-    wpose.position.y = 0.4
-    wpose.position.x = 0.2
+    wpose.position.x = 0.1
+    wpose.position.y = 0.3
     
     waypoints.append(copy.deepcopy(wpose))    
 
-    wpose.position.y = 0.2
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.x = -0.2
+    wpose.position.x = -0.1
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = 0.4
+    wpose.position.x = 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
 
@@ -76,7 +76,7 @@ def square():
     # ignoring the check for infeasible jumps in joint space, which is sufficient
     # for this tutorial.
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -89,13 +89,13 @@ def triangle():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.z = pen  # First move up (z)
+    wpose.position.z = pen   # First move up (z)
     wpose.position.y = 0.3
     wpose.position.x = 0.0
     waypoints.append(copy.deepcopy(wpose))    
 
     wpose.position.x = 0.1
-    wpose.position.y = 0.2
+    wpose.position.y = 0.25
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.x = -0.1
@@ -126,13 +126,13 @@ def circle():
     wpose.position.y = center_y
     waypoints.append(copy.deepcopy(wpose))
 
-    for theta in range(0, 91, 2):
+    for theta in range(0, 361, 2):
         wpose.position. y = center_y + r*math.sin(theta*math.pi/180)
         wpose.position. x = center_x + r*math.cos(theta*math.pi/180)
         waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0 # waypoints to follow  # eef_step
+        waypoints, 0.00005, 0.0 # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -239,7 +239,7 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.0001, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -280,7 +280,7 @@ home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
-plan = espol()[0]
+plan = square()[0]
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
