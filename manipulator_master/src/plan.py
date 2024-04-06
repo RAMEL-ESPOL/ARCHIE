@@ -13,7 +13,7 @@ import math
 
 # Altura del lapiz
 global pen 
-pen = 0.2 
+pen = 0.22
 
 def home():
     # We get the joint values from the group and change some of the values:
