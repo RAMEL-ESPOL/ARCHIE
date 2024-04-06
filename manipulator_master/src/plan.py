@@ -245,6 +245,148 @@ def espol():
     print_plan(waypoints, figure)
     return plan, fraction
 
+def espol_mayus():
+    figure = "ESPOL"
+    waypoints = []
+
+    wpose = group.get_current_pose().pose
+    
+    wpose.position.y = 0.225
+    wpose.position.x = -0.1325 + 0.05
+    waypoints.append(copy.deepcopy(wpose))   
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Drawing the "E"
+    ########################################
+    wpose.position.x = -0.1325
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y = 0.2
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x = -0.1325
+    waypoints.append(copy.deepcopy(wpose))
+    ########################################
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Drawing the "S"
+    ########################################
+    wpose.position.x = -0.1325 + 0.11
+    wpose.position.y = 0.225
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y = 0.2
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.025
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+    ########################################
+
+    wpose.position.x += 0.06
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Drawing the "P"
+    ########################################
+    wpose.position.y += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.025
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+    ########################################
+
+    wpose.position.x += 0.06
+    wpose.position.y = 0.225
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Drawing the "O"
+    ########################################
+    wpose.position.x += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y += 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+    ########################################
+
+    wpose.position.x += 0.06
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    #Drawing the "L"
+    ########################################
+    wpose.position.y -= 0.05
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += 0.0255
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.055
+    waypoints.append(copy.deepcopy(wpose))
+    ########################################
+
+    (plan, fraction) = group.compute_cartesian_path(
+        waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
+    )  # jump_threshold
+
+    print_plan(waypoints, figure)
+    return plan, fraction
+
 
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
@@ -280,7 +422,7 @@ home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
-plan = square()[0]
+plan = espol_mayus()[0]
 
 display_trajectory = moveit_msgs.msg.DisplayTrajectory()
 display_trajectory.trajectory_start = robot.get_current_state()
