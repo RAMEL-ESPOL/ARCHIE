@@ -14,6 +14,8 @@ import math
 # Altura del lapiz
 global pen 
 pen = 0.22
+global quit
+quit = 0
 
 def home():
     # We get the joint values from the group and change some of the values:
@@ -28,7 +30,7 @@ def home():
     # The go command can be called with joint values, poses, or without any
     # parameters if you have already set the pose or joint target for the group
     group.go(joint_goal, wait=True)
-    rospy.loginfo("El brazo se encuentra en la posicion inicial")
+    rospy.loginfo("The robotic arm is at home position.")
 
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
@@ -162,8 +164,8 @@ def plan_circle( center_x : float , center_y : float , r : float , theta_o : flo
 
     return circle_waypoints, wpose
 
-def espol():
-    figure = "ESPOL"
+def espol_logo():
+    figure = "ESPOL (LOGO)"
 
     waypoints = []
 
@@ -245,7 +247,7 @@ def espol():
     print_plan(waypoints, figure)
     return plan, fraction
 
-def espol_mayus():
+def espol():
     figure = "ESPOL"
     waypoints = []
 
@@ -387,7 +389,6 @@ def espol_mayus():
     print_plan(waypoints, figure)
     return plan, fraction
 
-
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
 rospy.init_node('planing_node', anonymous=True)
@@ -421,15 +422,89 @@ print("")
 home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
+while (not rospy.is_shutdown() and quit == 0):
+    number = input("""
+          
+Choose a number to make de corresponding draw or write 'q' to close the program:
 
-plan = espol_mayus()[0]
+    1. Square
+    2. Triangle
+    3. Circle
+    4. ESPOL (logo)
+    5. ESPOL
+    q. QUIT
+          
+Write the option: """)
+    
+    if (number == '1'):
+        plan = square()[0]
 
-display_trajectory = moveit_msgs.msg.DisplayTrajectory()
-display_trajectory.trajectory_start = robot.get_current_state()
-display_trajectory.trajectory.append(plan)
-# Publish
-display_trajectory_publisher.publish(display_trajectory)
+        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+        display_trajectory.trajectory_start = robot.get_current_state()
+        display_trajectory.trajectory.append(plan)
+        # Publish
+        display_trajectory_publisher.publish(display_trajectory)
 
-group.execute(plan, wait=True)
-rospy.loginfo("Planning succesfully executed")
-home()
+        group.execute(plan, wait=True)
+        rospy.loginfo("Planning succesfully executed.\n")
+        home()
+
+    elif (number == '2'):
+        plan = triangle()[0]
+
+        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+        display_trajectory.trajectory_start = robot.get_current_state()
+        display_trajectory.trajectory.append(plan)
+        # Publish
+        display_trajectory_publisher.publish(display_trajectory)
+
+        group.execute(plan, wait=True)
+        rospy.loginfo("Planning succesfully executed.\n")
+        home()
+        
+    elif (number == '3'):
+        plan = circle()[0]
+
+        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+        display_trajectory.trajectory_start = robot.get_current_state()
+        display_trajectory.trajectory.append(plan)
+        # Publish
+        display_trajectory_publisher.publish(display_trajectory)
+
+        group.execute(plan, wait=True)
+        rospy.loginfo("Planning succesfully executed.\n")
+        home()
+
+    elif (number == '4'):
+        plan = espol_logo()[0]
+
+        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+        display_trajectory.trajectory_start = robot.get_current_state()
+        display_trajectory.trajectory.append(plan)
+        # Publish
+        display_trajectory_publisher.publish(display_trajectory)
+
+        group.execute(plan, wait=True)
+        rospy.loginfo("Planning succesfully executed.\n")
+        home()
+
+    elif (number == '5'):
+        plan = espol()[0]
+
+        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+        display_trajectory.trajectory_start = robot.get_current_state()
+        display_trajectory.trajectory.append(plan)
+        # Publish
+        display_trajectory_publisher.publish(display_trajectory)
+
+        group.execute(plan, wait=True)
+        rospy.loginfo("Planning succesfully executed.\n")
+        home()
+
+    elif (number == 'q' or number == 'Q'):
+        quit = 1
+
+    else:
+        print("Please select one of the avaliable options.")
+
+    rospy.sleep(1)
