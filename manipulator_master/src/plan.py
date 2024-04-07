@@ -503,6 +503,7 @@ Write the option: """)
 
     elif (number == 'q' or number == 'Q'):
         quit = 1
+        rospy.loginfo("Shutting down the program.\n")
 
     else:
         print("Please select one of the avaliable options.")
