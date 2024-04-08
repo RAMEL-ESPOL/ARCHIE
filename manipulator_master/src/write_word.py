@@ -417,7 +417,7 @@ display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path
 home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
-word = "Aisa".upper()
+word = input("Write the word you want the robotic arm write: ").upper()
 if (((space + size)*len(word)) <= 0.5):
     waypoints = []
 
