@@ -1,13 +1,17 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
+import rospy
+from sensor_msgs.msg import JointState
 
-import moveit_commander
-import math
-#Executing this file will print the current position in degrees of each joint by console
-group = moveit_commander.MoveGroupCommander("arm_group")
+global pos
+pos = [0.0,0.0,0.0,0.0,0.0,0.0]
 
-print("Posición de los joints:")
+def real_position(state: JointState):
+    rospy.logerr(state.position)
+    rospy.logwarn("hola")
 
-for i in range(6):
-    print((group.get_joints()[i]) + ": " + str(math.degrees(group.get_current_joint_values()[i])))
+if __name__ == "__main__":
+    rospy.init_node("move_arm_node")
+    subRealState  = rospy.Subscriber("/real_joint_states", JointState, callback= real_position)
 
-moveit_commander.roscpp_shutdown()
+    rospy.logwarn("The move_arm_node has been started")
+    rospy.spin()

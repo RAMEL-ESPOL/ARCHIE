@@ -19,12 +19,6 @@ def set_positions(data,callback_args):
     num_joints = callback_args[2]
     joint_state_pub = callback_args[3]
 
-    """for id in range(len(data.position)):
-        pos = data.position[id]
-        print(pos)"""
-        #if pos > value_angles_max[id]: data.position[id] = value_angles_max[id]
-        #elif pos < value_angles_min[id]: data.position[id] = value_angles_min[id]
-    
     print("""=====================================================================================
 Lista de motores
 """)
@@ -51,15 +45,17 @@ Lista de motores
 
 ####
 def get_positions(list_motors):# Read present position
+    present_positions = [0,0,0,0,0,0]
     for motor in list_motors:
         for id in motor.list_ids:
-            dxl_present_position, dxl_comm_result, dxl_error = motor.packetHandler.read4ByteTxRx(motor.portHandler, id, motor.addr_present_position)
+            # Read present position
+            dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(motor.portHandler, id, motor.addr_present_position)
             if dxl_comm_result != COMM_SUCCESS:
-                print("%s" % motor.packetHandler.getTxRxResult(dxl_comm_result))
+                print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
             elif dxl_error != 0:
-                print("%s" % motor.packetHandler.getRxPacketError(dxl_error))
-            ##################
-            general_joint_position[id]=dxl_present_position
+                print("%s" % packetHandler.getRxPacketError(dxl_error))
+            present_positions[id]=dxl_present_position
+    return present_positions
 
 
 
@@ -76,13 +72,14 @@ def joint_state_publisher(list_motors,num_joints,joint_state_pub):
     print("Joint State")
     for motor in list_motors:
         for id in motor.list_ids:
-            general_joint_position_state[id-1]=motor.angleConversion(general_joint_position[id-1],True,id) 
+            general_joint_position_state[id]=motor.angleConversion(general_joint_position[id],True,id) 
+    print(general_joint_position_state)
     #Publish the new joint state
     joints_states.position = general_joint_position_state
     joints_states.velocity = []
     joints_states.effort = []
     joint_state_pub.publish(joints_states)
-
+    rospy.logerr(general_joint_position)
 
 
 if __name__ == '__main__':
@@ -96,6 +93,7 @@ if __name__ == '__main__':
 
     num_joints = 6
     general_joint_position = [0 for i in range(num_joints)]
+    print("lista vacia ", general_joint_position)
     general_joint_position_state = [0 for i in range(num_joints)]
 
     portHandler = PortHandler(usb_port)
@@ -118,11 +116,8 @@ if __name__ == '__main__':
     # Subscribe desired joint position
     rospy.Subscriber('/joint_goals', JointState,set_positions,(list_motors,False,num_joints,joint_state_pub), queue_size=5)
 
-    print("subcribir")
-
-    while not rospy.is_shutdown():  
-           
-        #print("Antes del Spin")
+    while not rospy.is_shutdown():     
+        print("Antes del Spin")
         rospy.spin()
         r.sleep()
     portHandler.closePort()

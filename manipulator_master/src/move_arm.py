@@ -17,6 +17,7 @@ def state_position(state: JointState):#Recibimos del Subscriber un msg de tipo J
 
 def real_position(state: JointState):
     rospy.logerr(state.position)
+    rospy.logwarn("hola")
 
 if __name__ == "__main__":
     rospy.init_node("move_arm_node")
