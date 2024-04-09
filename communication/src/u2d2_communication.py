@@ -117,13 +117,12 @@ if __name__ == '__main__':
 
     # Subscribe desired joint position
     rospy.Subscriber('/joint_goals', JointState,set_positions,(list_motors,False,num_joints,joint_state_pub), queue_size=5)
+
     print("subcribir")
 
     while not rospy.is_shutdown():  
            
         #print("Antes del Spin")
         rospy.spin()
-        #print("Escuchando...")
-        #joint_state_publisher(list_motors,num_joints,joint_state_pub)
         r.sleep()
     portHandler.closePort()
