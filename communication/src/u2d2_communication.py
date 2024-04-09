@@ -61,7 +61,7 @@ def get_positions(list_motors):# Read present position
 
 
 ##########
-def joint_state_publisher(list_motors,num_joints,joint_state_pub):
+def joint_state_publisher(list_motors,num_joints):
     joints_states = JointState()
     joints_states.header = Header()
     joints_states.header.stamp = rospy.Time.now()
@@ -69,17 +69,16 @@ def joint_state_publisher(list_motors,num_joints,joint_state_pub):
     #Read actual position after movement occured
     general_joint_position = get_positions(list_motors)
     #Convert from 0-4095 to degrees
-    print("Joint State")
+    #print("Joint State")
     for motor in list_motors:
         for id in motor.list_ids:
             general_joint_position_state[id]=motor.angleConversion(general_joint_position[id],True,id) 
-    print(general_joint_position_state)
+            #print("El joint del ID ", id, " es: ", general_joint_position_state[id])
     #Publish the new joint state
     joints_states.position = general_joint_position_state
     joints_states.velocity = []
     joints_states.effort = []
     joint_state_pub.publish(joints_states)
-    rospy.logerr(general_joint_position)
 
 
 if __name__ == '__main__':
@@ -93,7 +92,6 @@ if __name__ == '__main__':
 
     num_joints = 6
     general_joint_position = [0 for i in range(num_joints)]
-    print("lista vacia ", general_joint_position)
     general_joint_position_state = [0 for i in range(num_joints)]
 
     portHandler = PortHandler(usb_port)
@@ -111,13 +109,15 @@ if __name__ == '__main__':
     #Publish current robot state
     joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
 
-    set_positions({},[list_motors,True,num_joints,joint_state_pub])
+    set_positions({},[list_motors,True,num_joints,joint_state_pub]) 
 
     # Subscribe desired joint position
     rospy.Subscriber('/joint_goals', JointState,set_positions,(list_motors,False,num_joints,joint_state_pub), queue_size=5)
 
-    while not rospy.is_shutdown():     
-        print("Antes del Spin")
-        rospy.spin()
+    print("subcribir")
+
+    while not rospy.is_shutdown():
+        joint_state_publisher(list_motors,num_joints)  
         r.sleep()
+
     portHandler.closePort()
