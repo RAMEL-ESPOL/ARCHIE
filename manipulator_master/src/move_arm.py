@@ -14,8 +14,7 @@ def state_position(state: JointState):
     global pos
     if (state.position != pos ):
         pub.publish(state)
-    pos = state.position
-    rospy.sleep(0.1)
+        pos = state.position
 
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_position(state: JointState): 
