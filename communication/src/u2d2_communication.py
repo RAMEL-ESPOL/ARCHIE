@@ -13,6 +13,7 @@ from dynamixel_sdk import *
 value_angles_max = []
 value_angles_min = []
 
+
 def set_positions(data,callback_args):
     list_motors = callback_args[0]
     bool_init = callback_args[1]
@@ -35,19 +36,55 @@ def set_positions(data,callback_args):
     print("=====================================================================================")
     
 
+def set_sync_positions(data,callback_args):
+    list_motors = callback_args[0]
+    bool_init = callback_args[1]
+    for motor in list_motors:
+        for id in motor.list_ids:
+            print("ID Motor: " + str(id))
+            #Check if zero value positions are the initial positions for each joint!!!!!!!!!!!!!!!!!!!!!!!!
+            if bool_init:
+                param_goal_position = [DXL_LOBYTE(DXL_LOWORD(2048)), DXL_HIBYTE(DXL_LOWORD(2048)), DXL_LOBYTE(DXL_HIWORD(2048)), DXL_HIBYTE(DXL_HIWORD(2048))]
+                # Add Dynamixel#1 goal position value to the Syncwrite parameter storage
+                dxl_addparam_result = groupSyncWrite.addParam(id, param_goal_position)
+                if dxl_addparam_result != True:
+                    print("[ID:%03d] groupSyncWrite addparam failed" % id)
+            else:
+                new_angle = motor.angleConversion(data.position[id], False,id) 
+                param_goal_position = [DXL_LOBYTE(DXL_LOWORD(new_angle)), DXL_HIBYTE(DXL_LOWORD(new_angle)), DXL_LOBYTE(DXL_HIWORD(new_angle)), DXL_HIBYTE(DXL_HIWORD(new_angle))]
+                # Add Dynamixel#1 goal position value to the Syncwrite parameter storage
+                dxl_addparam_result = groupSyncWrite.addParam(id, param_goal_position)
+                if dxl_addparam_result != True:
+                    print("[ID:%03d] groupSyncWrite addparam failed" % id)
+
+    print(groupSyncWrite.param)
+    dxl_comm_result = groupSyncWrite.txPacket()
+    if dxl_comm_result != COMM_SUCCESS:
+        print("Hubo un fallo")
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+
+    # Clear syncwrite parameter storage
+    groupSyncWrite.clearParam()
+
+    joint_state_publisher(list_motors,num_joints)
 
 
 ####
 def get_positions(list_motors):# Read present position
-    present_positions = [0,0,0,0,0,0]
+    present_positions = [0,0,0,0,0,0]   
+    # Syncread present position
+    dxl_comm_result = groupSyncRead.txRxPacket()
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    
     for motor in list_motors:
         for id in motor.list_ids:
-            # Read present position
-            dxl_present_position, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(motor.portHandler, id, motor.addr_present_position)
-            if dxl_comm_result != COMM_SUCCESS:
-                print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-            elif dxl_error != 0:
-                print("%s" % packetHandler.getRxPacketError(dxl_error))
+            # Check if groupsyncread data of Dynamixel#1 is available
+            dxl_getdata_result = groupSyncRead.isAvailable(id, motor.addr_present_position , 4)
+            if dxl_getdata_result != True:
+                print("[ID:%03d] groupSyncRead getdata failed" % id)
+            # Get Dynamixel present position value
+            dxl_present_position = groupSyncRead.getData(id, motor.addr_present_position , 4)
             present_positions[id]=dxl_present_position
     return present_positions
 
@@ -100,16 +137,32 @@ if __name__ == '__main__':
 
     list_motors = [base,codo,ee]
 
+    # Initialize GroupSyncWrite instance
+    groupSyncWrite = GroupSyncWrite(portHandler, packetHandler, 116, 4)
+    # Initialize GroupSyncRead instace for Present Position
+    groupSyncRead = GroupSyncRead(portHandler, packetHandler, 132, 4)
+
+    for m in list_motors:
+        for id in m.list_ids:
+            # Add parameter storage for Dynamixel present position value
+            dxl_addparam_result = groupSyncRead.addParam(id)
+            if dxl_addparam_result != True:
+                print("[ID:%03d] groupSyncRead addparam failed" % id)
+    
+
     #Publish current robot state
     joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
-    set_positions({},[list_motors, True])
+    set_sync_positions({},[list_motors, True])
 
     # Subscribe desired joint position
-    rospy.Subscriber('/joint_goals', JointState,set_positions,(list_motors,False),queue_size= 5)
+    rospy.Subscriber('/joint_goals', JointState,set_sync_positions,(list_motors,False),queue_size= 5)
 
     print("subcribir")
 
     while not rospy.is_shutdown():     
         r.sleep()
-    
+        
+    # Clear syncread parameter storage
+    groupSyncRead.clearParam()
+
     portHandler.closePort()
