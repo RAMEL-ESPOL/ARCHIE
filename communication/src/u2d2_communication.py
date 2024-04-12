@@ -14,10 +14,12 @@ value_angles_max = []
 value_angles_min = []
 
 
+#Funcion usada antes, sirve para setear el valor en cada motor a la vez, no muy eficaz
+"""
 def set_positions(data,callback_args):
     list_motors = callback_args[0]
     bool_init = callback_args[1]
-    print("""=====================================================================================Lista de motores""")
+    print("=====================================================================================Lista de motores")
     for motor in list_motors:
         for id in motor.list_ids:
             print("ID Motor: " + str(id))
@@ -34,11 +36,13 @@ def set_positions(data,callback_args):
             elif dxl_error != 0:
                 print("%s" % motor.packetHandler.getRxPacketError(dxl_error))
     print("=====================================================================================")
-    
+"""
+
 
 def set_sync_positions(data,callback_args):
     list_motors = callback_args[0]
     bool_init = callback_args[1]
+    print("""=====================================================================================Lista de motores""")
     for motor in list_motors:
         for id in motor.list_ids:
             print("ID Motor: " + str(id))
@@ -49,6 +53,8 @@ def set_sync_positions(data,callback_args):
                 dxl_addparam_result = groupSyncWrite.addParam(id, param_goal_position)
                 if dxl_addparam_result != True:
                     print("[ID:%03d] groupSyncWrite addparam failed" % id)
+                print("Dynamixel has successfully set the initial position")
+
             else:
                 new_angle = motor.angleConversion(data.position[id], False,id) 
                 param_goal_position = [DXL_LOBYTE(DXL_LOWORD(new_angle)), DXL_HIBYTE(DXL_LOWORD(new_angle)), DXL_LOBYTE(DXL_HIWORD(new_angle)), DXL_HIBYTE(DXL_HIWORD(new_angle))]
@@ -56,6 +62,7 @@ def set_sync_positions(data,callback_args):
                 dxl_addparam_result = groupSyncWrite.addParam(id, param_goal_position)
                 if dxl_addparam_result != True:
                     print("[ID:%03d] groupSyncWrite addparam failed" % id)
+                print("The new angle is " + str(new_angle*180/2048))
 
     print(groupSyncWrite.param)
     dxl_comm_result = groupSyncWrite.txPacket()
@@ -66,7 +73,8 @@ def set_sync_positions(data,callback_args):
     # Clear syncwrite parameter storage
     groupSyncWrite.clearParam()
 
-    joint_state_publisher(list_motors,num_joints)
+    print("=====================================================================================")
+
 
 
 ####
@@ -115,7 +123,7 @@ def joint_state_publisher(list_motors,num_joints):
 if __name__ == '__main__':
 
     rospy.init_node("motor_communication")
-    r =rospy.Rate(2) # 10hz
+    r =rospy.Rate(10) # 10hz
 
     usb_port = rospy.get_param('~usb_port')
     dxl_baud_rate = rospy.get_param('~dxl_baud_rate')
@@ -159,7 +167,8 @@ if __name__ == '__main__':
 
     print("subcribir")
 
-    while not rospy.is_shutdown():     
+    while not rospy.is_shutdown():
+        joint_state_publisher(list_motors,num_joints)
         r.sleep()
         
     # Clear syncread parameter storage
