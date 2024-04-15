@@ -15,15 +15,17 @@ def state_position(state: JointState):
     if (state.position != pos ):
         pub.publish(state)
         pos = state.position
-        escribir_datos(pos*180/1.57, "goals") #Funcion para guardar los datos
+    pos_array = np.array(pos)*180/1.57
+    pos = list(pos_array)
+    escribir_datos(pos, "goals") #Funcion para guardar los datos
+
 
 
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_position(state: JointState): 
-    global real_pos
-    if (state.position != real_pos):
-        real_pos = state.position
-        escribir_datos(real_pos*180/1.57, "state") #Funcion para guardar los datos
+    pos_array = np.array(state.position)*180/1.57
+    real_pos = list(pos_array)
+    escribir_datos(real_pos, "state") #Funcion para guardar los datos
 
 def escribir_datos(posiciones, pre):
     archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_master/src/datos.txt", "a")

@@ -123,7 +123,7 @@ def joint_state_publisher(list_motors,num_joints):
 if __name__ == '__main__':
 
     rospy.init_node("motor_communication")
-    r =rospy.Rate(10) # 10hz
+    r =rospy.Rate(5) # 10hz
 
     usb_port = rospy.get_param('~usb_port')
     dxl_baud_rate = rospy.get_param('~dxl_baud_rate')
@@ -139,8 +139,8 @@ if __name__ == '__main__':
 
     #Last value is the max desired speed: value*0.229rpm is the speed in rpm
     print(dxl_baud_rate)
-    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[500,0,50],1:[1500,200,150]})
-    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[1200,100,70],3:[300,0,30]})
+    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[600,400,200],1:[4500,800,3000]})
+    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[2000,500,100],3:[300,0,30]})
     ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[700,0,50],5:[200,0,20]})
 
     list_motors = [base,codo,ee]
