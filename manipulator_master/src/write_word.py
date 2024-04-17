@@ -122,14 +122,93 @@ def plan_B(wpose, waypoints : list):
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))    
 
+    wpose.position.x += size * 0.9
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += size * 0.1
+    wpose.position.y -= size * 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.2
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.1
+    wpose.position.x -= size * 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.1
+    wpose.position.x += size * 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.4
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.1
+    wpose.position.x -= size * 0.1
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x -= size * 0.9
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y += size
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.05
+    waypoints.append(copy.deepcopy(wpose))    
+    
+    wpose.position.y -= size/2
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))    
+
+    wpose.position.x += size * 0.9
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.05
+    waypoints.append(copy.deepcopy(wpose))  
+
+    wpose.position.z = pen + 0.05
+    waypoints.append(copy.deepcopy(wpose))  
+
+    wpose.position.y = y_h
+    wpose.position.x += space + (size * 0.1 )
+    waypoints.append(copy.deepcopy(wpose))
 
     return (waypoints, wpose)
 
 
 def plan_C(wpose, waypoints : list):
 
+    wpose.position.x += size
+    waypoints.append(copy.deepcopy(wpose))
+
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))    
+
+    wpose.position.x -= size * 0.85
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.15
+    wpose.position.x -= size * 0.15
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.7
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.15
+    wpose.position.x += size * 0.15
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x += size * 0.85
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.05
+    waypoints.append(copy.deepcopy(wpose))    
+
+    wpose.position.y = y_h
+    wpose.position.x += space
+    waypoints.append(copy.deepcopy(wpose))
 
 
     return (waypoints, wpose)
@@ -140,6 +219,28 @@ def plan_D(wpose, waypoints : list):
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))    
 
+    wpose.position.x += size * 0.85
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.15
+    wpose.position.x += size * 0.15
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.7
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= size * 0.15
+    wpose.position.x -= size * 0.15
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.x -= size * 0.85
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y = y_h
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.z = pen + 0.05
+    waypoints.append(copy.deepcopy(wpose))
 
     return (waypoints, wpose)
 
