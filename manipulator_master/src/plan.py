@@ -13,7 +13,7 @@ import math
 
 # Altura del lapiz
 global pen 
-pen = 0.22
+pen = 0.207
 global quit
 quit = 0
 
@@ -108,7 +108,7 @@ def triangle():
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.1, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -134,7 +134,7 @@ def circle():
         waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00005, 0.0 # waypoints to follow  # eef_step
+        waypoints, 0.005, 0.0 # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -253,7 +253,7 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.y = 0.325
+    wpose.position.y = -0.15 +0.325
     wpose.position.x = -0.075 + 0.025
     waypoints.append(copy.deepcopy(wpose))   
 
@@ -286,13 +286,13 @@ def espol():
     wpose.position.z = pen + 0.055
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.313
+    wpose.position.y = -0.15 +0.313
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = -0.075
+    wpose.position.x = -0.078
     waypoints.append(copy.deepcopy(wpose))
     ########################################
 
@@ -301,8 +301,8 @@ def espol():
 
     #Drawing the "S"
     ########################################
-    wpose.position.x = -0.075 + 0.06
-    wpose.position.y = 0.325
+    wpose.position.x = -0.075 + 0.055
+    wpose.position.y = -0.15 +0.325
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -317,7 +317,7 @@ def espol():
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.313
+    wpose.position.y = -0.15 +0.313
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
@@ -398,7 +398,7 @@ def espol():
     ########################################
 
     wpose.position.x += 0.03
-    wpose.position.y = 0.325
+    wpose.position.y = -0.15 +0.325
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -444,7 +444,7 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
     ########################################
 
-    wpose.position.x += 0.005
+    wpose.position.x += 0.006
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.y += 0.025
@@ -488,6 +488,7 @@ scene = moveit_commander.PlanningSceneInterface()
 group = moveit_commander.MoveGroupCommander("arm_group")
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 
+
 '''
 # We can get the name of the reference frame for this robot:
 planning_frame = group.get_planning_frame()
@@ -525,6 +526,7 @@ Choose a number to make de corresponding draw or write 'q' to close the program:
           
 Write the option: """)
     
+    
     if (number == '1'):
         plan = square()[0]
 
@@ -533,7 +535,7 @@ Write the option: """)
         display_trajectory.trajectory.append(plan)
         # Publish
         display_trajectory_publisher.publish(display_trajectory)
-
+        
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
         home()
@@ -546,7 +548,6 @@ Write the option: """)
         display_trajectory.trajectory.append(plan)
         # Publish
         display_trajectory_publisher.publish(display_trajectory)
-
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
         home()
