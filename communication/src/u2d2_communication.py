@@ -140,8 +140,8 @@ if __name__ == '__main__':
     #Last value is the max desired speed: value*0.229rpm is the speed in rpm
     print(dxl_baud_rate)
     base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[2500,500,100],1:[4500,1800,800]})
-    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[2000,500,100],3:[300,0,30]})
-    ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[1000,300,50],5:[200,0,20]})
+    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[2500,800,300],3:[300,0,30]})
+    ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[1500,500,150],5:[200,0,20]})
 
     list_motors = [base,codo,ee]
 

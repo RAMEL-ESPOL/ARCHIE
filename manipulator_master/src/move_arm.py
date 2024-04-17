@@ -7,7 +7,7 @@ from sensor_msgs.msg import JointState
 global pos
 global real_pos
 pos = [0.0,0.0,0.0,0.0,0.0,0.0]
-real_pos = [0.0,0.0,0.0,0.0,0.0,0.0]
+real_pos = []
 
 #Recibimos del Subscriber un msg de tipo JointState de moveit y posteriormente lo publicamos con el Publisher como goal
 def state_position(state: JointState):
@@ -18,8 +18,6 @@ def state_position(state: JointState):
     pos_array = np.array(pos)*180/1.57
     pos = list(pos_array)
     escribir_datos(pos, "goals") #Funcion para guardar los datos
-
-
 
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_position(state: JointState): 
