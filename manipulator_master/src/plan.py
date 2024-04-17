@@ -275,6 +275,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.003
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.003
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -283,7 +287,11 @@ def espol():
     wpose.position.x += 0.025
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.z = pen + 0.055
+    wpose.position.z = pen + 0.03
+    wpose.position.y += 0.003
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.003
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.y = -0.15 +0.313
