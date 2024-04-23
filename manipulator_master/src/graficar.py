@@ -3,6 +3,11 @@
 import rospy
 import numpy as np
 import matplotlib.pyplot as plt
+import moveit_commander
+
+
+group = moveit_commander.MoveGroupCommander("arm_group")
+
 
 x = [0]
 goalsJ0 = [0.0]
