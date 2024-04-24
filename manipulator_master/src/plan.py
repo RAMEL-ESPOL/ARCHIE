@@ -266,6 +266,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.007
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.007
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -275,6 +279,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.012
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.012
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -283,7 +291,8 @@ def espol():
     wpose.position.x += 0.025
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.z = pen + 0.055
+    wpose.position.z = pen + 0.03
+    wpose.position.y += 0.015
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.y = -0.15 +0.313
@@ -292,11 +301,11 @@ def espol():
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.x = -0.078
+    wpose.position.x = -0.077
     waypoints.append(copy.deepcopy(wpose))
     ########################################
 
-    wpose.position.z = pen + 0.055
+    wpose.position.z = pen + 0.03
     waypoints.append(copy.deepcopy(wpose))
 
     #Drawing the "S"
@@ -321,6 +330,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.01
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.01
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -330,6 +343,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.01
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.01
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -339,6 +356,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.01
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.01
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -347,12 +368,14 @@ def espol():
     wpose.position.x -= 0.025
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.z = pen + 0.055
+    wpose.position.z = pen + 0.03
+    wpose.position.y += 0.007
     waypoints.append(copy.deepcopy(wpose))
+
     ########################################
 
     wpose.position.x += 0.03
-    wpose.position.y += 0.025
+    wpose.position.y += 0.025 - 0.008
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -364,9 +387,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y += 0.025
+    wpose.position.y += 0.025 -0.008
     waypoints.append(copy.deepcopy(wpose))
     
     wpose.position.z = pen
@@ -385,6 +409,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.008
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.008
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -393,7 +421,8 @@ def espol():
     wpose.position.x -= 0.025
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.z = pen + 0.055
+    wpose.position.z = pen + 0.02
+    wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
     ########################################
 
@@ -419,10 +448,11 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.x -= 0.025
-    wpose.position.y += 0.025
+    wpose.position.y += 0.025 -0.008
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -432,6 +462,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.01
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.01
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -440,14 +474,16 @@ def espol():
     wpose.position.x += 0.025
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.z = pen + 0.055
+    wpose.position.z = pen + 0.03
+    wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
+
     ########################################
 
     wpose.position.x += 0.006
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y += 0.025
+    wpose.position.y += 0.025 -0.008
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -459,6 +495,10 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.01
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.01
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -468,11 +508,12 @@ def espol():
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.055
+    wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
     ########################################
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00003, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
@@ -542,7 +583,6 @@ Write the option: """)
 
     elif (number == '2'):
         plan = triangle()[0]
-
         display_trajectory = moveit_msgs.msg.DisplayTrajectory()
         display_trajectory.trajectory_start = robot.get_current_state()
         display_trajectory.trajectory.append(plan)
