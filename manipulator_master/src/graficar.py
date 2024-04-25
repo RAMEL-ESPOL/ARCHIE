@@ -19,7 +19,7 @@ statesJ4 = [0.0]
 goalsJ5 = [0.0]
 statesJ5 = [0.0]
 
-archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_master/src/datos.txt","r")
+archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_description/datos.txt","r")
 archivo.readline()
 lista_lineas = archivo.readlines()
 for i, linea in enumerate(lista_lineas):
