@@ -5,8 +5,8 @@
   <description>
      An automatically generated package with all the configuration and launch files for using the manipulator_robot with the MoveIt Motion Planning Framework
   </description>
-  <author email="eridamen@espol.edu.ec">erick</author>
-  <maintainer email="eridamen@espol.edu.ec">erick</maintainer>
+  <author email="eridamen@espol.edu.ec">Erick Mendoza, Juan Saeteros</author>
+  <maintainer email="eridamen@espol.edu.ec">Erick Mendoza, Juan Saeteros</maintainer>
 
   <license>BSD</license>
 

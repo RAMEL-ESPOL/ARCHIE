@@ -23,8 +23,8 @@
     </group_state>
     <group_state name="extended" group="arm_group">
         <joint name="joint_1" value="0"/>
-        <joint name="joint_2" value="0.2519"/>
-        <joint name="joint_3" value="1.2523"/>
+        <joint name="joint_2" value="0.1477"/>
+        <joint name="joint_3" value="1.0596"/>
         <joint name="joint_4" value="0"/>
         <joint name="joint_5" value="0"/>
         <joint name="joint_6" value="0"/>
