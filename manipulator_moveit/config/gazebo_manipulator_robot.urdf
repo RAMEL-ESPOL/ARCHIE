@@ -13,12 +13,12 @@
     </joint>
     <link name="base_link">
         <inertial>
-            <origin rpy="0 0 1.57" xyz="5.34102915090225E-06 0.00149611119634718 0.027324411040906" />
+            <origin rpy="0 0 0" xyz="5.34102915090225E-06 0.00149611119634718 0.027324411040906" />
             <mass value="0.391381454473344" />
             <inertia ixx="224200000" ixy="-102530000" ixz="10964000" iyy="935460000" iyz="-533770" izz="777040000" />
         </inertial>
         <visual>
-            <origin rpy="0 0 1.57" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
                 <mesh filename="package://manipulator_description/meshes/base_link.STL" />
             </geometry>
@@ -27,7 +27,7 @@
             </material>
         </visual>
         <collision>
-            <origin rpy="0 0 1.57" xyz="0 0 0" />
+            <origin rpy="0 0 0" xyz="0 0 0" />
             <geometry>
                 <mesh filename="package://manipulator_description/meshes/base_link.STL" />
             </geometry>
@@ -36,7 +36,7 @@
     <link name="link_1">
         <inertial>
             <origin rpy="0 0 0" xyz="0.000495971250250978 -0.0119998499605218 0.0204959033777655" />
-            <mass value="0.0569176277607128" />
+            <mass value="0.102" />
             <inertia ixx="26860" ixy="525.09" ixz="287.62" iyy="16993" iyz="-523.85" izz="26995" />
         </inertial>
         <visual>
@@ -94,7 +94,7 @@
     <link name="link_3">
         <inertial>
             <origin rpy="0 0 0" xyz="0.000495971402698712 -0.0119998503185919 0.000495878377765541" />
-            <mass value="0.0569176277607127" />
+            <mass value="0.102" />
             <inertia ixx="26860" ixy="525.09" ixz="287.62" iyy="16993" iyz="-523.85" izz="26995" />
         </inertial>
         <visual>
@@ -152,7 +152,7 @@
     <link name="link_5">
         <inertial>
             <origin rpy="0 0 0" xyz="0.000495971250250887 0.0120001503975483 0.000495878530213656" />
-            <mass value="0.0569176277607127" />
+            <mass value="0.102" />
             <inertia ixx="26860" ixy="525.09" ixz="287.62" iyy="16993" iyz="-523.85" izz="26995" />
         </inertial>
         <visual>

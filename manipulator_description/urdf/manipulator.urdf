@@ -21,12 +21,12 @@
       <mass
         value="0.391381454473344" />
       <inertia
-        ixx="224200000"
-        ixy="-102530000"
-        ixz="10964000"
-        iyy="935460000"
-        iyz="-533770"
-        izz="777040000" />
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
     </inertial>
     <visual>
       <origin
@@ -61,12 +61,12 @@
       <mass
         value="0.102" />
       <inertia
-        ixx="26860"
-        ixy="525.09"
-        ixz="287.62"
-        iyy="16993"
-        iyz="-523.85"
-        izz="26995" />
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
     </inertial>
     <visual>
       <origin
