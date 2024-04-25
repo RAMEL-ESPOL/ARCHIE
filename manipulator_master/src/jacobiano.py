@@ -7,7 +7,7 @@ import moveit_commander
 
 group = moveit_commander.MoveGroupCommander("arm_group")
 
-archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_master/src/datos.txt","r")
+archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_description/datos.txt","r")
 archivo.readline()
 for i, linea in enumerate(archivo.readlines()):
     llave, valor = linea.strip("/n").split(": ")

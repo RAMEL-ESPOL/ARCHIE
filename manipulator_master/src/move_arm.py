@@ -26,13 +26,13 @@ def real_position(state: JointState):
     escribir_datos(real_pos, "state") #Funcion para guardar los datos
 
 def escribir_datos(posiciones, pre):
-    archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_master/src/datos.txt", "a")
+    archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_description/datos.txt", "a")
     posiciones_array = np.array(posiciones,str)
     posiciones_str = ",".join(posiciones_array)
     archivo.write(pre + ": "+ posiciones_str + "\n")
 
 if __name__ == "__main__":
-    archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_master/src/datos.txt", "w")
+    archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_description/datos.txt", "w")
     archivo.write("Joint0,Joint1,Joint2,Joint3,Joint4,Joint5 \n")
     archivo.close()
 
