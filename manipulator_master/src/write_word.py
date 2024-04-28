@@ -14,11 +14,11 @@ import math
 
 # Altura del lapiz
 global pen 
-pen = 0.207
+pen = 0.1635
 
 #El paso que habrá entre una coordenada y la siguiente a la hora de escribir
 global t
-t = 0.00005
+t = 0.00003
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
@@ -26,7 +26,7 @@ y_h = 0.175
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.025
+size = 0.020
 
 #Espacio entre cada letra
 global space

@@ -6,6 +6,6 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/manipulator_robot.srdf
   CONFIG:
-    author_name: erick
+    author_name: Erick Mendoza, Juan Saeteros
     author_email: eridamen@espol.edu.ec
-    generated_timestamp: 1711989524
+    generated_timestamp: 1714062510

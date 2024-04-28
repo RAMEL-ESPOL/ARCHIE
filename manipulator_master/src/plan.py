@@ -13,7 +13,7 @@ import math
 
 # Altura del lapiz
 global pen 
-pen = 0.207
+pen = 0.163
 global quit
 quit = 0
 
@@ -253,7 +253,7 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.y = -0.15 +0.325
+    wpose.position.y = -0.15 +0.325 +0.010
     wpose.position.x = -0.075 + 0.025
     waypoints.append(copy.deepcopy(wpose))   
 
@@ -295,7 +295,7 @@ def espol():
     wpose.position.y += 0.015
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.15 +0.313
+    wpose.position.y = -0.15 +0.313 + 0.010
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -311,7 +311,7 @@ def espol():
     #Drawing the "S"
     ########################################
     wpose.position.x = -0.075 + 0.055
-    wpose.position.y = -0.15 +0.325
+    wpose.position.y = -0.15 +0.325 +0.010
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -326,7 +326,7 @@ def espol():
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.15 +0.313
+    wpose.position.y = -0.15 +0.313 +0.010
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
@@ -427,7 +427,7 @@ def espol():
     ########################################
 
     wpose.position.x += 0.03
-    wpose.position.y = -0.15 +0.325
+    wpose.position.y = -0.15 +0.325 +0.010
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -513,7 +513,7 @@ def espol():
     ########################################
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00003, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00002, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
