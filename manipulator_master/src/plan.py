@@ -513,7 +513,7 @@ def espol():
     ########################################
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00002, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00003, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)
