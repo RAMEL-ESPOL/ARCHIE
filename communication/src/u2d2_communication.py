@@ -97,14 +97,31 @@ def get_positions(list_motors):# Read present position
     return present_positions
 
 
+def get_load(list_motors):# Read present position
+    present_load = [0,0,0,0,0,0]  
+    # Syncread present position
+    dxl_comm_result = groupSyncRead.txRxPacket()
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    
+    for motor in list_motors:
+        for id in motor.list_ids:
+            # Check if groupsyncread data of Dynamixel#1 is available
+            dxl_getdata_result = groupSyncRead.isAvailable(id, 126 , 4)
+            if dxl_getdata_result != True:
+                print("[ID:%03d] groupSyncRead getdata failed" % id)
+            # Get Dynamixel present position value
+            present_load[id]= groupSyncRead.getData(id, 126 , 4)
+    return present_load
 
-##########
+
 def joint_state_publisher(list_motors,num_joints):
     joints_states = JointState()
     joints_states.header = Header()
     joints_states.header.stamp = rospy.Time.now()
     joints_states.name = ['joint_'+str(id+1) for id in range(num_joints)]
     #Read actual position after movement occured
+    #general_joint_load = get_load(list_motors)
     general_joint_position = get_positions(list_motors)
     #Convert from 0-4095 to degrees
     #print("Joint State")
@@ -139,7 +156,7 @@ if __name__ == '__main__':
 
     #Last value is the max desired speed: value*0.229rpm is the speed in rpm
     print(dxl_baud_rate)
-    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[2500,500,100],1:[4500,1800,800]})
+    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[2000,400,100],1:[4500,1800,800]})
     codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[3500,1500,400],3:[300,0,30]})
     ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[1500,500,150],5:[200,0,20]})
 
@@ -148,6 +165,9 @@ if __name__ == '__main__':
     # Initialize GroupSyncWrite instance
     groupSyncWrite = GroupSyncWrite(portHandler, packetHandler, 116, 4)
     # Initialize GroupSyncRead instace for Present Position
+    #groupSyncRead = GroupSyncRead(portHandler, packetHandler, 132, 4)
+
+    #leer las velocidades
     groupSyncRead = GroupSyncRead(portHandler, packetHandler, 132, 4)
 
     for m in list_motors:
@@ -160,6 +180,11 @@ if __name__ == '__main__':
 
     #Publish current robot state
     joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
+
+    #Publish current robot state
+    joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
+
+
     set_sync_positions({},[list_motors, True])
 
     # Subscribe desired joint position
@@ -168,6 +193,7 @@ if __name__ == '__main__':
     print("subcribir")
 
     while not rospy.is_shutdown():
+        #se lama a la funcion joint state publisher para publicar los /joint_states a ROS
         joint_state_publisher(list_motors,num_joints)
         r.sleep()
         

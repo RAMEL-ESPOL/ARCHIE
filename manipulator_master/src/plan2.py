@@ -16,12 +16,12 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.163
+pen = 0.17
 global quit
 quit = 0
 
 global theta
-theta = 60
+theta = 30
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
 
@@ -29,8 +29,8 @@ def home():
     # We get the joint values from the group and change some of the values:
     joint_goal = group.get_current_joint_values()
     joint_goal[0] = 0
-    joint_goal[1] = 0
-    joint_goal[2] = 0
+    joint_goal[1] = 0.4
+    joint_goal[2] = 0.4
     joint_goal[3] = 0
     joint_goal[4] = 0
     joint_goal[5] = 0
@@ -53,60 +53,22 @@ Pose {0}:\n{1}
     rospy.loginfo(message)
     loginfog("Drawing a " + s)
 
-def square():
-    figure = "square (0.2 x 0.2)"
-    waypoints = []
-
-    #Se copia la pose actual para únicamente modificar las coordenadas cartesianas y que la orientación
-    #del efector final no se vea modificada, de esta manera mantenemos el lápiz perpendicular al suelo
-    wpose = group.get_current_pose().pose
-    
-    wpose.position.z = pen  # First move up (z)
-    wpose.position.x = 0.1
-    wpose.position.y = 0.3
-    
-    waypoints.append(copy.deepcopy(wpose))    
-
-    wpose.position.x = -0.1
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.y = 0.2
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.x = 0.1
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.y = 0.3
-    waypoints.append(copy.deepcopy(wpose))
-
-
-    # We want the Cartesian path to be interpolated at a resolution of 1 cm
-    # which is why we will specify 0.01 as the eef_step in Cartesian
-    # translation.  We will disable the jump threshold by setting it to 0.0,
-    # ignoring the check for infeasible jumps in joint space, which is sufficient
-    # for this tutorial.
-    (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.1, 0.0  # waypoints to follow  # eef_step
-    )  # jump_threshold
-
-    print_plan(waypoints, figure)
-    # Note: We are just planning, not asking move_group to actually move the robot yet:
-    return plan, fraction
 
 def triangle():
     figure = "Triangle (h=0.1   b=0.2)"
     waypoints = []
 
     wpose = group.get_current_pose().pose
-    
     wpose.position.z = pen   # First move up (z)
-    wpose.position.y = 0.3
+    wpose.position.y = 0.4
     wpose.position.x = 0.0
+    print("Matrix rotacion: ",type(rmatrix))
+    print(rmatrix*SE3(1,1,1))
     waypoints.append(copy.deepcopy(wpose))    
     #print(to_spatialmath(wpose))
 
     wpose.position.x = 0.1
-    wpose.position.y = 0.25
+    wpose.position.y = 0.35
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))
 
@@ -115,7 +77,7 @@ def triangle():
     #print(to_spatialmath(wpose))
 
     wpose.position.x = 0.0
-    wpose.position.y = 0.3
+    wpose.position.y = 0.4
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))#.printline()
 
@@ -123,20 +85,21 @@ def triangle():
     #Matriz de rotación usando la orientación del efector final
     T = SE3(wpose.position.x, wpose.position.y, wpose.position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
     way = []
+
     for i in range(len(waypoints)):
         T = SE3(waypoints[i].position.x, waypoints[i].position.y, waypoints[i].position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
-        way.append(to_ros(T*rmatrix))
+        way.append(to_ros(rmatrix*T))
     
-    rospy.logerr(to_ros(T*rmatrix))
+    rospy.logerr(T)
     #rospy.logerr(SE3(np.array(SE3(rmatrix))))
 
 
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.1, 0.0  # waypoints to follow  # eef_step
+        way, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
-    print_plan(way, figure)
+    #print_plan(way, figure)
     return plan, fraction
 
 

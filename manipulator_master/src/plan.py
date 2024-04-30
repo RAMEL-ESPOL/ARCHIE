@@ -10,19 +10,26 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
 from moveit_commander.conversions import pose_to_list
 import math
+from spatialmath_rospy import to_spatialmath, to_ros
+from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.163
+pen = 0.16
 global quit
 quit = 0
+
+global theta
+theta = 30
+global rmatrix
+rmatrix = SE3.Rx(theta,'deg')
 
 def home():
     # We get the joint values from the group and change some of the values:
     joint_goal = group.get_current_joint_values()
     joint_goal[0] = 0
-    joint_goal[1] = 0
-    joint_goal[2] = 0
+    joint_goal[1] = 0.4
+    joint_goal[2] = 0.4
     joint_goal[3] = 0
     joint_goal[4] = 0
     joint_goal[5] = 0
@@ -90,28 +97,47 @@ def triangle():
     waypoints = []
 
     wpose = group.get_current_pose().pose
-    
     wpose.position.z = pen   # First move up (z)
-    wpose.position.y = 0.3
+    wpose.position.y = 0.4
     wpose.position.x = 0.0
+    print("Matrix rotacion: ",type(rmatrix))
+    print(rmatrix*SE3(1,1,1))
     waypoints.append(copy.deepcopy(wpose))    
+    #print(to_spatialmath(wpose))
 
     wpose.position.x = 0.1
-    wpose.position.y = 0.25
+    wpose.position.y = 0.35
     waypoints.append(copy.deepcopy(wpose))
+    #print(to_spatialmath(wpose))
 
     wpose.position.x = -0.1
     waypoints.append(copy.deepcopy(wpose))
+    #print(to_spatialmath(wpose))
 
     wpose.position.x = 0.0
-    wpose.position.y = 0.3
+    wpose.position.y = 0.4
     waypoints.append(copy.deepcopy(wpose))
+    #print(to_spatialmath(wpose))#.printline()
+
+
+    #Matriz de rotación usando la orientación del efector final
+    T = SE3(wpose.position.x, wpose.position.y, wpose.position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
+    way = []
+
+    for i in range(len(waypoints)):
+        T = SE3(waypoints[i].position.x, waypoints[i].position.y, waypoints[i].position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
+        way.append(to_ros(rmatrix*T))
+    
+    rospy.logerr(T)
+    #rospy.logerr(SE3(np.array(SE3(rmatrix))))
+
+
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.1, 0.0  # waypoints to follow  # eef_step
+        way, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
-    print_plan(waypoints, figure)
+    #print_plan(way, figure)
     return plan, fraction
 
 def circle():
@@ -253,7 +279,7 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.y = -0.15 +0.325 +0.010
+    wpose.position.y = -0.15 +0.325 +0.005
     wpose.position.x = -0.075 + 0.025
     waypoints.append(copy.deepcopy(wpose))   
 
@@ -295,7 +321,7 @@ def espol():
     wpose.position.y += 0.015
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.15 +0.313 + 0.010
+    wpose.position.y = -0.15 +0.313 + 0.005
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -311,7 +337,7 @@ def espol():
     #Drawing the "S"
     ########################################
     wpose.position.x = -0.075 + 0.055
-    wpose.position.y = -0.15 +0.325 +0.010
+    wpose.position.y = -0.15 +0.325 +0.005
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -326,7 +352,7 @@ def espol():
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.15 +0.313 +0.010
+    wpose.position.y = -0.15 +0.313 +0.005
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
@@ -427,7 +453,7 @@ def espol():
     ########################################
 
     wpose.position.x += 0.03
-    wpose.position.y = -0.15 +0.325 +0.010
+    wpose.position.y = -0.15 +0.325 +0.005
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -513,7 +539,7 @@ def espol():
     ########################################
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00003, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     print_plan(waypoints, figure)

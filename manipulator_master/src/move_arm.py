@@ -8,6 +8,7 @@ global pos
 global real_pos
 pos = [0.0,0.0,0.0,0.0,0.0,0.0]
 real_pos = []
+real_load = []
 
 #Recibimos del Subscriber un msg de tipo JointState de moveit y posteriormente lo publicamos con el Publisher como goal
 def state_position(state: JointState):
@@ -24,6 +25,11 @@ def real_position(state: JointState):
     pos_array = np.array(state.position)*180/1.57
     real_pos = list(pos_array)
     escribir_datos(real_pos, "state") #Funcion para guardar los datos
+    
+def load(state: JointState): 
+    pos_array = np.array(state.effort)
+    real_load= list(pos_array)
+    escribir_datos(real_load, "load") #Funcion para guardar los datos
 
 def escribir_datos(posiciones, pre):
     archivo = open("/home/erick/catkin_ws/src/manipulator/manipulator_description/datos.txt", "a")
