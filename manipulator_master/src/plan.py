@@ -98,7 +98,7 @@ def triangle():
 
     wpose = group.get_current_pose().pose
     wpose.position.z = pen +0.04  # First move up (z)
-    wpose.position.y = 0.4
+    wpose.position.y = 0.2
     wpose.position.x = 0.0
     waypoints.append(copy.deepcopy(wpose))    
     #print(to_spatialmath(wpose))
@@ -107,7 +107,7 @@ def triangle():
     waypoints.append(copy.deepcopy(wpose))   
 
     wpose.position.x = 0.05
-    wpose.position.y = 0.35
+    wpose.position.y = 0.15
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))
 
@@ -116,7 +116,7 @@ def triangle():
     #print(to_spatialmath(wpose))
 
     wpose.position.x = 0.0
-    wpose.position.y = 0.4
+    wpose.position.y = 0.2
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))#.printline()
 
@@ -136,7 +136,7 @@ def triangle():
 
 
     (plan, fraction) = group.compute_cartesian_path(
-        way, 0.00005, 0.0  # waypoints to follow  # eef_step
+        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
 
     #print_plan(way, figure)
