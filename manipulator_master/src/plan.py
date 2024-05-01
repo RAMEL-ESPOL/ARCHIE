@@ -15,7 +15,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.15
+pen = 0.16
 global quit
 quit = 0
 
