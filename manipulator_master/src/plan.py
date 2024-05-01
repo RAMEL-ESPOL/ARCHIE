@@ -97,13 +97,14 @@ def triangle():
     waypoints = []
 
     wpose = group.get_current_pose().pose
-    wpose.position.z = pen   # First move up (z)
+    wpose.position.z = pen +0.04  # First move up (z)
     wpose.position.y = 0.4
     wpose.position.x = 0.0
-    print("Matrix rotacion: ",type(rmatrix))
-    print(rmatrix*SE3(1,1,1))
     waypoints.append(copy.deepcopy(wpose))    
     #print(to_spatialmath(wpose))
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))   
 
     wpose.position.x = 0.05
     wpose.position.y = 0.35
@@ -119,6 +120,8 @@ def triangle():
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))#.printline()
 
+    wpose.position.z = pen +0.04
+    waypoints.append(copy.deepcopy(wpose))   
 
     #Matriz de rotación usando la orientación del efector final
     way = []
@@ -278,7 +281,7 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.y = 0.3
+    wpose.position.y = 0.4
     wpose.position.x = -0.075 + 0.025
     waypoints.append(copy.deepcopy(wpose))   
 
@@ -320,7 +323,7 @@ def espol():
     wpose.position.y += 0.015
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = 0.3
+    wpose.position.y = 0.
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
