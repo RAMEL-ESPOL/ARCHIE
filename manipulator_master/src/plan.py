@@ -15,7 +15,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.16
+pen = 0
 global quit
 quit = 0
 
@@ -537,11 +537,22 @@ def espol():
     wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
     ########################################
+    #Matriz de rotación usando la orientación del efector final
+    T = SE3(wpose.position.x, wpose.position.y, wpose.position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
+    way = []
+
+    for i in range(len(waypoints)):
+        T = SE3(waypoints[i].position.x, waypoints[i].position.y, waypoints[i].position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
+        way.append(to_ros(rmatrix*T))
+    
+    rospy.logerr(T)
+    #rospy.logerr(SE3(np.array(SE3(rmatrix))))
+
+
 
     (plan, fraction) = group.compute_cartesian_path(
-        waypoints, 0.00005, 0.0  # waypoints to follow  # eef_step
+        way, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
-
     print_plan(waypoints, figure)
     return plan, fraction
 
@@ -579,7 +590,7 @@ print("")
 home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
-while (not rospy.is_shutdown() or quit == 0):
+while (not rospy.is_shutdown() and quit == 0):
     number = input("""
           
 Choose a number to make de corresponding draw or write 'q' to close the program:

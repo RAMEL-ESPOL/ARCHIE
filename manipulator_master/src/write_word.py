@@ -37,8 +37,8 @@ def home():
     # We get the joint values from the group and change some of the values:
     joint_goal = group.get_current_joint_values()
     joint_goal[0] = 0
-    joint_goal[1] = 0
-    joint_goal[2] = 0
+    joint_goal[1] = 0.4
+    joint_goal[2] = 0.4
     joint_goal[3] = 0
     joint_goal[4] = 0
     joint_goal[5] = 0
