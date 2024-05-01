@@ -15,7 +15,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0
+pen = 0.15
 global quit
 quit = 0
 
@@ -27,9 +27,9 @@ rmatrix = SE3.Rx(theta,'deg')
 def home():
     # We get the joint values from the group and change some of the values:
     joint_goal = group.get_current_joint_values()
-    joint_goal[0] = 0
-    joint_goal[1] = 0.4
-    joint_goal[2] = 0.4
+    joint_goal[0] = 1.3
+    joint_goal[1] = 0
+    joint_goal[2] = 0
     joint_goal[3] = 0
     joint_goal[4] = 0
     joint_goal[5] = 0
@@ -121,7 +121,6 @@ def triangle():
 
 
     #Matriz de rotación usando la orientación del efector final
-    T = SE3(wpose.position.x, wpose.position.y, wpose.position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
     way = []
 
     for i in range(len(waypoints)):
@@ -279,7 +278,7 @@ def espol():
 
     wpose = group.get_current_pose().pose
     
-    wpose.position.y = -0.15 +0.325 +0.005
+    wpose.position.y = 0.3
     wpose.position.x = -0.075 + 0.025
     waypoints.append(copy.deepcopy(wpose))   
 
@@ -321,7 +320,7 @@ def espol():
     wpose.position.y += 0.015
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.15 +0.313 + 0.005
+    wpose.position.y = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -337,7 +336,7 @@ def espol():
     #Drawing the "S"
     ########################################
     wpose.position.x = -0.075 + 0.055
-    wpose.position.y = -0.15 +0.325 +0.005
+    wpose.position.y = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -352,7 +351,7 @@ def espol():
     wpose.position.z = pen
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y = -0.15 +0.313 +0.005
+    wpose.position.y = 0.3
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen + 0.02
@@ -453,7 +452,7 @@ def espol():
     ########################################
 
     wpose.position.x += 0.03
-    wpose.position.y = -0.15 +0.325 +0.005
+    wpose.position.y =  0.3
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -537,8 +536,7 @@ def espol():
     wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
     ########################################
-    #Matriz de rotación usando la orientación del efector final
-    T = SE3(wpose.position.x, wpose.position.y, wpose.position.z)* SE3.Rz(-88, 'deg')* SE3.Rx(180, 'deg')
+
     way = []
 
     for i in range(len(waypoints)):
@@ -553,7 +551,7 @@ def espol():
     (plan, fraction) = group.compute_cartesian_path(
         way, 0.00005, 0.0  # waypoints to follow  # eef_step
     )  # jump_threshold
-    print_plan(waypoints, figure)
+    
     return plan, fraction
 
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
