@@ -105,12 +105,12 @@ def triangle():
     waypoints.append(copy.deepcopy(wpose))    
     #print(to_spatialmath(wpose))
 
-    wpose.position.x = 0.1
+    wpose.position.x = 0.05
     wpose.position.y = 0.35
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))
 
-    wpose.position.x = -0.1
+    wpose.position.x = -0.05
     waypoints.append(copy.deepcopy(wpose))
     #print(to_spatialmath(wpose))
 
@@ -579,7 +579,7 @@ print("")
 home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
-while (not rospy.is_shutdown() and quit == 0):
+while (not rospy.is_shutdown() or quit == 0):
     number = input("""
           
 Choose a number to make de corresponding draw or write 'q' to close the program:
