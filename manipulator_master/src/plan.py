@@ -15,13 +15,13 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.16
+pen = 0.175
 
 global quit
 quit = 0
 
 global theta
-theta = 45
+theta = 0
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
@@ -31,7 +31,7 @@ t = 0.0005
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.35
+y_h = 0.25
 
 #Tamaño de cada letra en ancho y alto
 global size
@@ -45,7 +45,7 @@ def home():
     # We get the joint values from the group and change some of the values:
     joint_goal = group.get_current_joint_values()
     joint_goal[0] = 0
-    joint_goal[1] = math.radians(30)
+    joint_goal[1] = 0
     joint_goal[2] = 0
     joint_goal[3] = 0
     joint_goal[4] = 0
@@ -151,7 +151,7 @@ def square(wpose, waypoints: list):
 def triangle(wpose, waypoints: list):
     h_t = 0.025
     b_t = 0.05
-    figure = "Triangle (h = " + str(h_t) + " b = " + str(b_t)
+    figure = "Triangle (h = " + str(h_t) + " b = " + str(b_t) + ')'
 
     (wpose, waypoints) = set_pen(wpose, waypoints, 0, y_h, pen + 0.02)
 

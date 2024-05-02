@@ -31,6 +31,7 @@ def state_position(state: JointState):
 
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_callback(state: JointState):
+    
     real_position(state)
     real_loa(state)
     real_velocity(state)

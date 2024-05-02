@@ -112,6 +112,8 @@ def get_load(list_motors):# Read present position
                 print("[ID:%03d] groupSyncRead getdata failed" % id)
             # Get Dynamixel present position value
             present_load[id]= groupSyncRead.getData(id, 126 , 4)
+
+    rospy.logerr(present_load)
     return present_load
 
 
@@ -133,7 +135,7 @@ def joint_state_publisher(list_motors,num_joints):
     #Publish the new joint state
     joints_states.position = general_joint_position_state
     joints_states.velocity = []
-    joints_states.effort = []
+    joints_states.effort = get_load(list_motors)
     joint_state_pub.publish(joints_states)
 
 
@@ -181,10 +183,6 @@ if __name__ == '__main__':
     #Publish current robot state
     joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
 
-    #Publish current robot state
-    joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
-
-
     set_sync_positions({},[list_motors, True])
 
     # Subscribe desired joint position
@@ -194,7 +192,7 @@ if __name__ == '__main__':
 
     while not rospy.is_shutdown():
         #se lama a la funcion joint state publisher para publicar los /joint_states a ROS
-        joint_state_publisher(list_motors,num_joints)
+        joint_state_publisher(list_motors, num_joints)
         r.sleep()
         
     # Clear syncread parameter storage
