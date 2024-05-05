@@ -39,9 +39,9 @@ def set_positions(data,callback_args):
 """
 
 
-def set_sync_positions(data,callback_args):
+def set_sync_positions(data : JointState,callback_args):
     list_motors = callback_args[0]
-    bool_init = callback_args[1]
+    bool_init   = callback_args[1]
     print("""=====================================================================================Lista de motores""")
     for motor in list_motors:
         for id in motor.list_ids:
@@ -111,10 +111,52 @@ def get_load(list_motors):# Read present position
             if dxl_getdata_result != True:
                 print("[ID:%03d] groupSyncRead getdata failed" % id)
             # Get Dynamixel present position value
-            present_load[id]= groupSyncRead.getData(id, 126 , 4)
+            present_load[id]= groupSyncRead.getData(id, motor.addr_present_load , 4)
 
     rospy.logerr(present_load)
     return present_load
+
+
+def get_velocities(list_motors):# Read present position
+    present_vel = [0,0,0,0,0,0]  
+    # Syncread present position
+    dxl_comm_result = groupSyncRead.txRxPacket()
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    
+    for motor in list_motors:
+        for id in motor.list_ids:
+            # Check if groupsyncread data of Dynamixel#1 is available
+            dxl_getdata_result = groupSyncRead.isAvailable(id, 128 , 4)
+            if dxl_getdata_result != True:
+                print("[ID:%03d] groupSyncRead getdata failed" % id)
+            # Get Dynamixel present position value
+            present_vel[id]= groupSyncRead.getData(id, 128 , 4)
+
+    rospy.logerr(present_vel)
+    return present_vel
+
+def get_motor_data(list_motors):
+    present_positions = [0,0,0,0,0,0]
+    present_load      = [0,0,0,0,0,0]
+    present_vel       = [0,0,0,0,0,0]
+    # Syncread present position
+    dxl_comm_result = groupSyncRead.txRxPacket()
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+
+    for motor in list_motors:
+        for id in motor.list_ids:
+            # Check if groupsyncread data of Dynamixel#1 is available
+            dxl_getdata_result = groupSyncRead.isAvailable(id, motor.addr_present_position , 4)
+            if dxl_getdata_result != True:
+                print("[ID:%03d] groupSyncRead getdata failed" % id)
+            # Get Dynamixel present position value
+            present_positions[id] = groupSyncRead.getData(id, motor.addr_present_position , 4)
+            present_vel      [id] = groupSyncRead.getData(id, motor.addr_present_velocity , 4)
+            present_load     [id] = groupSyncRead.getData(id, motor.addr_present_load     , 4)
+    
+    return present_positions, present_vel, present_load
 
 
 def joint_state_publisher(list_motors,num_joints):
@@ -122,9 +164,8 @@ def joint_state_publisher(list_motors,num_joints):
     joints_states.header = Header()
     joints_states.header.stamp = rospy.Time.now()
     joints_states.name = ['joint_'+str(id+1) for id in range(num_joints)]
-    #Read actual position after movement occured
-    #general_joint_load = get_load(list_motors)
-    general_joint_position = get_positions(list_motors)
+    #Read actual motor state after movement occured
+    general_joint_position, joints_states.velocity, joints_states.effort = get_motor_data(list_motors)
     #Convert from 0-4095 to degrees
     #print("Joint State")
     if general_joint_position != general_joint_position_state:
@@ -134,8 +175,6 @@ def joint_state_publisher(list_motors,num_joints):
                 #print("El joint del ID ", id, " es: ", general_joint_position_state[id])
     #Publish the new joint state
     joints_states.position = general_joint_position_state
-    joints_states.velocity = []
-    joints_states.effort = get_load(list_motors)
     joint_state_pub.publish(joints_states)
 
 

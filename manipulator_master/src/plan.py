@@ -8,6 +8,7 @@ import moveit_msgs.msg
 import geometry_msgs.msg
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Header
+from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 import math
 from spatialmath_rospy import to_spatialmath, to_ros
@@ -127,10 +128,10 @@ def plane_rotation(waypoints : list):
         
     return way
     
-
 def square(wpose, waypoints: list):
     square_size = 0.025
     figure = "Square (" + str(square_size) + "x" + str(square_size) + ")"
+    figure_message = "_square"
     
     (wpose, waypoints) = set_pen(wpose, waypoints, -square_size/2, y_h, pen + 0.02)
 
@@ -146,12 +147,13 @@ def square(wpose, waypoints: list):
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
-    return waypoints, wpose,  figure
+    return waypoints, wpose, figure, figure_message
 
 def triangle(wpose, waypoints: list):
     h_t = 0.025
     b_t = 0.05
     figure = "Triangle (h = " + str(h_t) + " b = " + str(b_t) + ')'
+    figure_message = "_triangle"
 
     (wpose, waypoints) = set_pen(wpose, waypoints, 0, y_h, pen + 0.02)
 
@@ -165,7 +167,7 @@ def triangle(wpose, waypoints: list):
     
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
-    return waypoints, wpose,  figure
+    return waypoints, wpose, figure, figure_message
 
 def plan_circle( center_x : float , center_y : float , r : float , theta_o : float  , theta_f : float , wpose, circle_waypoints : list , sentido_x : bool, sentido_y : bool):
     
@@ -197,6 +199,7 @@ def circle(wpose, waypoints: list):
     figure = "Circle ( " + str(r) + " )"
     center_y = y_h - r
     center_x = 0 
+    figure_message = "_circle"
 
     (wpose, waypoints) = set_pen(wpose, waypoints, 0, y_h, pen + 0.02)
     
@@ -204,11 +207,12 @@ def circle(wpose, waypoints: list):
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
-    return waypoints, wpose,  figure
+    return waypoints, wpose, figure, figure_message
 
 def espol_logo(wpose, waypoints: list):
     figure = "ESPOL (LOGO)"
     r = size/2
+    figure_message = "_espol_logo"
     
     (wpose, waypoints) = set_pen(wpose, waypoints, -(2*(size + space)) - r, y_h, pen + 0.02)
     
@@ -259,10 +263,11 @@ def espol_logo(wpose, waypoints: list):
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
-    return waypoints, wpose,  figure
+    return waypoints, wpose, figure, figure_message
 
 def espol(wpose, waypoints : list):
     figure = "ESPOL"
+    figure_message = "_espol"
 
     (wpose, waypoints) = set_pen(wpose, waypoints, -(2*(space + size)) - size/2 + size, y_h, pen + 0.002)
     
@@ -410,7 +415,7 @@ def espol(wpose, waypoints : list):
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
-    return waypoints, wpose,  figure
+    return waypoints, wpose, figure, figure_message
 
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
@@ -421,7 +426,8 @@ robot = moveit_commander.RobotCommander()
 scene = moveit_commander.PlanningSceneInterface()    
 group = moveit_commander.MoveGroupCommander("arm_group")
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
-
+data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2)
+data_writing_publisher.publish(("_none"))
 home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
@@ -444,16 +450,17 @@ Choose a number to make de corresponding draw or write 'q' to close the program:
 Write the option: """)
     
     if number.upper() != "Q":
-        (waypoints, wpose, figure) = (square    (wpose, waypoints) if number == "1" else
-                                     (triangle  (wpose, waypoints) if number == "2" else
-                                     (circle    (wpose, waypoints) if number == "3" else
-                                     (espol_logo(wpose, waypoints) if number == "4" else 
-                                     (espol     (wpose, waypoints) if number == "5" else (waypoints, wpose, figure)   )))))
+        (waypoints, wpose, figure, figure_message) = (square    (wpose, waypoints) if number == "1" else
+                                                     (triangle  (wpose, waypoints) if number == "2" else
+                                                     (circle    (wpose, waypoints) if number == "3" else
+                                                     (espol_logo(wpose, waypoints) if number == "4" else 
+                                                     (espol     (wpose, waypoints) if number == "5" else (waypoints, wpose, figure, "_none")   )))))
         
         waypoints = (plane_rotation(waypoints) if theta != 0 else waypoints)
         
         print_plan(waypoints, figure)
-
+        data_writing_publisher.publish(figure_message)
+        rospy.sleep(1)
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
         # which is why we will specify 0.01 as the eef_step in Cartesian
         # translation.  We will disable the jump threshold by setting it to 0.0,
@@ -472,6 +479,8 @@ Write the option: """)
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
         home()
+        rospy.sleep(1)
+        data_writing_publisher.publish("_none")
 
     else:
         quit = 1

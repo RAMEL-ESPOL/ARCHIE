@@ -89,7 +89,10 @@ class Motor:
 
 class XCseries_motor(Motor):
     global l_pid
-
+    '''
+    Dynamixel 2XL430-W250-T features: 
+    https://emanual.robotis.com/docs/en/dxl/x/2xl430-w250/
+    '''
     def __init__(self,usb_port, dxl_baud_rate, list_ids,portHandler,packetHandler,r,value_max_velocity,max_min_range_dict,list_pid):
         global l_pid
         super().__init__(usb_port, dxl_baud_rate, list_ids,portHandler,packetHandler,r)
@@ -101,6 +104,7 @@ class XCseries_motor(Motor):
         self.addr_goal_velocity = 104
         self.torque_enable = 1
         self.torque_disable = 0
+        self.addr_present_load = 126
         self.minimum_position_value = 0
         self.maximum_position_value = 4095
         self.moving_status_threshold = 10
@@ -109,7 +113,7 @@ class XCseries_motor(Motor):
         self.addr_pos_dgain = 80
         self.max_angle_deg = 360
         self.min_angle_deg = 0
-        self.addr_velocity_limit = 44 #unit is 0.229rpm,0-1023
+        self.addr_velocity_limit = 44 #size = 4 Bytes, Initial Value = 250, Range = 0 - 1023, Unit = 0.29 rev/min
         self.dict_range = max_min_range_dict
 
         self.angle_zero = (self.maximum_position_value-self.minimum_position_value)//2 +1
