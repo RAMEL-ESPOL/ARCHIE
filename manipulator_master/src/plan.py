@@ -22,7 +22,7 @@ global quit
 quit = 0
 
 global theta
-theta = 0
+theta = 60
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
@@ -32,7 +32,7 @@ t = 0.0005
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.25
+y_h = 0.2
 
 #Tamaño de cada letra en ancho y alto
 global size
@@ -454,12 +454,12 @@ Write the option: """)
                                                      (triangle  (wpose, waypoints) if number == "2" else
                                                      (circle    (wpose, waypoints) if number == "3" else
                                                      (espol_logo(wpose, waypoints) if number == "4" else 
-                                                     (espol     (wpose, waypoints) if number == "5" else (waypoints, wpose, figure, "_none")   )))))
+                                                     (espol     (wpose, waypoints) if number == "5" else (waypoints, wpose, "none", "_none")   )))))
         
         waypoints = (plane_rotation(waypoints) if theta != 0 else waypoints)
         
         print_plan(waypoints, figure)
-        data_writing_publisher.publish(figure_message)
+        data_writing_publisher.publish(figure_message + "_" + str(theta) + "_h_" + str(y_h))
         rospy.sleep(1)
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
         # which is why we will specify 0.01 as the eef_step in Cartesian

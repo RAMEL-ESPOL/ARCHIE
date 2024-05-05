@@ -64,8 +64,6 @@ def figure(data_figure : str):
     global fig
     fig = str(data_figure.data)
 
-    rospy.logerr(data_figure)
-
 def write_data(posiciones, pre):
     global new_file
     if fig != '_none':
