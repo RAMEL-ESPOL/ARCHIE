@@ -16,13 +16,13 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.175
+pen = 0.17
 
 global quit
 quit = 0
 
 global theta
-theta = 60
+theta = 30
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
@@ -32,7 +32,7 @@ t = 0.0005
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.2
+y_h = 0.3
 
 #Tamaño de cada letra en ancho y alto
 global size
@@ -459,7 +459,7 @@ Write the option: """)
         waypoints = (plane_rotation(waypoints) if theta != 0 else waypoints)
         
         print_plan(waypoints, figure)
-        data_writing_publisher.publish(figure_message + "_" + str(theta) + "_h_" + str(y_h))
+        data_writing_publisher.publish(figure_message + "_t" + str(theta) + "_h" + str(y_h*100).split('.')[0] + "_p" + str((pen - 0.17)*100).split('.')[0])
         rospy.sleep(1)
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
         # which is why we will specify 0.01 as the eef_step in Cartesian
