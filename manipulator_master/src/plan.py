@@ -43,7 +43,7 @@ global space
 space = 0.01
 
 def home():
-    # We get the joint values from the group and change some of the values:
+    '''
     joint_goal = group.get_current_joint_values()
     joint_goal[0] = 0
     joint_goal[1] = 0
@@ -55,7 +55,32 @@ def home():
     # The go command can be called with joint values, poses, or without any
     # parameters if you have already set the pose or joint target for the group
     group.go(joint_goal, wait=True)
+    '''
+    waypoints = []
+
+    wpose = group.get_current_pose().pose 
+    wpose.position.x = 0 #0.010161332452417767
+    wpose.position.y = 0.2
+    wpose.position.z = 0.35
+    wpose.orientation.x = -0.7189220126245031
+    wpose.orientation.y = 0.6941852389299743
+    wpose.orientation.z = 0
+    wpose.orientation.w = 0
+    waypoints.append(copy.deepcopy(wpose))
+
+    (plan, fraction) = group.compute_cartesian_path(waypoints, t, 0.0)  # jump_threshold
+
+    display_trajectory = moveit_msgs.msg.DisplayTrajectory()
+    display_trajectory.trajectory_start = robot.get_current_state()
+    display_trajectory.trajectory.append(plan)
+
+    # Publish
+    display_trajectory_publisher.publish(display_trajectory)
+    
+    group.execute(plan, wait=True)
+
     rospy.loginfo("The robotic arm is at home position.")
+    return wpose
 
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
@@ -451,10 +476,11 @@ group = moveit_commander.MoveGroupCommander("arm_group")
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2)
 data_writing_publisher.publish(("_none"))
-home()
+wpose = group.get_current_pose().pose
+wpose = home()
+rospy.logerr(group.get_current_joint_values())
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
-wpose = group.get_current_pose().pose
 
 while (not rospy.is_shutdown() and quit == 0):
     
@@ -501,7 +527,7 @@ Write the option: """)
         
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
-        home()
+        wpose = home()
         rospy.sleep(1)
         data_writing_publisher.publish("_none")
 
