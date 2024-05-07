@@ -527,7 +527,7 @@ Write the option: """)
         
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
-        home()
+        wpose = home()
         rospy.sleep(1)
         data_writing_publisher.publish("_none")
 
