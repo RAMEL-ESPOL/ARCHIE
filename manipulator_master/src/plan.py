@@ -16,27 +16,27 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.17
+pen = 0.253
 
 global quit
 quit = 0
 
 global theta
-theta = 30
+theta = 5
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
 
 global t
-t = 0.0005
+t = 0.00004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.3
+y_h = 0.35
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.025
+size = 0.02
 
 #Espacio entre cada letra
 global space
@@ -71,7 +71,11 @@ Pose {0}:\n{1}
     loginfog("Drawing a " + s)
 
 def pen_up_down(wpose, waypoints : list):
-    wpose.position.z = pen + 0.02
+    wpose.position.z = pen + 0.02    
+    wpose.position.y += 0.005
+    waypoints.append(copy.deepcopy(wpose))
+
+    wpose.position.y -= 0.005
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
@@ -81,8 +85,11 @@ def pen_up_down(wpose, waypoints : list):
 
 def up_pen(wpose, waypoints : list):
     wpose.position.z = pen + 0.02
+    wpose.position.y += 0.01
     waypoints.append(copy.deepcopy(wpose))
 
+    wpose.position.y -= 0.01
+    waypoints.append(copy.deepcopy(wpose))
     return wpose, waypoints
 
 def down_pen(wpose, waypoints : list):
@@ -141,9 +148,25 @@ def square(wpose, waypoints: list):
 
     (wpose, waypoints) = move_pen(wpose, waypoints, square_size, 0)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, y_h)
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = set_pen(wpose, waypoints, -square_size/2, y_h, pen + 0.02)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, square_size, y_h)
+
+    (wpose, waypoints) = pen_up_down(wpose, waypoints)
     
-    (wpose, waypoints) = move_pen(wpose, waypoints, -square_size, 0)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -square_size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = set_pen(wpose, waypoints, -square_size/2, y_h -2*square_size/5, pen + 0.02)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, square_size, 0)
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
@@ -459,7 +482,7 @@ Write the option: """)
         waypoints = (plane_rotation(waypoints) if theta != 0 else waypoints)
         
         print_plan(waypoints, figure)
-        data_writing_publisher.publish(figure_message + "_t" + str(theta) + "_h" + str(y_h*100).split('.')[0] + "_p" + str((pen - 0.17)*100).split('.')[0])
+        data_writing_publisher.publish(figure_message + "_t" + str(theta) + "_h" + str(y_h*100).split('.')[0] + "_p" + str((pen)*100).split('.')[0])
         rospy.sleep(1)
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
         # which is why we will specify 0.01 as the eef_step in Cartesian

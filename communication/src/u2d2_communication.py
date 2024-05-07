@@ -165,7 +165,7 @@ def joint_state_publisher(list_motors,num_joints):
     joints_states.header.stamp = rospy.Time.now()
     joints_states.name = ['joint_'+str(id+1) for id in range(num_joints)]
     #Read actual motor state after movement occured
-    general_joint_position, joints_states.velocity, joints_states.effort = get_motor_data(list_motors)
+    general_joint_position = get_positions(list_motors)
     #Convert from 0-4095 to degrees
     #print("Joint State")
     if general_joint_position != general_joint_position_state:
@@ -181,7 +181,7 @@ def joint_state_publisher(list_motors,num_joints):
 if __name__ == '__main__':
 
     rospy.init_node("motor_communication")
-    r =rospy.Rate(5) # 10hz
+    r =rospy.Rate(10) # 10hz
 
     usb_port = rospy.get_param('~usb_port')
     dxl_baud_rate = rospy.get_param('~dxl_baud_rate')
@@ -204,12 +204,10 @@ if __name__ == '__main__':
     list_motors = [base,codo,ee]
 
     # Initialize GroupSyncWrite instance
-    groupSyncWrite = GroupSyncWrite(portHandler, packetHandler, 116, 4)
+    groupSyncWrite = GroupSyncWrite(portHandler, packetHandler, ee.addr_goal_position, 4)
     # Initialize GroupSyncRead instace for Present Position
-    #groupSyncRead = GroupSyncRead(portHandler, packetHandler, 132, 4)
 
-    #leer las velocidades
-    groupSyncRead = GroupSyncRead(portHandler, packetHandler, 132, 4)
+    groupSyncRead = GroupSyncRead(portHandler, packetHandler, ee.addr_present_position, 4)
 
     for m in list_motors:
         for id in m.list_ids:

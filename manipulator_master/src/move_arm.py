@@ -17,7 +17,7 @@ global real_vel
 real_vel =  [0.0,0.0,0.0,0.0,0.0,0.0]
 
 global ruta_file
-ruta_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'matlab')
+ruta_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'matlab', 'data')
 
 global new_file
 new_file  = False
@@ -39,8 +39,8 @@ def state_position(goal_state: JointState):
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_callback(real_state: JointState):
     real_position(real_state)
-    real_torque  (real_state)
-    real_velocity(real_state)
+    #real_torque  (real_state)
+    #real_velocity(real_state)
 
 def real_position(real_state: JointState): 
     global real_pos
