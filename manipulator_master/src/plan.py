@@ -16,13 +16,16 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.247
+#pen = 0.247 
+#pen = 0.221
+#pen = 0.186
+pen = 0.15
 
 global quit
 quit = 0
 
 global theta
-theta = 5
+theta = 35
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
@@ -43,29 +46,20 @@ global space
 space = 0.01
 
 def home():
-    '''
+    
     joint_goal = group.get_current_joint_values()
-    joint_goal[0] = 0
-    joint_goal[1] = 0
-    joint_goal[2] = 0
-    joint_goal[3] = 0
-    joint_goal[4] = 0
-    joint_goal[5] = 0
+    joint_goal = [1.267872420911887e-06, 0.16714812767180828, 0.24872782685877684, -3.421257973905653e-07, -0.41587595452500437, -3.5425905235787057e-07]
 
     # The go command can be called with joint values, poses, or without any
     # parameters if you have already set the pose or joint target for the group
     group.go(joint_goal, wait=True)
-    '''
+    """
     waypoints = []
 
     wpose = group.get_current_pose().pose 
-    wpose.position.x = 0 #0.010161332452417767
-    wpose.position.y = 0.2
-    wpose.position.z = 0.35
-    wpose.orientation.x = -0.7189220126245031
-    wpose.orientation.y = 0.6941852389299743
-    wpose.orientation.z = 0
-    wpose.orientation.w = 0
+    #wpose.position.x = 0 #0.010161332452417767
+    wpose.position.y += 0.2
+    wpose.position.z -= 0.1
     waypoints.append(copy.deepcopy(wpose))
 
     (plan, fraction) = group.compute_cartesian_path(waypoints, t, 0.0)  # jump_threshold
@@ -76,8 +70,8 @@ def home():
 
     # Publish
     display_trajectory_publisher.publish(display_trajectory)
-    
-    group.execute(plan, wait=True)
+    """
+    #group.execute(plan, wait=True)
 
     rospy.loginfo("The robotic arm is at home position.")
     return wpose
