@@ -60,7 +60,7 @@ for j = 1:4
     xlabel("Iteración")
     ylabel("Torque (kg*m)")
     hold on
-    plot(g_states_325(:,j),"LineWidth",2)
+    plot(g_states_h35(:,j),"LineWidth",2)
     hold on
     plot(g_states_h40(:,j),"LineWidth",2)
     hold on
