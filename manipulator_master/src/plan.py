@@ -20,7 +20,7 @@ global pen
 #pen = 0.221
 #pen = 0.186
 #pen = 0.15
-pen = 0.12
+pen = 0.124
 global quit
 quit = 0
 
@@ -35,7 +35,7 @@ t = 0.00004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.3
+y_h = 0.35
 
 #Tamaño de cada letra en ancho y alto
 global size
