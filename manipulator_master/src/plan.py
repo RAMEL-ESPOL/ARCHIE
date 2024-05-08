@@ -35,7 +35,7 @@ t = 0.00004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.30
+y_h = 0.45
 
 #Tamaño de cada letra en ancho y alto
 global size
