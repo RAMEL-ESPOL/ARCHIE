@@ -117,14 +117,14 @@ for j = 1:6
 end
 
 figure(6)
-plot(joint_states_h35(:,1))
+plot(joint_states_h35(:,2))
 grid on
 grid minor
 title("Desplazamiento del Joint " + 0)
 xlabel("Iteración")
 ylabel("Desplazamiento (grados)")
 hold on
-plot(joint_goals_h35(:,1))
+plot(joint_goals_h35(:,2))
 legend('joint_states','joint_goals') 
 
 
