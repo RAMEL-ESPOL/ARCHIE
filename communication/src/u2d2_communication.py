@@ -203,8 +203,8 @@ if __name__ == '__main__':
     """
     #Plano inclinado
     base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[2000,800,0],1:[3000,1200,0]})
-    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[3000,1200,0],3:[1000,0,0]})
-    ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[800,200,0],5:[200,0,20]})
+    codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[3300,1200,0],3:[1000,0,0]})
+    ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[1200,500,0],5:[200,0,20]})
 
     list_motors = [base,codo,ee]
 
