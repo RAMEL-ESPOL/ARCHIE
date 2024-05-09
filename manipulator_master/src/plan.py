@@ -20,7 +20,11 @@ global pen
 #pen = 0.221
 #pen = 0.186
 #pen = 0.15
+<<<<<<< HEAD
 pen = 0.1225
+=======
+pen = 0.1242
+>>>>>>> 1f552b9bb7321e454fdb40cf21547e081bd0b206
 global quit
 quit = 0
 
@@ -43,7 +47,7 @@ size = 0.02
 
 #Espacio entre cada letra
 global space
-space = 0.005
+space = 0.01
 
 def home():
     
@@ -311,32 +315,48 @@ def espol(wpose, waypoints : list):
     figure = "ESPOL"
     figure_message = "_espol"
 
-    (wpose, waypoints) = set_pen(wpose, waypoints, -(2*(space + size)) - size/2 + size, y_h, pen + 0.01)
+    (wpose, waypoints) = set_pen(wpose, waypoints, -(2*(space + size)) - size/2 + size, y_h, pen + 0.002)
     
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
     #Drawing the "E"
     (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, 0.007, pen + 0.02)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -0.007)
     
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
+    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
+    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
     
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
-
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size ,0 , 0)
     
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
+<<<<<<< HEAD
     (wpose, waypoints) = move_pen(wpose, waypoints, size*2/3, 0)
+=======
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+>>>>>>> 1f552b9bb7321e454fdb40cf21547e081bd0b206
     
     (wpose, waypoints) = up_pen(wpose, waypoints)
     
 
     #Drawing the "S"
+<<<<<<< HEAD
     (wpose, waypoints) = move_pen(wpose, waypoints, size*1/3 + size + space, y_h)
+=======
+    (wpose, waypoints) = move_pen(wpose, waypoints, 2*size + space, y_h)
+>>>>>>> 1f552b9bb7321e454fdb40cf21547e081bd0b206
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
@@ -346,15 +366,35 @@ def espol(wpose, waypoints : list):
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
     
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, 0.01, pen + 0.02)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -0.01)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+    
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size , 0)
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/3, pen + 0.02)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
+
+<<<<<<< HEAD
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size , 0)
+=======
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+>>>>>>> 1f552b9bb7321e454fdb40cf21547e081bd0b206
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, space + size, y_h)
 
