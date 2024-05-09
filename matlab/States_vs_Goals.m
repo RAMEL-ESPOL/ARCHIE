@@ -105,15 +105,16 @@ diferencia_h45 = joint_states_h45 - joint_goals_h45;
 for j = 1:6
     figure(5);
     subplot(3,2,j)
-    plot(joint_states_h40(:,j),"LineWidth",2)
+    plot(joint_states_h35(:,j),"LineWidth",2)
     grid on
     grid minor
     title("Desplazamiento del Joint " + (j - 1))
     xlabel("Iteración")
     ylabel("Desplazamiento (grados)")
     hold on
-    plot(joint_goals_h40(:,j),"LineWidth",2)
+    plot(joint_goals_h35(:,j),"LineWidth",2)
     legend('joint_states','joint_goals') 
 end
+
 
 
