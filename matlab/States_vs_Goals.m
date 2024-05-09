@@ -120,7 +120,7 @@ figure(6)
 plot(joint_states_h35(:,2))
 grid on
 grid minor
-title("Desplazamiento del Joint " + 0)
+title("Desplazamiento del Joint " + 1)
 xlabel("Iteración")
 ylabel("Desplazamiento (grados)")
 hold on
