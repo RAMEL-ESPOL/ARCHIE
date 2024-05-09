@@ -5,8 +5,8 @@ robot.Gravity = [0 0 -9.81];
 
 joint_goals_h30   = table2array(readtable('matlab/data/joint_goals_square_t35_h30_p12.txt'));
 joint_states_h30  = table2array(readtable('matlab/data/joint_real_states_square_t35_h30_p12.txt'));
-joint_goals_h35   = table2array(readtable('matlab/data/joint_goals_square_t35_h35_p12.txt'));
-joint_states_h35  = table2array(readtable('matlab/data/joint_real_states_square_t35_h35_p12.txt'));
+joint_goals_h35   = table2array(readtable('matlab/data/joint_goals_espol_t35_h35_p12.txt'));
+joint_states_h35  = table2array(readtable('matlab/data/joint_real_states_espol_t35_h35_p12.txt'));
 joint_goals_h40   = table2array(readtable('matlab/data/joint_goals_square_t35_h40_p12.txt'));
 joint_states_h40  = table2array(readtable('matlab/data/joint_real_states_square_t35_h40_p12.txt'));
 joint_goals_h45   = table2array(readtable('matlab/data/joint_goals_square_t35_h45_p12.txt'));
