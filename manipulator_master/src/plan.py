@@ -311,7 +311,7 @@ def espol(wpose, waypoints : list):
     figure = "ESPOL"
     figure_message = "_espol"
 
-    (wpose, waypoints) = set_pen(wpose, waypoints, -(2*(space + size)) - size/2 + size, y_h, pen + 0.002)
+    (wpose, waypoints) = set_pen(wpose, waypoints, -(2*(space + size)) - size/2 + size, y_h, pen + 0.01)
     
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
