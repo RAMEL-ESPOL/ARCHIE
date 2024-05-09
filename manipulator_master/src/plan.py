@@ -20,7 +20,7 @@ global pen
 #pen = 0.221
 #pen = 0.186
 #pen = 0.15
-pen = 0.1234
+pen = 0.124
 global quit
 quit = 0
 
