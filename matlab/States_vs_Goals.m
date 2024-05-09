@@ -33,73 +33,73 @@ diferencia_h30 = joint_states_h30 - joint_goals_h30;
 diferencia_h35 = joint_states_h35 - joint_goals_h35;
 diferencia_h40 = joint_states_h40 - joint_goals_h40;
 diferencia_h45 = joint_states_h45 - joint_goals_h45;
-
-for j = 1:4
-    figure(1);
-    subplot(2,2,j)
-    plot(joint_states_h30(:,j),"LineWidth",2)
-    grid on
-    grid minor
-    title("Desplazamiento del Joint " + (j - 1))
-    xlabel("Iteración")
-    ylabel("Desplazamiento (grados)")
-    hold on
-    plot(joint_states_h35(:,j),"LineWidth",2)
-    hold on
-    plot(joint_states_h40(:,j),"LineWidth",2)
-    hold on
-    plot(joint_states_h45(:,j),"LineWidth",2)
-    legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0') 
-    
-    figure(2);
-    subplot(2,2,j)
-    plot(g_states_h30(:,j),"LineWidth",2)
-    grid on
-    grid minor
-    title("Torque en el Joint " + (j - 1))
-    xlabel("Iteración")
-    ylabel("Torque (kg*m)")
-    hold on
-    plot(g_states_h35(:,j),"LineWidth",2)
-    hold on
-    plot(g_states_h40(:,j),"LineWidth",2)
-    hold on
-    plot(g_states_h45(:,j),"LineWidth",2)
-    legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0') 
-
-    figure(3)
-    subplot(2,2,j)
-    plot(diferencia_h30(:,j),"LineWidth",2);
-    grid on
-    grid minor
-    title("Diferencia JointStates y JointGoals "+ (j - 1));
-    xlabel('Iteración');
-    ylabel('Diferencia (grados)');
-    hold on
-    plot(diferencia_h35(:,j),"LineWidth",2);
-    hold on
-    plot(diferencia_h40(:,j),"LineWidth",2);
-    hold on
-    plot(diferencia_h45(:,j),"LineWidth",2);
-    legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0') 
-end
-
-figure(4);
-plot(det_states_h30,"LineWidth",2)
-grid on
-grid minor
-title(strcat("Determinantes de figura"))
-xlabel("Iteración")
-ylabel("Determinante")
-hold on;
-plot(det_states_h35,"LineWidth",2)
-hold on;
-plot(det_states_h40,"LineWidth",2)
-hold on;
-plot(det_states_h45,"LineWidth",2)
-hold on
-plot([1, length(det_states_h35)], [0, 0], 'r--');
-legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0')
+% 
+% for j = 1:4
+%     figure(1);
+%     subplot(2,2,j)
+%     plot(joint_states_h30(:,j),"LineWidth",2)
+%     grid on
+%     grid minor
+%     title("Desplazamiento del Joint " + (j - 1))
+%     xlabel("Iteración")
+%     ylabel("Desplazamiento (grados)")
+%     hold on
+%     plot(joint_states_h35(:,j),"LineWidth",2)
+%     hold on
+%     plot(joint_states_h40(:,j),"LineWidth",2)
+%     hold on
+%     plot(joint_states_h45(:,j),"LineWidth",2)
+%     legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0') 
+%     
+%     figure(2);
+%     subplot(2,2,j)
+%     plot(g_states_h30(:,j),"LineWidth",2)
+%     grid on
+%     grid minor
+%     title("Torque en el Joint " + (j - 1))
+%     xlabel("Iteración")
+%     ylabel("Torque (kg*m)")
+%     hold on
+%     plot(g_states_h35(:,j),"LineWidth",2)
+%     hold on
+%     plot(g_states_h40(:,j),"LineWidth",2)
+%     hold on
+%     plot(g_states_h45(:,j),"LineWidth",2)
+%     legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0') 
+% 
+%     figure(3)
+%     subplot(2,2,j)
+%     plot(diferencia_h30(:,j),"LineWidth",2);
+%     grid on
+%     grid minor
+%     title("Diferencia JointStates y JointGoals "+ (j - 1));
+%     xlabel('Iteración');
+%     ylabel('Diferencia (grados)');
+%     hold on
+%     plot(diferencia_h35(:,j),"LineWidth",2);
+%     hold on
+%     plot(diferencia_h40(:,j),"LineWidth",2);
+%     hold on
+%     plot(diferencia_h45(:,j),"LineWidth",2);
+%     legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0') 
+% end
+% 
+% figure(4);
+% plot(det_states_h30,"LineWidth",2)
+% grid on
+% grid minor
+% title(strcat("Determinantes de figura"))
+% xlabel("Iteración")
+% ylabel("Determinante")
+% hold on;
+% plot(det_states_h35,"LineWidth",2)
+% hold on;
+% plot(det_states_h40,"LineWidth",2)
+% hold on;
+% plot(det_states_h45,"LineWidth",2)
+% hold on
+% plot([1, length(det_states_h35)], [0, 0], 'r--');
+% legend('h = 30', 'h = 35', 'h = 40', 'h = 45', 'Eje 0')
 
 
 for j = 1:6
