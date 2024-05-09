@@ -159,7 +159,7 @@ def square(wpose, waypoints: list):
     figure = "Square (" + str(square_size) + "x" + str(square_size) + ")"
     figure_message = "_square"
     
-    (wpose, waypoints) = set_pen(wpose, waypoints, -square_size/2, y_h, pen + 0.02)
+    (wpose, waypoints) = set_pen(wpose, waypoints,-0.05 -square_size/2, y_h, pen + 0.02)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
@@ -169,7 +169,7 @@ def square(wpose, waypoints: list):
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    (wpose, waypoints) = set_pen(wpose, waypoints, -square_size/2, y_h, pen + 0.02)
+    (wpose, waypoints) = set_pen(wpose, waypoints,-0.05 -square_size/2, y_h, pen + 0.02)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
@@ -181,7 +181,7 @@ def square(wpose, waypoints: list):
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    (wpose, waypoints) = set_pen(wpose, waypoints, -square_size/2, y_h -2*square_size/5, pen + 0.02)
+    (wpose, waypoints) = set_pen(wpose, waypoints,-0.05 -square_size/2, y_h -2*square_size/5, pen + 0.02)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
