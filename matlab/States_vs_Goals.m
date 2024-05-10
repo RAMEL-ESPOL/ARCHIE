@@ -3,14 +3,14 @@ robot = importrobot('manipulator_description/urdf/manipulator.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
-joint_goals_h20   = table2array(readtable('matlab/data/joint_goals_square_t5_h20_p24.txt'));
-joint_states_h20  = table2array(readtable('matlab/data/joint_real_states_square_t5_h20_p24.txt'));
-joint_goals_h25   = table2array(readtable('matlab/data/joint_goals_square_t5_h25_p24.txt'));
-joint_states_h25  = table2array(readtable('matlab/data/joint_real_states_square_t5_h25_p24.txt'));
-joint_goals_h30   = table2array(readtable('matlab/data/joint_goals_square_t5_h30_p24.txt'));
-joint_states_h30  = table2array(readtable('matlab/data/joint_real_states_square_t5_h30_p24.txt'));
-joint_goals_h35   = table2array(readtable('matlab/data/joint_goals_square_t5_h35_p24.txt'));
-joint_states_h35  = table2array(readtable('matlab/data/joint_real_states_square_t5_h35_p24.txt'));
+joint_goals_h20   = table2array(readtable('matlab/data/joint_goals_square_t5_h20_p22.txt'));
+joint_states_h20  = table2array(readtable('matlab/data/joint_real_states_square_t5_h20_p22.txt'));
+joint_goals_h25   = table2array(readtable('matlab/data/joint_goals_square_t5_h25_p22.txt'));
+joint_states_h25  = table2array(readtable('matlab/data/joint_real_states_square_t5_h25_p22.txt'));
+joint_goals_h30   = table2array(readtable('matlab/data/joint_goals_square_t5_h30_p22.txt'));
+joint_states_h30  = table2array(readtable('matlab/data/joint_real_states_square_t5_h30_p22.txt'));
+joint_goals_h35   = table2array(readtable('matlab/data/joint_goals_square_t5_h35_p22.txt'));
+joint_states_h35  = table2array(readtable('matlab/data/joint_real_states_square_t5_h35_p22.txt'));
 
 for i=1:length(joint_goals_h20)
     det_states_h20(i)  = det(geometricJacobian(robot,deg2rad(joint_states_h20(i,:)),'link_6'));
