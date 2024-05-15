@@ -6,7 +6,7 @@ robot.Gravity = [0 0 -9.81];
 joint_goals   = table2array(readtable('matlab/data/joint_goals_espol_t5_h20_p21.txt'));
 joint_states  = table2array(readtable('matlab/data/joint_real_states_espol_t5_h20_p21.txt'));
 
-diferencia = joint_states - joint_goals;
+diferencia = abs(joint_states - joint_goals);
 
 for j = 1:6
 
