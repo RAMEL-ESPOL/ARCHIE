@@ -16,16 +16,13 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-#pen = 0.247 
-#pen = 0.221
-#pen = 0.186
-#pen = 0.15
-pen = 0.1225
+pen = 0.2195 #plano perpendicular
+#pen = 0.1225 # plano inclinado
 global quit
 quit = 0
 
 global theta
-theta = 35
+theta = 5
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
@@ -35,20 +32,23 @@ t = 0.00004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.35
+y_h = 0.225
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.02
+size = 0.025
 
 #Espacio entre cada letra
 global space
-space = 0.005
+space = 0.006
 
 def home():
     
     joint_goal = group.get_current_joint_values()
-    joint_goal = [1.267872420911887e-06, 0.16714812767180828, 0.24872782685877684, -3.421257973905653e-07, -0.41587595452500437, -3.5425905235787057e-07]
+    #Para el plano inclinado es un home diferente
+    #joint_goal = [1.267872420911887e-06, 0.16714812767180828, 0.24872782685877684, -3.421257973905653e-07, -0.41587595452500437, -3.5425905235787057e-07]
+    #Home:
+    joint_goal = [0,0,0,0,0,0]
 
     # The go command can be called with joint values, poses, or without any
     # parameters if you have already set the pose or joint target for the group
@@ -178,14 +178,6 @@ def square(wpose, waypoints: list):
     (wpose, waypoints) = pen_up_down(wpose, waypoints)
     
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -square_size)
-
-    (wpose, waypoints) = up_pen(wpose, waypoints)
-
-    (wpose, waypoints) = set_pen(wpose, waypoints,-square_size/2, y_h -2*square_size/5, pen + 0.02)
-
-    (wpose, waypoints) = down_pen(wpose, waypoints)
-
-    (wpose, waypoints) = move_pen(wpose, waypoints, square_size, 0)
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
@@ -325,28 +317,22 @@ def espol(wpose, waypoints : list):
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
-
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
-    
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
-    
-    (wpose, waypoints) = down_pen(wpose, waypoints)
     
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0, 0 )
+    (wpose, waypoints) = move_pen(wpose, waypoints, -1*size/3, 0, 0 )
     
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, size*2/3, 0)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*2/3, 0)
     
     (wpose, waypoints) = up_pen(wpose, waypoints)
     
 
     #Drawing the "S"
-    (wpose, waypoints) = move_pen(wpose, waypoints, size*1/3 + size + space, y_h)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + size + space, y_h)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 

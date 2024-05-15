@@ -14,31 +14,31 @@ import math
 
 # Altura del lapiz
 global pen 
-pen = 0.1635
+pen = 0.22
 
 #El paso que habrá entre una coordenada y la siguiente a la hora de escribir
 global t
-t = 0.00003
+t = 0.00004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.175
+y_h = 0.23
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.020
+size = 0.02
 
 #Espacio entre cada letra
 global space
-space = 0.01
+space = 0.005
 
 #Altura cuando se levanta el l
 def home():
     # We get the joint values from the group and change some of the values:
     joint_goal = group.get_current_joint_values()
     joint_goal[0] = 0
-    joint_goal[1] = 0.4
-    joint_goal[2] = 0.4
+    joint_goal[1] = 0
+    joint_goal[2] = 0
     joint_goal[3] = 0
     joint_goal[4] = 0
     joint_goal[5] = 0
