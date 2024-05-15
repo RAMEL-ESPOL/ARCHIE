@@ -16,7 +16,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.216 #plano perpendicular
+pen = 0.218 #plano perpendicular
 #pen = 0.1225 # plano inclinado
 global quit
 quit = 0
@@ -332,27 +332,39 @@ def espol(wpose, waypoints : list):
     
 
     #Drawing the "S"
-    (wpose, waypoints) = move_pen(wpose, waypoints, size + size + space, y_h)
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
 
     (wpose, waypoints) = pen_up_down(wpose, waypoints)
-
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
     
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, size/2)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0 , -size/2)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0 , -size/2)
+
     (wpose, waypoints) = pen_up_down(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size , 0)
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
-
-    (wpose, waypoints) = move_pen(wpose, waypoints, space + size, y_h)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, y_h)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
