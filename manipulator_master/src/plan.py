@@ -91,10 +91,10 @@ Pose {0}:\n{1}
 
 def pen_up_down(wpose, waypoints : list):
     wpose.position.z = pen + 0.02    
-    wpose.position.y += 0.005
+    wpose.position.y += 0.008
     waypoints.append(copy.deepcopy(wpose))
 
-    wpose.position.y -= 0.005
+    wpose.position.y -= 0.008
     waypoints.append(copy.deepcopy(wpose))
 
     wpose.position.z = pen
