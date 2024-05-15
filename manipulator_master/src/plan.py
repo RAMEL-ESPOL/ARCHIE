@@ -383,6 +383,8 @@ def espol(wpose, waypoints : list):
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size/2)
 
+    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+
     (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, size/2, pen + 0.02)
@@ -406,6 +408,8 @@ def espol(wpose, waypoints : list):
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = pen_up_down(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
