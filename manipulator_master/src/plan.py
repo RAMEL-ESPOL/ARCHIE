@@ -16,7 +16,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.218 #plano perpendicular
+pen = 0.217 #plano perpendicular
 #pen = 0.1225 # plano inclinado
 global quit
 quit = 0
@@ -325,6 +325,8 @@ def espol(wpose, waypoints : list):
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = pen_up_down(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
