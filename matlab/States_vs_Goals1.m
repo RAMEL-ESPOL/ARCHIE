@@ -15,10 +15,10 @@ for j = 1:6
     plot(diferencia(:,j),"LineWidth",2);
     grid on
     grid minor
-    title("Diferencia JointStates y JointGoals " + (j - 1) + "    Promedio: " + mean(diferencia(:,j)));
+    title("Diferencia JointStates y JointGoals " + (j - 1));
     xlabel('Iteración');
     ylabel('Diferencia (grados)');
-    legend('Diferencia') 
+    legend("Promedio: " + mean(diferencia(:,j)))
     axis([0 900 -2 2])
 
     figure(2);
