@@ -11,6 +11,14 @@ joint_goals_h40   = table2array(readtable('matlab/data/joint_goals_square_t35_h4
 joint_states_h40  = table2array(readtable('matlab/data/joint_real_states_square_t35_h40_p12.txt'));
 joint_goals_h45   = table2array(readtable('matlab/data/joint_goals_square_t35_h45_p12.txt'));
 joint_states_h45  = table2array(readtable('matlab/data/joint_real_states_square_t35_h45_p12.txt'));
+joint_goals_h20   = table2array(readtable('matlab/data/joint_goals_square_t5_h20_p22.txt'));
+joint_states_h20  = table2array(readtable('matlab/data/joint_real_states_square_t5_h20_p22.txt'));
+joint_goals_h25   = table2array(readtable('matlab/data/joint_goals_square_t5_h25_p22.txt'));
+joint_states_h25  = table2array(readtable('matlab/data/joint_real_states_square_t5_h25_p22.txt'));
+joint_goals_h30   = table2array(readtable('matlab/data/joint_goals_square_t5_h30_p22.txt'));
+joint_states_h30  = table2array(readtable('matlab/data/joint_real_states_square_t5_h30_p22.txt'));
+joint_goals_h35   = table2array(readtable('matlab/data/joint_goals_square_t5_h35_p22.txt'));
+joint_states_h35  = table2array(readtable('matlab/data/joint_real_states_square_t5_h35_p22.txt'));
 
 for i=1:length(joint_goals_h30)
     det_states_h30(i)  = det(geometricJacobian(robot,deg2rad(joint_states_h30(i,:)),'link_6'));
