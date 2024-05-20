@@ -7,9 +7,8 @@ robot.Gravity = [0 0 -9.81];
 joint_data = table2array(readtable(strcat('matlab/data/joint_goals_square_t5_h20_p15.txt')));
 
 for i = 1:length(joint_data)
-    jointVal = joint_data(i,:);
     det_urdf(i) = det(geometricJacobian(robot,deg2rad(joint_data(i,:)),'link_6'));
-    det_DH  (i) = double(subs(det_J, jointVars, jointVal));
+    det_DH  (i) = double(subs(det_J, jointVars, joint_data(i,:)));
 end
 
 figure(1);
