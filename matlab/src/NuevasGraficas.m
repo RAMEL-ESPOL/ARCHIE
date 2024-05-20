@@ -4,14 +4,14 @@ robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
 
-joint_data_square_t0_h15_p12 = table2array(readtable(strcat('matlab/joint_goals_square_t0_h15_p12.txt')));
-joint_data_square_t0_h15_p23 = table2array(readtable(strcat('matlab/joint_goals_square_t0_h15_p23.txt')));
-joint_data_square_t0_h25_p12 = table2array(readtable(strcat('matlab/joint_goals_square_t0_h25_p12.txt')));
-joint_data_square_t0_h25_p23 = table2array(readtable(strcat('matlab/joint_goals_square_t0_h25_p23.txt')));
-joint_data_square_t0_h35_p12 = table2array(readtable(strcat('matlab/joint_goals_square_t0_h35_p12.txt')));
-joint_data_square_t30_h25_p0 = table2array(readtable(strcat('matlab/joint_goals_square_t30_h25_p0.txt')));
-joint_data_square_t30_h30_p0 = table2array(readtable(strcat('matlab/joint_goals_square_t30_h30_p0.txt')));
-joint_data_square_t30_h35_p0 = table2array(readtable(strcat('matlab/joint_goals_square_t30_h35_p0.txt')));
+joint_data_square_t0_h15_p12 = table2array(readtable(strcat('matlab/data/joint_goals_square_t0_h15_p12.txt')));
+joint_data_square_t0_h15_p23 = table2array(readtable(strcat('matlab/data/joint_goals_square_t0_h15_p23.txt')));
+joint_data_square_t0_h25_p12 = table2array(readtable(strcat('matlab/data/joint_goals_square_t0_h25_p12.txt')));
+joint_data_square_t0_h25_p23 = table2array(readtable(strcat('matlab/data/joint_goals_square_t0_h25_p23.txt')));
+joint_data_square_t0_h35_p12 = table2array(readtable(strcat('matlab/data/joint_goals_square_t0_h35_p12.txt')));
+joint_data_square_t30_h25_p0 = table2array(readtable(strcat('matlab/data/joint_goals_square_t30_h25_p0.txt')));
+joint_data_square_t30_h30_p0 = table2array(readtable(strcat('matlab/data/joint_goals_square_t30_h30_p0.txt')));
+joint_data_square_t30_h35_p0 = table2array(readtable(strcat('matlab/data/joint_goals_square_t30_h35_p0.txt')));
 
 for i = 1:length(joint_data_square_t0_h15_p12)
     det_squaret0_h15_p12(i) = det(geometricJacobian(robot,deg2rad(joint_data_square_t0_h15_p12(i,:)),'link_6'));
