@@ -4,12 +4,12 @@ jointVars = [q1 q2 q3 q4 q5 q6];
 
 % Parámetros DH: [theta d a alpha]
 DH_params = [
-    q1-pi/2, 0.02, 0.00, pi/2;
-    q2+pi/2, 0.00, 0.28, 0.0 ;
-    q3     , 0.00, 0.00, pi/2;
-    q4     , 0.30, 0.00,-pi/2;
+    q1+pi/2, 0.09, 0.02, pi/2;
+    q2+pi/2, 0.00, 0.20, 0.0 ;
+    q3     , 0.00, 0.02, pi/2;
+    q4     , 0.23,-0.02,-pi/2;
     q5-pi/2, 0.00, 0.00, pi/2;
-    q6     , 0.00, 0.00, 0.0 ;
+    q6     , 0.04, 0.00, 0.0 ;
 ];
 
 % Inicializar la transformación total como la identidad
@@ -83,6 +83,10 @@ disp('Jacobiano del urdf usando la configuración inicial:');
 disp(J_home);
 disp('Determinante del urdf usando la configuración inicial:');
 disp(det(J_home));
+
+disp('Posición del efector final')
+disp(pos_efector);
+disp(double(subs(pos_efector, jointVars, jointVal)));
 % Función para crear la matriz de transformación usando los parámetros DH
 function T = dh_transform(theta, d, a, alpha)
     T = [cos(theta), -sin(theta)*cos(alpha),  sin(theta)*sin(alpha), a*cos(theta);

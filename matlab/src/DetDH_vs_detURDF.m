@@ -22,7 +22,7 @@ figure(1);
 plot(det_urdf,"LineWidth",2)
 grid on
 grid minor
-title("Determinante del cuadrado")
+title("Determinante URDF vs Determinante DH Parameters")
 xlabel("Iteración")
 ylabel("Determinante")
 hold on;
@@ -35,3 +35,4 @@ hold on;
 
 legend('Determinante usando antiguo URDF','Determinante usando nuevo URDF', 'Determinante usando los parámetros DH')
 plot([1, length(det_DH)], [0, 0], 'r--');
+axis([0 length(det_DH) -0.025 0.025])
