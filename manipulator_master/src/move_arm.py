@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+import sys
 import rospy
 import numpy as np
 from   sensor_msgs.msg import JointState
 from std_msgs.msg import String
+from geometry_msgs.msg import Point
 import os
 import math
+import moveit_commander
+from visualization_msgs.msg import Marker, MarkerArray
 
 global pos
 pos =       [0.0,0.0,0.0,0.0,0.0,0.0]
@@ -25,6 +29,26 @@ new_file  = False
 global fig
 fig = '_none'
 
+global marker_array
+marker_array = MarkerArray()
+
+global point_array
+point_array = []
+
+global marker
+marker = Marker()
+marker.header.frame_id = "world"
+marker.type = marker.POINTS
+marker.action = marker.ADD
+marker.scale.x = 0.003
+marker.scale.y = 0.003
+marker.scale.z = 0
+marker.color.r = 0.0
+marker.color.g = 1.0
+marker.color.b = 0.0
+marker.color.a = 1.0
+marker.lifetime = rospy.Duration()
+
 #Recibimos del Subscriber un msg de tipo JointState de moveit y posteriormente lo publicamos con el Publisher como goal
 def state_position(goal_state: JointState):
     global pos
@@ -35,6 +59,21 @@ def state_position(goal_state: JointState):
     j_array = np.array(pos)*180/math.pi
     pos = list(j_array)
     write_data(pos, "goals") #Funcion para guardar los datos
+    plan_marker()
+
+def plan_marker():
+    global marker_array
+    global marker
+    pose = group.get_current_pose(group.get_end_effector_link())
+    rospy.logerr(pose.pose.position.z)
+    if (pose.pose.position.z <= 0.217 + 0.003) and (pose.pose.position.z >= 0.217 - 0.003):
+        p = Point() 
+        p = pose.pose.position
+        p.z = 0.217 - 0.165
+        
+        marker.points.append(p)
+        marker_array.markers.append(marker)
+        marker_pub.publish(marker_array)
 
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_callback(real_state: JointState):
@@ -86,9 +125,13 @@ def write_data(posiciones, pre):
 
 if __name__ == "__main__":
     rospy.init_node("move_arm_node")
+    moveit_commander.roscpp_initialize(sys.argv)
     pub             = rospy.Publisher ("/joint_goals" , JointState, queue_size=10)
+    marker_pub      = rospy.Publisher("/visualization_marker_array", MarkerArray, queue_size = 2)
     subGoalState    = rospy.Subscriber("/joint_states", JointState, callback = state_position)
     subRealState    = rospy.Subscriber("/real_joint_states", JointState, callback = real_callback)
     subWritingData  = rospy.Subscriber("/figure_writing", String, callback = figure)
+    group           = moveit_commander.MoveGroupCommander("arm_group")
+
     rospy.logwarn("The move_arm_node has been started")
     rospy.spin()
