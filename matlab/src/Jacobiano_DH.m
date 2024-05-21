@@ -4,7 +4,7 @@ jointVars = [q1 q2 q3 q4 q5 q6];
 
 % Parámetros DH: [theta d a alpha]
 DH_params = [
-    q1     , 0.02, 0.00, pi/2;
+    q1-pi/2, 0.02, 0.00, pi/2;
     q2+pi/2, 0.00, 0.28, 0.0 ;
     q3     , 0.00, 0.00, pi/2;
     q4     , 0.30, 0.00,-pi/2;
@@ -55,15 +55,17 @@ end
 J = simplify(J);
 
 % Mostrar el Jacobiano simbólico
-% disp('Jacobiano simbólico:');
-% disp(J);
+disp('Jacobiano simbólico:');
+disp(J);
 
 % Calcular el determinante del Jacobiano
 det_J = simplify(det(J));
 
 % Mostrar el determinante simbólico
-% disp('Determinante del Jacobiano simbólico:');
-% disp(det_J);
+disp('Determinante del Jacobiano simbólico:');
+disp(det_J);
+
+jointVal = [0 0 0 0 0 0];
 
 % Mostrar el resultado
 disp('Jacobiano sacado de DH Parameters usando la configuración inicial:');
@@ -72,7 +74,7 @@ disp('Determinante sacado de DH Parameters usando la configuración inicial:');
 disp(double(subs(det_J, jointVars, jointVal)));
 
 
-robot = importrobot('manipulator_description/urdf/manipulator.urdf');
+robot = importrobot('manipulator_final2\urdf\manipulator_final2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
