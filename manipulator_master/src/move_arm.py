@@ -32,9 +32,6 @@ fig = '_none'
 global marker_array
 marker_array = MarkerArray()
 
-global point_array
-point_array = []
-
 global marker
 marker = Marker()
 marker.header.frame_id = "world"
@@ -47,7 +44,7 @@ marker.color.r = 0.0
 marker.color.g = 1.0
 marker.color.b = 0.0
 marker.color.a = 1.0
-marker.lifetime = rospy.Duration()
+marker.lifetime = rospy.Duration(10)
 
 #Recibimos del Subscriber un msg de tipo JointState de moveit y posteriormente lo publicamos con el Publisher como goal
 def state_position(goal_state: JointState):
@@ -59,14 +56,17 @@ def state_position(goal_state: JointState):
     j_array = np.array(pos)*180/math.pi
     pos = list(j_array)
     write_data(pos, "goals") #Funcion para guardar los datos
-    plan_marker()
+    if fig != '_none': 
+        plan_marker()
+    else:
+        marker.points.clear()
+        marker_array.markers.append(marker)
 
 def plan_marker():
     global marker_array
     global marker
     pose = group.get_current_pose(group.get_end_effector_link())
-    rospy.logerr(pose.pose.position.z)
-    if (pose.pose.position.z <= 0.217 + 0.003) and (pose.pose.position.z >= 0.217 - 0.003):
+    if (pose.pose.position.z <= 0.217 + 0.005) and (pose.pose.position.z >= 0.217 - 0.005):
         p = Point() 
         p = pose.pose.position
         p.z = 0.217 - 0.165
