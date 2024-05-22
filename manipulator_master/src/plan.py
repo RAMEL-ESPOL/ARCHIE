@@ -22,7 +22,7 @@ global quit
 quit = 0
 
 global theta
-theta = 5
+theta = 0
 
 global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
@@ -255,7 +255,7 @@ def espol_logo(wpose, waypoints: list):
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = plan_circle(wpose.position.x, wpose.position.y, r, 45, 270, wpose, waypoints , 1 , 1)
+    (wpose, waypoints) = plan_circle(wpose.position.x, wpose.position.y, r, 45, 280, wpose, waypoints , 1 , 1)
 
     #Planemiento de la "s"
     (wpose, waypoints) = move_pen(wpose, waypoints, space + r, y_h)
@@ -264,14 +264,14 @@ def espol_logo(wpose, waypoints: list):
     
     (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, space + r*(1-math.cos(290 * math.pi/180)), abs(r*math.sin(math.radians(290))))
+    (wpose, waypoints) = move_pen(wpose, waypoints, space + r*(1 + math.cos(290 * math.pi/180)), abs(r*math.sin(math.radians(290))))
     
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
     #Planeamiento de la "p"
     (wpose, waypoints) = plan_circle(wpose.position.x + r, wpose.position.y, r, 0, 360, wpose, waypoints, 0, 0)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.7)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -r - size)
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
 
@@ -280,6 +280,8 @@ def espol_logo(wpose, waypoints: list):
     #Planeamiento de la "o"
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -r)
 
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+    
     (wpose, waypoints) = plan_circle(wpose.position.x + r, wpose.position.y, r, 0, 360, wpose, waypoints, 0, 1)
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
@@ -287,13 +289,13 @@ def espol_logo(wpose, waypoints: list):
     (wpose, waypoints) = move_pen(wpose, waypoints, space + size, y_h)
 
     #Planeamiento de la "l"
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, r*0.2)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -r*0.2 - r)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size - r)
 
-    (wpose, waypoints) = plan_circle(wpose.position.x, wpose.position.y + r, r, 180, 270, wpose, waypoints, 1, 1)
+    (wpose, waypoints) = plan_circle(wpose.position.x + r, wpose.position.y, r, 180, 270, wpose, waypoints, 1, 1)
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
@@ -444,7 +446,6 @@ data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2
 data_writing_publisher.publish(("_none"))
 wpose = group.get_current_pose().pose
 wpose = home()
-rospy.logerr(group.get_current_joint_values())
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
