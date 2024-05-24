@@ -55,15 +55,15 @@ end
 J = simplify(J);
 
 % Mostrar el Jacobiano simbólico
-disp('Jacobiano simbólico:');
-disp(J);
+% disp('Jacobiano simbólico:');
+% disp(J);
 
 % Calcular el determinante del Jacobiano
 det_J = simplify(det(J));
 
 % Mostrar el determinante simbólico
-disp('Determinante del Jacobiano simbólico:');
-disp(det_J);
+% disp('Determinante del Jacobiano simbólico:');
+% disp(det_J);
 
 jointVal = [0 0 0 0 0 0];
 
@@ -79,14 +79,20 @@ robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
 J_home = geometricJacobian(robot,[0 0 0 0 0 0],'link_6');
+J3 = J_home(1:3, :);
+J_home(1:3, :) = J_home(4:6, :);
+J_home(4:6,:) = J3;
 disp('Jacobiano del urdf usando la configuración inicial:');
 disp(J_home);
 disp('Determinante del urdf usando la configuración inicial:');
 disp(det(J_home));
 
 disp('Posición del efector final')
-disp(pos_efector);
-disp(double(subs(pos_efector, jointVars, jointVal)));
+disp(double(subs(T_efector, jointVars, jointVal)));
+
+trans_urdf = getTransform(robot,jointVal,'link_6');
+disp(trans_urdf);
+
 % Función para crear la matriz de transformación usando los parámetros DH
 function T = dh_transform(theta, d, a, alpha)
     T = [cos(theta), -sin(theta)*cos(alpha),  sin(theta)*sin(alpha), a*cos(theta);
