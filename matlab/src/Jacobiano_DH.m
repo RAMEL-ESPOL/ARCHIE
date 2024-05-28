@@ -67,13 +67,6 @@ det_J = simplify(det(J));
 
 jointVal = [0 0 0 0 0 0];
 
-% Mostrar el resultado
-disp('Jacobiano sacado de DH Parameters usando la configuración inicial:');
-disp(double(subs(J, jointVars, jointVal)));
-disp('Determinante sacado de DH Parameters usando la configuración inicial:');
-disp(double(subs(det_J, jointVars, jointVal)));
-
-
 robot = importrobot('manipulator_final2\urdf\manipulator_final2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
@@ -82,15 +75,23 @@ J_home = geometricJacobian(robot,[0 0 0 0 0 0],'link_6');
 J3 = J_home(1:3, :);
 J_home(1:3, :) = J_home(4:6, :);
 J_home(4:6,:) = J3;
+
+% Mostrar el resultado
+disp('Jacobiano sacado de DH Parameters usando la configuración inicial:');
+disp(double(subs(J, jointVars, jointVal)));
 disp('Jacobiano del urdf usando la configuración inicial:');
 disp(J_home);
+disp('Determinante sacado de DH Parameters usando la configuración inicial:');
+disp(double(subs(det_J, jointVars, jointVal)));
 disp('Determinante del urdf usando la configuración inicial:');
 disp(det(J_home));
 
-disp('Posición del efector final')
-disp(double(subs(T_efector, jointVars, jointVal)));
-
 trans_urdf = getTransform(robot,jointVal,'link_6');
+disp(trans_urdf);
+
+disp('Transformada del efector final usando parámetros DH:')
+disp(double(subs(T_efector, jointVars, jointVal)));
+disp('Transformada del efector final usando urdf:')
 disp(trans_urdf);
 
 % Función para crear la matriz de transformación usando los parámetros DH
