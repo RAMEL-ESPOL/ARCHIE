@@ -435,7 +435,7 @@ def espol(wpose, waypoints : list):
 
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
-rospy.init_node('planing_node', anonymous=True)
+rospy.init_node('plan_node')
 rate = rospy.Rate(10)
 
 robot = moveit_commander.RobotCommander()
