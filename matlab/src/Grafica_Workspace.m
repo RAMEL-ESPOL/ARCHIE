@@ -3,14 +3,14 @@ figure;
 
 % Graficar los puntos del workspace
 scatter3(positions(:,1), positions(:,2), positions(:,3), 'filled', ...
-    'MarkerEdgeAlpha', 0.05, ... % Transparencia del borde del marcador
-    'MarkerFaceAlpha', 0.05);    % Transparencia de la cara del marcador
+    'MarkerEdgeAlpha', 0.15, ... % Transparencia del borde del marcador
+    'MarkerFaceAlpha', 0.15);    % Transparencia de la cara del marcador
 
 % Añadir etiquetas y título
-xlabel('Eje X');
-ylabel('Eje Y');
-zlabel('Eje Z');
-title('Workspace del Robot');
+xlabel('Axis X (m)');
+ylabel('Axis Y (m)');
+zlabel('Axis Z (m)');
+title('Workspace of the robotic arm');
 
 % Configuración adicional para mejorar la visualización
 grid on;

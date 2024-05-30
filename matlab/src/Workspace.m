@@ -1,5 +1,5 @@
 % Importar el robot desde el archivo URDF
-robot = importrobot('manipulator_description/urdf/manipulator.urdf');
+robot = importrobot('manipulator_final2/urdf/manipulator_final2.urdf');
 robot.DataFormat = 'row';
 
 % Mostrar el robot para asegurarnos de que se ha importado correctamente
