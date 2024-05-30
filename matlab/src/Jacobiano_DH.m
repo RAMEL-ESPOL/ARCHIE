@@ -55,15 +55,17 @@ end
 J = simplify(J);
 
 % Mostrar el Jacobiano simbólico
-% disp('Jacobiano simbólico:');
-% disp(J);
+disp('Jacobiano simbólico:');
+disp(J);
 
+disp('Trasformada simbólica:');
+disp(T_efector);
 % Calcular el determinante del Jacobiano
 det_J = simplify(det(J));
 
 % Mostrar el determinante simbólico
-% disp('Determinante del Jacobiano simbólico:');
-% disp(det_J);
+disp('Determinante del Jacobiano simbólico:');
+disp(det_J);
 
 jointVal = [0 0 0 0 0 0];
 
