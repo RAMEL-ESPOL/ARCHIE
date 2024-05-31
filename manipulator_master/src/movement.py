@@ -11,7 +11,7 @@ class movement:
     def __init__(self):
         rospy.init_node("motion_control")
         self.r = rospy.Rate(10)
-        self.pub = rospy.Publisher('/joint_goals', JointState, queue_size=1)
+        self.pub = rospy.Publisher('/joint_state', JointState, queue_size=1)
        
 
     def loop(self):
@@ -46,7 +46,7 @@ class movement:
 
             if (number=='1'):
 
-                self.joint_position_state=[0,0.2,-0.5,0.0,1,1.2]
+                self.joint_position_state=[0.1,0.1,0.1,0.1,0.1,0.1]
                 self.joints_states.position = self.joint_position_state
                 #self.pub.publish(self.joints_states)
                 self.pub.publish(self.joints_states)
@@ -55,7 +55,7 @@ class movement:
 
             if (number=='2'):
 
-                self.joint_position_state=[0,0.6,-1,2,2,2]
+                self.joint_position_state=[0,2,0.2,0.2,0.2,0.2,0.2]
                 self.joints_states.position = self.joint_position_state
                 #self.pub.publish(self.joints_states)
                 self.pub.publish(self.joints_states)
@@ -66,7 +66,7 @@ class movement:
 
             if (number=='3'):
 
-                self.joint_position_state=[0,-0.2,0.5,1,0,0]
+                self.joint_position_state=[0,3,0.3,0.3,0.3,0.3,0.3]
                 self.joints_states.position = self.joint_position_state
                 #self.pub.publish(self.joints_states)
                 self.pub.publish(self.joints_states)
@@ -77,7 +77,7 @@ class movement:
 
             if (number=='4'):
 
-                self.joint_position_state=[0,-0.6,0.5,1.5,0,0]
+                self.joint_position_state=[0,5,0.5,0.5,0.5,0.5,0.5]
                 self.joints_states.position = self.joint_position_state
                 #self.pub.publish(self.joints_states)
                 self.pub.publish(self.joints_states)
