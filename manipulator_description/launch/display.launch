@@ -16,5 +16,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find manipulator_description)/config/manipulator.rviz" />
+    args="-d $(find manipulator_description)/config/rviz_display.rviz" />
 </launch>
