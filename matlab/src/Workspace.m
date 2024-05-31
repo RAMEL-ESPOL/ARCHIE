@@ -11,7 +11,7 @@ jointLimits = [-pi/2 pi/2; -0.78 0.78; -1.15 2; -pi pi; -1.15 2; -pi pi]; % Ajus
 % Número de muestras por articulación
 % En este momento el código tarda mucho en ejecutarse por lo que lo mejor es
 % usar un menor numSamples en caso de que se vuelva a correr el código
-numSamples = 7;
+numSamples = 20;
 
 % Generar un conjunto de configuraciones de articulaciones
 jointConfigurations = [];
@@ -25,18 +25,16 @@ positions = [];
 for i1 = 1:numSamples
     for i2 = 1:numSamples
         for i3 = 1:numSamples
-            for i4 = 1:numSamples
+            for i4 = 1:10
                 for i5 = 1:numSamples
-                    for i6 = 1:numSamples
-                        % Configuración de las articulaciones
-                        jointConfig = [jointConfigurations(1, i1), jointConfigurations(2, i2), ...
-                                       jointConfigurations(3, i3), jointConfigurations(4, i4), ...
-                                       jointConfigurations(5, i5), jointConfigurations(6, i6)];
-                        % Calcular la posición del efector final
-                        tform = getTransform(robot, jointConfig, 'link_6'); % Reemplaza 'end_effector_name' con el nombre real de tu efector final
-                        pos = tform2trvec(tform);
-                        positions = [positions; pos];
-                    end
+                    % Configuración de las articulaciones
+                    jointConfig = [jointConfigurations(1, i1), jointConfigurations(2, i2), ...
+                                   jointConfigurations(3, i3), jointConfigurations(4, i4), ...
+                                   jointConfigurations(5, i5), jointConfigurations(6, 1)];
+                    % Calcular la posición del efector final
+                    tform = getTransform(robot, jointConfig, 'link_6'); % Reemplaza 'end_effector_name' con el nombre real de tu efector final
+                    pos = tform2trvec(tform);
+                    positions = [positions; pos];
                 end
             end
         end
