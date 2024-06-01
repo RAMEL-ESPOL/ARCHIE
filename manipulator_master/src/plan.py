@@ -236,6 +236,8 @@ def circle(wpose, waypoints: list):
     figure_message = "_circle"
 
     (wpose, waypoints) = set_pen(wpose, waypoints, 0, y_h, pen + 0.02)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
     
     (wpose, waypoints) = plan_circle(center_x, center_y, r, 90, 450, wpose, waypoints, 1, 1)
 
