@@ -36,7 +36,7 @@ y_h = 0.20
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.025
+size = 0.08
 
 #Espacio entre cada letra
 global space
@@ -155,7 +155,7 @@ def plane_rotation(waypoints : list):
     return way
     
 def square(wpose, waypoints: list):
-    square_size = 0.025
+    square_size = size
     figure = "Square (" + str(square_size) + "x" + str(square_size) + ")"
     figure_message = "_square"
     
@@ -184,20 +184,18 @@ def square(wpose, waypoints: list):
     return waypoints, wpose, figure, figure_message
 
 def triangle(wpose, waypoints: list):
-    h_t = 0.025
-    b_t = 0.05
-    figure = "Triangle (h = " + str(h_t) + " b = " + str(b_t) + ')'
+    figure = "Equilater Triangle Side = " + str(size) + ')'
     figure_message = "_triangle"
 
     (wpose, waypoints) = set_pen(wpose, waypoints, 0, y_h, pen + 0.02)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -b_t/2, -h_t)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*math.cos(math.pi/3), -size*math.sin(math.pi/3))
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, b_t, 0)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -b_t/2, y_h)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*math.cos(math.pi/3), size*math.sin(math.pi/3))
     
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
