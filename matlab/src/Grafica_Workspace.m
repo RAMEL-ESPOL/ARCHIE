@@ -18,12 +18,14 @@ axis equal;
 view(3);
 
 % Supongamos que también tienes el robot en la misma figura
+robot = importrobot('manipulator_description\urdf\manipulator_without_pen.urdf');
+robot.DataFormat = 'row';
 hold on;
 show(robot);
 
 % Mejorar la transparencia del robot para que no bloquee los puntos
 h = findobj(gca, 'Type', 'Patch');
-set(h, 'FaceAlpha', 0.8); % Ajustar la transparencia del robot
+set(h, 'FaceAlpha', 0.95); % Ajustar la transparencia del robot
 
 % Mantener la gráfica
 hold off;

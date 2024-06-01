@@ -2,8 +2,8 @@
 robot = importrobot('manipulator_final2/urdf/manipulator_final2.urdf');
 robot.DataFormat = 'row';
 
-% Mostrar el robot para asegurarnos de que se ha importado correctamente
-show(robot);
+% % Mostrar el robot para asegurarnos de que se ha importado correctamente
+% show(robot);
 
 % Definir los límites de las articulaciones
 jointLimits = [-pi/2 pi/2; -0.78 0.78; -1.15 2; -pi pi; -1.15 2; -pi pi]; % Ajusta según tu robot
