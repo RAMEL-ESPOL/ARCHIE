@@ -76,6 +76,17 @@ def home():
     rospy.loginfo("The robotic arm is at home position.")
     return wpose
 
+def step():
+    
+    joint_goal = group.get_current_joint_values()
+    joint_goal = [0.5,0.5,0.5,0.5,1,1]
+
+    # The go command can be called with joint values, poses, or without any
+    # parameters if you have already set the pose or joint target for the group
+    group.go(joint_goal, wait=True)
+
+
+
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
 
@@ -449,6 +460,14 @@ wpose = home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
 
+
+data_writing_publisher.publish("step")
+joint_goal = group.get_current_joint_values()
+joint_goal = [0.5,0.5,0.5,0.5,1,1]
+group.go(joint_goal, wait=True)
+rospy.sleep(1)
+data_writing_publisher.publish("_none")
+
 while (not rospy.is_shutdown() and quit == 0):
     
     waypoints = []
@@ -480,8 +499,7 @@ Write the option: """)
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
         # which is why we will specify 0.01 as the eef_step in Cartesian
         # translation.  We will disable the jump threshold by setting it to 0.0,
-        # ignoring the check for infeasible jumps in joint space, which is sufficient
-        # for this tutorial.
+        # ignoring the check for infeasible jumps in joint space
         (plan, fraction) = group.compute_cartesian_path(waypoints, t, 0.0)  # jump_threshold
 
         display_trajectory = moveit_msgs.msg.DisplayTrajectory()
@@ -495,9 +513,7 @@ Write the option: """)
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
         wpose = home()
-        rospy.sleep(1)
-        data_writing_publisher.publish("_none")
-
+        
     else:
         quit = 1
         rospy.loginfo("Shutting down the program.\n")
