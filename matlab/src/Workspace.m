@@ -11,6 +11,9 @@ jointLimits = [-pi/2 pi/2; -0.78 0.78; -1.15 2; -pi pi; -1.15 2; -pi pi]; % Ajus
 % Número de muestras por articulación
 % En este momento el código tarda mucho en ejecutarse por lo que lo mejor es
 % usar un menor numSamples en caso de que se vuelva a correr el código
+% En el repositorio ya hay un workspace creado donde han sido guardados los
+% datos después de correr el programa con un numSamples elevado
+% se llama "workspace_samples.mat"
 numSamples = 20;
 
 % Generar un conjunto de configuraciones de articulaciones
