@@ -38,11 +38,11 @@ for i=1:3
         xlabel("Iteration")
         ylabel("Z (m)")
     end
-
-    hold on
-    plot(positions_30(:,i),"LineWidth",2)    
-    legend('Y distance = 0.4', 'Y distance = 0.3')
-    
+% 
+%     hold on
+%     plot(positions_30(:,i),"LineWidth",2)    
+%     legend('Y distance = 0.4', 'Y distance = 0.3')
+%     
     
     
     
