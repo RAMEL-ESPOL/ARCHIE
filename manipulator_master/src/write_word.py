@@ -8,6 +8,7 @@ import moveit_msgs.msg
 import geometry_msgs.msg
 import numpy as np
 from sensor_msgs.msg import JointState
+from std_msgs.msg import String
 from std_msgs.msg import Header
 from moveit_commander.conversions import pose_to_list
 import math
@@ -725,7 +726,7 @@ rate = rospy.Rate(10)
 
 robot = moveit_commander.RobotCommander()
 scene = moveit_commander.PlanningSceneInterface()    
-group = moveit_commander.MoveGroupCommander("robot_arm")
+group = moveit_commander.MoveGroupCommander("arm_group")
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2)
 data_writing_publisher.publish(("_none," + str(pen)))
