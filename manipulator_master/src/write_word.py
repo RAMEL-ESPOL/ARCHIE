@@ -95,266 +95,169 @@ def move_pen(wpose, waypoints : list, d_x : float, d_y: float, d_z : float = 0):
 
     return (wpose, waypoints)
 
+def set_pen(wpose, waypoints : list, p_x : float, p_y: float, p_z : float = 0):
+    
+    wpose.position.y = -p_x
+    wpose.position.x = p_y
+    wpose.position.z = p_z
+    waypoints.append(copy.deepcopy(wpose))
+
+    return (wpose, waypoints)
+
 def plan_A(wpose, waypoints : list):
 
-    wpose.position.y -= size
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.y += size
-    waypoints.append(copy.deepcopy(wpose))   
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints) 
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.y -= size
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, 0.5*size)
 
-    wpose.position.y += size/2
-    waypoints.append(copy.deepcopy(wpose))
-    
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.y  = y_h
-    wpose.position.x += size + space
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, y_h)
 
     return (waypoints, wpose)
 
 
 def plan_B(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x += size * 0.9
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size*0.85, 0)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size*0.15, -size*0.15)
 
-    wpose.position.x += size * 0.1
-    wpose.position.y -= size * 0.1
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, 0.2)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.15, -size*0.15)
 
-    wpose.position.y -= size * 0.2
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.85, 0)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size*0.85, 0)
 
-    wpose.position.y -= size * 0.1
-    wpose.position.x -= size * 0.1
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size*0.15, -size*0.15)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.2)
 
-    wpose.position.y -= size * 0.1
-    wpose.position.x += size * 0.1
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.15, -size*0.15)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.85, 0)
 
-    wpose.position.y -= size * 0.4
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, y_h)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.y -= size * 0.1
-    wpose.position.x -= size * 0.1
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, 0)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
-
-    wpose.position.x -= size * 0.9
-    waypoints.append(copy.deepcopy(wpose))
-
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
-
-    wpose.position.y += size
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))    
-    
-    wpose.position.y -= size/2
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
-
-    wpose.position.x += size * 0.9
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))  
-
-    wpose.position.y = y_h
-    wpose.position.x += space + (size * 0.1 )
-    waypoints.append(copy.deepcopy(wpose))
 
     return (waypoints, wpose)
 
 
 def plan_C(wpose, waypoints : list):
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x -= size * 0.85
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    wpose.position.y -= size * 0.15
-    wpose.position.x -= size * 0.15
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    wpose.position.y -= size * 0.7
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.y -= size * 0.15
-    wpose.position.x += size * 0.15
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.x += size * 0.85
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))    
-
-    wpose.position.y = y_h
-    wpose.position.x += space
-    waypoints.append(copy.deepcopy(wpose))
-
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
     return (waypoints, wpose)
 
 
 def plan_D(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x += size * 0.85
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size*0.85, 0)
 
-    wpose.position.y -= size * 0.15
-    wpose.position.x += size * 0.15
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size*0.15, -size*0.15)
 
-    wpose.position.y -= size * 0.7
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.7)
 
-    wpose.position.y -= size * 0.15
-    wpose.position.x -= size * 0.15
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.15, -size*0.15)
 
-    wpose.position.x -= size * 0.85
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.85, 0)
 
-    wpose.position.y = y_h
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, y_h)
 
-    wpose.position.z = pen + 0.02
-    wpose.position.x += size + space
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, 0)
+
 
     return (waypoints, wpose)
 
 
 def plan_E(wpose, waypoints : list):
 
-    wpose.position.x += size
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    wpose.position.y -= size*0.5
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size*0.5)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    wpose.position.y -= size*0.5
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, y_h)
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))
-
-    wpose.position.z = pen + 0.02
-    wpose.position.x += space
-    wpose.position.y = y_h
-    waypoints.append(copy.deepcopy(wpose))
 
     return (waypoints, wpose)
 
 
 def plan_F(wpose, waypoints : list):
 
-    wpose.position.x += size
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    wpose.position.y -= size*0.5
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size*0.5)
 
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.y -= size*0.5
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
-    wpose.position.z = pen + 0.02
-    wpose.position.y = y_h
-    wpose.position.x += size + space
-    waypoints.append(copy.deepcopy(wpose))
 
     return (waypoints, wpose)
 
@@ -419,30 +322,29 @@ def plan_H(wpose, waypoints : list):
 
 def plan_I(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.x -= size/2
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.y -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.5, 0)
 
-    wpose.position.x += size/2
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = up_pen(wpose, waypoints)
 
-    wpose.position.y = y_h
-    wpose.position.x += size + space
-    waypoints.append(copy.deepcopy(wpose))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.5, 0)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
     return (waypoints, wpose)
 
@@ -475,8 +377,29 @@ def plan_J(wpose, waypoints : list):
 
 def plan_K(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, 0.5*size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, -0.5*size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0.5*size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, y_h)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -484,8 +407,15 @@ def plan_K(wpose, waypoints : list):
 
 def plan_L(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -493,8 +423,21 @@ def plan_L(wpose, waypoints : list):
 
 def plan_M(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, -0.5*size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, 0.5*size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -502,8 +445,19 @@ def plan_M(wpose, waypoints : list):
 
 def plan_N(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, y_h)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -511,8 +465,19 @@ def plan_N(wpose, waypoints : list):
 
 def plan_O(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, y_h)    
 
 
     return (waypoints, wpose)
@@ -520,8 +485,21 @@ def plan_O(wpose, waypoints : list):
 
 def plan_P(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -0.5*size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, y_h)
 
 
     return (waypoints, wpose)
@@ -529,8 +507,27 @@ def plan_P(wpose, waypoints : list):
 
 def plan_Q(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, -0.5*size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, -0.5*size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -538,8 +535,23 @@ def plan_Q(wpose, waypoints : list):
 
 def plan_R(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -0.5*size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, -0.5*size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -547,33 +559,23 @@ def plan_R(wpose, waypoints : list):
 
 def plan_S(wpose, waypoints : list):
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
-    wpose.position.y -= size/2
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.5)
 
-    wpose.position.x += size
-    waypoints.append(copy.deepcopy(wpose))    
-    
-    wpose.position.y -= size/2
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
-    wpose.position.x -= size
-    waypoints.append(copy.deepcopy(wpose))    
-    
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))    
-    
-    wpose.position.x += size + space
-    wpose.position.y = y_h
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.5)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size + space, y_h)
     
     
     return (waypoints, wpose)
@@ -581,8 +583,21 @@ def plan_S(wpose, waypoints : list):
 
 def plan_T(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)   
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, -0.5*size, 0)
+
+    (wpose, waypoints) = down_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size + space, y_h)
 
 
     return (waypoints, wpose)
@@ -590,8 +605,17 @@ def plan_T(wpose, waypoints : list):
 
 def plan_U(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)    
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, y_h)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, y_h)
 
 
     return (waypoints, wpose)
@@ -599,8 +623,15 @@ def plan_U(wpose, waypoints : list):
 
 def plan_V(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints) 
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, y_h)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, 0)
 
 
     return (waypoints, wpose)
@@ -608,8 +639,19 @@ def plan_V(wpose, waypoints : list):
 
 def plan_W(wpose, waypoints : list):
 
-    wpose.position.z = pen
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = down_pen(wpose, waypoints)  
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, 0.5*size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0.5*size, -0.5*size)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, y_h)
+
+    (wpose, waypoints) = up_pen(wpose, waypoints)
+
+    (wpose, waypoints) = move_pen(wpose, waypoints, space, 0)
 
 
     return (waypoints, wpose)
@@ -683,24 +725,23 @@ rate = rospy.Rate(10)
 
 robot = moveit_commander.RobotCommander()
 scene = moveit_commander.PlanningSceneInterface()    
-group = moveit_commander.MoveGroupCommander("arm_group")
+group = moveit_commander.MoveGroupCommander("robot_arm")
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
-
+data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2)
+data_writing_publisher.publish(("_none," + str(pen)))
 home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
-word = input("Write the word you want the robotic arm write: ").upper()
+wpose = group.get_current_pose().pose
+
+word = input("\n--------------------\nWrite the word you want the robotic arm write: ").upper()
 if (((space + size)*len(word)) <= 0.5):
     waypoints = []
 
     x_i = -1*(len(word)/2 * (size + space))#Cálculo de la posición inicial del lápiz
     print(x_i)
     #Moviendo lápiz a la posición inicial
-    wpose = group.get_current_pose().pose
-    wpose.position.x = x_i
-    wpose.position.y = y_h
-    wpose.position.z = pen + 0.02
-    waypoints.append(copy.deepcopy(wpose))    
+    (wpose, waypoints) = set_pen(wpose, waypoints, x_i, y_h, pen + 0.02)
 
     for w in word:
         rospy.logerr(w)
@@ -731,6 +772,9 @@ if (((space + size)*len(word)) <= 0.5):
                              (plan_Y(wpose,waypoints) if w == "Y" else
                              (plan_Z(wpose,waypoints) if w == "Z" else []))))))))))))))))))))))))))
         
+    data_writing_publisher.publish("_" + str(word).lower())
+    rospy.sleep(1)
+
     plan  = group.compute_cartesian_path(waypoints, t, 0.0)[0]
 
     display_trajectory = moveit_msgs.msg.DisplayTrajectory()
@@ -741,6 +785,8 @@ if (((space + size)*len(word)) <= 0.5):
 
     group.execute(plan, wait=True)
     rospy.loginfo("Planning succesfully executed.\n")
+    rospy.sleep(1)
+    data_writing_publisher.publish("_none")
 else:
     rospy.logerr("The word has too many letters.")
 home()
