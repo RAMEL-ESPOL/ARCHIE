@@ -127,7 +127,7 @@ if __name__ == "__main__":
     rospy.init_node("move_arm_node")
     moveit_commander.roscpp_initialize(sys.argv)
     pub             = rospy.Publisher ("/joint_goals" , JointState, queue_size=10)
-    marker_pub      = rospy.Publisher("/visualization_marker_array", MarkerArray, queue_size = 2)
+    marker_pub      = rospy.Publisher ("/visualization_marker_array", MarkerArray, queue_size = 2)
     subGoalState    = rospy.Subscriber("/joint_states", JointState, callback = state_position)
     subRealState    = rospy.Subscriber("/real_joint_states", JointState, callback = real_callback)
     subWritingData  = rospy.Subscriber("/figure_writing", String, callback = figure)
