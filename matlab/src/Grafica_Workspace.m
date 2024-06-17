@@ -18,7 +18,7 @@ axis equal;
 view(3);
 
 % Supongamos que también tienes el robot en la misma figura
-robot = importrobot('manipulator_description\urdf\manipulator_without_pen.urdf');
+robot = importrobot('archie_description\urdf\manipulator_without_pen.urdf');
 robot.DataFormat = 'row';
 hold on;
 show(robot);

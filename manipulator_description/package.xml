@@ -1,5 +1,5 @@
 <package format="2">
-  <name>manipulator_description</name>
+  <name>archie_description</name>
   <version>1.0.0</version>
   <description>
     <p>URDF Description package for robotic_arm</p>

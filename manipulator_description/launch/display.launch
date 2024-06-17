@@ -3,7 +3,7 @@
     name="model" />
   <param
     name="robot_description"
-    textfile="$(find manipulator_description)/urdf/manipulator.urdf" />
+    textfile="$(find archie_description)/urdf/manipulator.urdf" />
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"
@@ -16,5 +16,5 @@
     name="rviz"
     pkg="rviz"
     type="rviz"
-    args="-d $(find manipulator_description)/config/rviz_display.rviz" />
+    args="-d $(find archie_description)/config/rviz_display.rviz" />
 </launch>

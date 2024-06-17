@@ -29,6 +29,9 @@ new_file  = False
 global fig
 fig = '_none'
 
+global pen
+pen = 0.217
+
 global marker_array
 marker_array = MarkerArray()
 
@@ -50,7 +53,7 @@ marker.lifetime = rospy.Duration(10)
 def state_position(goal_state: JointState):
     global pos
     if (goal_state.position != pos ):
-        goal_state.velocity = [10, 10, 10, 10, 10, 10]
+        #goal_state.velocity = [10, 10, 10, 10, 10, 10]
         pub.publish(goal_state)
         pos = goal_state.position
     j_array = np.array(pos)*180/math.pi
@@ -65,11 +68,12 @@ def state_position(goal_state: JointState):
 def plan_marker():
     global marker_array
     global marker
+    global pen
     pose = group.get_current_pose(group.get_end_effector_link())
-    if (pose.pose.position.z <= 0.217 + 0.005) and (pose.pose.position.z >= 0.217 - 0.005):
+    if (pose.pose.position.z <= pen + 0.005) and (pose.pose.position.z >= pen - 0.005):
         p = Point() 
         p = pose.pose.position
-        p.z = 0.217 - 0.165
+        p.z = pen - 0.165
         
         marker.points.append(p)
         marker_array.markers.append(marker)
@@ -101,7 +105,12 @@ def real_velocity(real_state: JointState):
 
 def figure(data_figure : str):
     global fig
-    fig = str(data_figure.data)
+    global pen
+    if "," in str(data_figure.data):
+        fig = (str(data_figure.data)).split(",")[0]
+        pen = float((str(data_figure.data)).split(",")[1])
+    else:
+        fig = str(data_figure.data)
 
 def write_data(posiciones, pre):
     global new_file

@@ -1,6 +1,6 @@
 <package>
 
-  <name>manipulator_moveit</name>
+  <name>archie_moveit</name>
   <version>0.3.0</version>
   <description>
      An automatically generated package with all the configuration and launch files for using the manipulator_robot with the MoveIt Motion Planning Framework
@@ -35,7 +35,7 @@
   <!-- <run_depend>gazebo_ros_control</run_depend> -->
   <!-- This package is referenced in the warehouse launch files, but does not build out of the box at the moment. Commented the dependency until this works. -->
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
-  <run_depend>manipulator_description</run_depend>
+  <run_depend>archie_description</run_depend>
 
 
 </package>

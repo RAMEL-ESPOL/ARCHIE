@@ -34,7 +34,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/base_link.STL" />
+          filename="package://archie_description/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -48,7 +48,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/base_link.STL" />
+          filename="package://archie_description/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -74,7 +74,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_1.STL" />
+          filename="package://archie_description/meshes/link_1.STL" />
       </geometry>
       <material
         name="">
@@ -88,7 +88,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_1.STL" />
+          filename="package://archie_description/meshes/link_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -132,7 +132,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_2.STL" />
+          filename="package://archie_description/meshes/link_2.STL" />
       </geometry>
       <material
         name="">
@@ -146,7 +146,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_2.STL" />
+          filename="package://archie_description/meshes/link_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -190,7 +190,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_3.STL" />
+          filename="package://archie_description/meshes/link_3.STL" />
       </geometry>
       <material
         name="">
@@ -204,7 +204,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_3.STL" />
+          filename="package://archie_description/meshes/link_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -248,7 +248,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_4.STL" />
+          filename="package://archie_description/meshes/link_4.STL" />
       </geometry>
       <material
         name="">
@@ -262,7 +262,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_4.STL" />
+          filename="package://archie_description/meshes/link_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -306,7 +306,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_5.STL" />
+          filename="package://archie_description/meshes/link_5.STL" />
       </geometry>
       <material
         name="">
@@ -320,7 +320,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_5.STL" />
+          filename="package://archie_description/meshes/link_5.STL" />
       </geometry>
     </collision>
   </link>
@@ -364,7 +364,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_6.STL" />
+          filename="package://archie_description/meshes/link_6.STL" />
       </geometry>
       <material
         name="">
@@ -378,7 +378,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://manipulator_description/meshes/link_6.STL" />
+          filename="package://archie_description/meshes/link_6.STL" />
       </geometry>
     </collision>
   </link>

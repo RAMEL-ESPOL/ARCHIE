@@ -36,7 +36,7 @@ y_h = 0.20
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.08
+size = 0.02
 
 #Espacio entre cada letra
 global space
@@ -73,19 +73,8 @@ def home():
     """
     #group.execute(plan, wait=True)
 
-    rospy.loginfo("The robotic arm is at home position.")
+    rospy.loginfo("ARCHIE is at home position.")
     return wpose
-
-def step():
-    
-    joint_goal = group.get_current_joint_values()
-    joint_goal = [0.5,0.5,0.5,0.5,1,1]
-
-    # The go command can be called with joint values, poses, or without any
-    # parameters if you have already set the pose or joint target for the group
-    group.go(joint_goal, wait=True)
-
-
 
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
@@ -155,12 +144,16 @@ def set_pen(wpose, waypoints : list, p_x : float, p_y: float, p_z : float = 0):
 def plane_rotation(waypoints : list):
     way = []
     for i in range(len(waypoints)):
-        #Primer elemento del producto es la parte de traslación de la matriz de transformación la cual usa las coordenadas cartsianas de cada pose (wpose)
-        #Segundo y tercer elementos del producto son las rotaciones necesarias para que el efector final esté perpendicular al plano XY
+        # Primer elemento del producto es la parte de traslación de la matriz de transformación 
+        # la cual usa las coordenadas cartsianas de cada pose (wpose)
+
+        # Segundo y tercer elementos del producto son las rotaciones necesarias para que el 
+        # efector final esté perpendicular al plano XY
         T = (SE3(waypoints[i].position.x, waypoints[i].position.y, waypoints[i].position.z)) * (SE3.Rz(-88, 'deg')) * (SE3.Rx(180, 'deg'))
         
-        #La matriz T representa la orientación y posición del efector final con respecto al plano XY original, al multiplicarla por 
-        #la matriz de rotación obtenemos la orientación y posición del efector con respecto al plano con la inclinación indicada
+        # La matriz T representa la orientación y posición del efector final con respecto al 
+        # plano XY original, al multiplicarla por la matriz de rotación obtenemos la orientación 
+        # y posición del efector con respecto al plano con la inclinación indicada
         way.append(copy.deepcopy(to_ros(rmatrix*T)))
         
     return way
@@ -444,7 +437,8 @@ def espol(wpose, waypoints : list):
         
     return waypoints, wpose, figure, figure_message
 
-#By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
+#By executing this file we can make the robot move to several preconfigured positions in 
+# Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
 rospy.init_node('plan_node')
 rate = rospy.Rate(10)
@@ -453,20 +447,12 @@ robot = moveit_commander.RobotCommander()
 scene = moveit_commander.PlanningSceneInterface()    
 group = moveit_commander.MoveGroupCommander("arm_group")
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
-data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2)
+data_writing_publisher       = rospy.Publisher('/figure_writing', String, queue_size=2)
 data_writing_publisher.publish(("_none"))
 wpose = group.get_current_pose().pose
 wpose = home()
 # Calling ``stop()`` ensures that there is no residual movement
 group.stop()
-
-
-data_writing_publisher.publish("step")
-joint_goal = group.get_current_joint_values()
-joint_goal = [0.5,0.5,0.5,0.5,1,1]
-group.go(joint_goal, wait=True)
-rospy.sleep(1)
-data_writing_publisher.publish("_none")
 
 while (not rospy.is_shutdown() and quit == 0):
     
@@ -494,10 +480,10 @@ Write the option: """)
         waypoints = (plane_rotation(waypoints) if theta != 0 else waypoints)
         
         print_plan(waypoints, figure)
-        data_writing_publisher.publish(figure_message + "_t" + str(theta) + "_h" + str(y_h*100).split('.')[0] + "_p" + str((pen)*100).split('.')[0])
+        data_writing_publisher.publish(figure_message + "_t" + str(theta) + "_h" + str(y_h*100).split('.')[0] + "_p" + str((pen)*100).split('.')[0] + "," + str(pen))
         rospy.sleep(1)
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
-        # which is why we will specify 0.01 as the eef_step in Cartesian
+        # which is why we will specify "t" as the eef_step in Cartesian
         # translation.  We will disable the jump threshold by setting it to 0.0,
         # ignoring the check for infeasible jumps in joint space
         (plan, fraction) = group.compute_cartesian_path(waypoints, t, 0.0)  # jump_threshold

@@ -13,7 +13,7 @@
   </include>
 
   <!-- Set the robot urdf on the parameter server -->
-  <param name="robot_description" textfile="$(find manipulator_description)/urdf/manipulator.urdf" />
+  <param name="robot_description" textfile="$(find archie_description)/urdf/manipulator.urdf" />
 
   <!-- Unpause the simulation after loading the robot model -->
   <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
@@ -23,8 +23,8 @@
     respawn="false" output="screen" />
 
   <!-- Load the controller parameters onto the parameter server -->
-  <rosparam file="$(find manipulator_description)/config/joint_state_controller.yaml" />
-  <include file="$(find manipulator_description)/launch/manipulator_control.launch"/>
+  <rosparam file="$(find archie_description)/config/joint_state_controller.yaml" />
+  <include file="$(find archie_description)/launch/manipulator_control.launch"/>
 
   <!-- Spawn the Gazebo ROS controllers -->
   <node name="gazebo_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller" />

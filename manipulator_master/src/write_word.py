@@ -773,7 +773,7 @@ if (((space + size)*len(word)) <= 0.5):
                              (plan_Y(wpose,waypoints) if w == "Y" else
                              (plan_Z(wpose,waypoints) if w == "Z" else []))))))))))))))))))))))))))
         
-    data_writing_publisher.publish("_" + str(word).lower())
+    data_writing_publisher.publish("_" + str(word).lower() + "," + str(pen))
     rospy.sleep(1)
 
     plan  = group.compute_cartesian_path(waypoints, t, 0.0)[0]
