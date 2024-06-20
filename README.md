@@ -28,10 +28,12 @@ There are a number of dependencies in this package, since the ARCHIE robot is op
 Now, Extract the metapackage `robotic_arm` into `${ros_workspace}/src`. `catkin_make` your workspace.
 
 We also need to install the following projects to make the trajectories.
-
-* pip install spatialmath-rospy
-* pip install spatialmath-python
-
+```
+pip install spatialmath-rospy
+```
+```
+ pip install spatialmath-python
+```
 These projects belong respectively to:
 
 * https://pypi.org/project/spatialmath-rospy/
