@@ -29,10 +29,13 @@ Now, Extract the metapackage `robotic_arm` into `${ros_workspace}/src`. `catkin_
 
 We also need to install the following projects to make the trajectories.
 ```
-pip install spatialmath-rospy
+sudo pip install spatialmath-rospy
 ```
 ```
- pip install spatialmath-python
+sudo pip install spatialmath-python
+```
+```
+sudo pip install -U numpy
 ```
 These projects belong respectively to:
 
@@ -76,8 +79,6 @@ These projects belong respectively to:
    roslaunch archie_master plan.py
    ```
 
-# Falta revisar
-
 #### 3.1.3 Gazebo Simulation
 
 1. Launch the robot in gazebo
@@ -85,7 +86,6 @@ These projects belong respectively to:
    roslaunch archie_gazebo archie_gazebo.launch
 
    ```
-# Falta revisar
 
 ### 3.4. Real Robot
 
