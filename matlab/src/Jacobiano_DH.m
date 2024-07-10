@@ -69,7 +69,7 @@ disp(det_J);
 
 jointVal = [0 0 0 0 0 0];
 
-robot = importrobot('manipulator_final\urdf\manipulator_final.urdf');
+robot = importrobot('archie_description\urdf\manipulator.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 

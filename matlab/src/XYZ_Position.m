@@ -1,5 +1,5 @@
 %https://la.mathworks.com/help/robotics/ref/importrobot.html
-robot = importrobot('archie_description/urdf/manipulator_without_pen.urdf');
+robot = importrobot('archie_description/urdf/archie_without_pen.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
