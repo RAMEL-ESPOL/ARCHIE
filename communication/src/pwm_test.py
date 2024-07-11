@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# https://github.com/ROBOTIS-GIT/dynamixel-workbench/issues/316
+# https://emanual.robotis.com/docs/en/software/dynamixel/dynamixel_workbench/
 
 from dynamixel_sdk import *                    # Uses Dynamixel SDK library
 
@@ -16,7 +18,7 @@ PROTOCOL_VERSION            = 2.0               # See which protocol version is 
 # Default setting
 DXL_ID                      = 1                 # Dynamixel ID : 1
 BAUDRATE                    = 57600             # Dynamixel default baudrate : 57600
-DEVICENAME                  = 'COM12'           #'/dev/ttyUSB0'    # Check which port is being used on your controller
+DEVICENAME                  = '/dev/ttyUSB0'           #'/dev/ttyUSB0'    # Check which port is being used on your controller
                                                 # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
 TORQUE_ENABLE               = 1                 # Value for enabling the torque
