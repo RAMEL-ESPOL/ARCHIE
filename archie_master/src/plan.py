@@ -29,7 +29,7 @@ global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
 
 global t
-t = 0.00004
+t = 0.0005
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
@@ -500,6 +500,8 @@ Write the option: """)
         group.execute(plan, wait=True)
         rospy.loginfo("Planning succesfully executed.\n")
         wpose = home()
+        data_writing_publisher.publish("_none")
+
         
     else:
         quit = 1

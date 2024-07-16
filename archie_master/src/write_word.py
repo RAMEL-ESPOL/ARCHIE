@@ -98,8 +98,8 @@ def move_pen(wpose, waypoints : list, d_x : float, d_y: float, d_z : float = 0):
 
 def set_pen(wpose, waypoints : list, p_x : float, p_y: float, p_z : float = 0):
     
-    wpose.position.y = -p_x
-    wpose.position.x = p_y
+    wpose.position.x = p_x
+    wpose.position.y = p_y
     wpose.position.z = p_z
     waypoints.append(copy.deepcopy(wpose))
 
@@ -740,7 +740,6 @@ if (((space + size)*len(word)) <= 0.5):
     waypoints = []
 
     x_i = -1*(len(word)/2 * (size + space))#Cálculo de la posición inicial del lápiz
-    print(x_i)
     #Moviendo lápiz a la posición inicial
     (wpose, waypoints) = set_pen(wpose, waypoints, x_i, y_h, pen + 0.02)
 
