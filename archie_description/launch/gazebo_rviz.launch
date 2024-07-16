@@ -3,8 +3,8 @@
   <arg name="ee_marker" default="false"/>
   <!-- MoveIt options -->
   <arg name="pipeline" default="ompl" doc="Planning pipeline to use with MoveIt"/>
-
-  <!-- Launch Gazebo and spawn the robot -->
+  
+<!-- Launch Gazebo and spawn the robot -->
   <include file="$(find archie_description)/launch/gazebo.launch">
     <arg name="ee_marker" value="$(arg ee_marker)"/>
   </include> 
