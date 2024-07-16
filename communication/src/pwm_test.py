@@ -100,7 +100,7 @@ while 1:
 
     while 1: 
         i = i+1 
-        pwm = -885 
+        pwm = -885                  #PWM range is -885 to 885  
 
         # Write goal position
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_PWM, convert_hex(pwm))
