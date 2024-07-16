@@ -19,7 +19,7 @@ pen = 0.22
 
 #El paso que habrá entre una coordenada y la siguiente a la hora de escribir
 global t
-t = 0.00004
+t = 0.01
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
@@ -744,7 +744,6 @@ if (((space + size)*len(word)) <= 0.5):
     (wpose, waypoints) = set_pen(wpose, waypoints, x_i, y_h, pen + 0.02)
 
     for w in word:
-        rospy.logerr(w)
         (waypoints, wpose) = (plan_A(wpose,waypoints) if w == "A" else
                              (plan_B(wpose,waypoints) if w == "B" else
                              (plan_C(wpose,waypoints) if w == "C" else

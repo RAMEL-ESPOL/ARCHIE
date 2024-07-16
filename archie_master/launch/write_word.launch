@@ -1,0 +1,6 @@
+<launch>
+
+    <node name="planing_node" pkg="archie_master" type="write_word.py" respawn="false" output="screen">
+    </node>
+
+</launch>

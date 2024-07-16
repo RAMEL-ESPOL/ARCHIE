@@ -29,7 +29,7 @@ global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
 
 global t
-t = 0.0005
+t = 0.01
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
@@ -160,7 +160,7 @@ def plane_rotation(waypoints : list):
     return way
     
 def square(wpose, waypoints: list):
-    square_size = size
+    square_size = size*3
     figure = "Square (" + str(square_size) + "x" + str(square_size) + ")"
     figure_message = "_square"
     
@@ -189,18 +189,19 @@ def square(wpose, waypoints: list):
     return waypoints, wpose, figure, figure_message
 
 def triangle(wpose, waypoints: list):
-    figure = "Equilater Triangle Side = " + str(size) + ')'
+    side = size*2.5
+    figure = "Equilater Triangle Side = " + str(side) + ')'
     figure_message = "_triangle"
 
     (wpose, waypoints) = set_pen(wpose, waypoints, 0, y_h, pen + 0.02)
 
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size*math.cos(math.pi/3), -size*math.sin(math.pi/3))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -side*math.cos(math.pi/3), -side*math.sin(math.pi/3))
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
+    (wpose, waypoints) = move_pen(wpose, waypoints, side, 0)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, -size*math.cos(math.pi/3), size*math.sin(math.pi/3))
+    (wpose, waypoints) = move_pen(wpose, waypoints, -side*math.cos(math.pi/3), side*math.sin(math.pi/3))
     
     (wpose, waypoints) = up_pen(wpose, waypoints)
         
@@ -232,7 +233,7 @@ def plan_circle( center_x : float , center_y : float , r : float , theta_o : flo
     return wpose, circle_waypoints
 
 def circle(wpose, waypoints: list):
-    r = size/2
+    r = size*2
     figure = "Circle ( " + str(r) + " )"
     center_y = y_h - r
     center_x = 0 
@@ -441,7 +442,7 @@ def espol(wpose, waypoints : list):
 #By executing this file we can make the robot move to several preconfigured positions in 
 # Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
-rospy.init_node('plan_node')
+rospy.init_node('planing_node')
 rate = rospy.Rate(10)
 
 robot = moveit_commander.RobotCommander()
