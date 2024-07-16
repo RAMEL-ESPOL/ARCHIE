@@ -1,0 +1,74 @@
+<?xml version="1.0" ?>
+<robot name="ee_marker" xmlns:xacro="http://ros.org/wiki/xacro">
+  <link
+    name="ee_marker">
+    <inertial>
+      <origin
+        xyz="2.13388833621327E-08 -6.02521102034508E-08 0.0650409276148536"
+        rpy="0 0 0" />
+      <mass
+        value="0.0340927901942582" />
+      <inertia
+        ixx="3.50572267074418E-05"
+        ixy="7.61605742281784E-12"
+        ixz="1.82035090014301E-12"
+        iyy="3.5057232927115E-05"
+        iyz="-2.2151447314013E-11"
+        izz="1.13056449928989E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/ee_marker.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.729411764705882 0.356862745098039 0.0235294117647059 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/ee_marker.STL" />
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="ee_marker_joint" type="fixed">
+    <parent link="link_6"/>
+    <child link="ee_marker"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint>
+  
+  <!-- end effect point 
+  <link name="end_effect_point">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.01 0.01"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.14"/>
+      <geometry>
+        <box size="0.002 0.002 0.002"/>
+      </geometry>
+    </collision>
+  </link>
+  -->
+  <!-- end effect point 
+  <joint name="end_effect_point" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="ee_marker"/>
+    <child link="end_effect_point"/>
+  </joint>
+  -->
+
+</robot>

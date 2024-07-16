@@ -114,7 +114,7 @@
     name="link_2">
     <inertial>
       <origin
-        xyz="-0.00775223885247785 0.0986651693444381 3.09623365033344E-07"
+        xyz="-0.00375223885247785 0.0986651693444381 3.09623365033344E-07"
         rpy="0 0 0" />
       <mass
         value="0.102283747087815" />
@@ -128,7 +128,7 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="-0.004 0.0012 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -142,7 +142,7 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="-0.004 0.0012 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -154,7 +154,7 @@
     name="joint_2"
     type="revolute">
     <origin
-      xyz="0 -0.02 0.02"
+      xyz="0 -0.024 0.0188"
       rpy="1.5707963267949 0 -1.5707963267949" />
     <parent
       link="link_1" />
@@ -172,7 +172,7 @@
     name="link_3">
     <inertial>
       <origin
-        xyz="0.0057998503185917 0.000495971402698678 0.000495878377765527"
+        xyz="0.07998503185917 0.000495971402698678 0.000495878377765527"
         rpy="0 0 0" />
       <mass
         value="0.102" />
@@ -186,7 +186,7 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="0.006 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -200,7 +200,7 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="0.006 0 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -212,7 +212,7 @@
     name="joint_3"
     type="revolute">
     <origin
-      xyz="-0.02 0.2 0"
+      xyz="-0.024 0.195 0"
       rpy="0 0 1.5707963267949" />
     <parent
       link="link_2" />
@@ -302,7 +302,7 @@
     </inertial>
     <visual>
       <origin
-        xyz="0 0 0"
+        xyz="0.006 -0.0025 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -316,7 +316,7 @@
     </visual>
     <collision>
       <origin
-        xyz="0 0 0"
+        xyz="0.006 -0.0025 0"
         rpy="0 0 0" />
       <geometry>
         <mesh
@@ -328,7 +328,7 @@
     name="joint_5"
     type="revolute">
     <origin
-      xyz="-0.0200000000000001 0 0.21"
+      xyz="-0.02562 0 0.2075"
       rpy="-1.5707963267949 0 0" />
     <parent
       link="link_4" />
@@ -349,14 +349,14 @@
         xyz="0.00150005999207131 2.13388833428252E-08 0.0547308096922248"
         rpy="0 0 0" />
       <mass
-        value="0.0340927901942582" />
+        value="0.000147831569305485" />
       <inertia
-        ixx="133722.55E-9"
-        ixy="0.01E-9"
-        ixz="0"
-        iyy="133722.55E-9"
-        iyz="-0.05E-9"
-        izz="1130.56E-9" />
+        ixx="3.66048153630127E-09"
+        ixy="1.57772181044196E-25"
+        ixz="1.17223439029209E-23"
+        iyy="3.66048153630127E-09"
+        iyz="8.32319653746676E-25"
+        izz="7.31480342388148E-09" />
     </inertial>
     <visual>
       <origin
@@ -386,7 +386,7 @@
     name="joint_6"
     type="revolute">
     <origin
-      xyz="-0.04 -0.02 0"
+      xyz="-0.02 -0.024 0"
       rpy="1.5707963267949 0 -1.5707963267949" />
     <parent
       link="link_5" />

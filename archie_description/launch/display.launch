@@ -1,9 +1,9 @@
 <launch>
-  <arg
-    name="model" />
-  <param
-    name="robot_description"
-    textfile="$(find archie_description)/urdf/manipulator.urdf" />
+  <arg name="model" />
+	<arg name="ee_marker" default="false" />
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find archie_description)/urdf/manipulator_main.xacro 
+    ee_marker:=$(arg ee_marker)"/>
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="ee_marker">
+  <link
+    name="ee_marker">
+    <inertial>
+      <origin
+        xyz="2.13388833621327E-08 -6.02521102034508E-08 0.0650409276148536"
+        rpy="0 0 0" />
+      <mass
+        value="0.0340927901942582" />
+      <inertia
+        ixx="3.50572267074418E-05"
+        ixy="7.61605742281784E-12"
+        ixz="1.82035090014301E-12"
+        iyy="3.5057232927115E-05"
+        iyz="-2.2151447314013E-11"
+        izz="1.13056449928989E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/ee_marker.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.729411764705882 0.356862745098039 0.0235294117647059 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/ee_marker.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

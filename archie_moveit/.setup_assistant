@@ -1,11 +1,11 @@
 moveit_setup_assistant_config:
   URDF:
     package: archie_description
-    relative_path: urdf/manipulator.xacro
-    xacro_args: ""
+    relative_path: urdf/manipulator_main.xacro
+    xacro_args: ee_marker:=true
   SRDF:
-    relative_path: config/manipulator_robot.srdf
+    relative_path: config/archie.srdf
   CONFIG:
     author_name: Erick Mendoza, Juan Saeteros
     author_email: eridamen@espol.edu.ec
-    generated_timestamp: 1717088134
+    generated_timestamp: 1721110836

@@ -16,7 +16,8 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.217 #plano perpendicular
+pen = 0.10 #plano perpendicular
+#pen = 0.217 #plano perpendicular
 #pen = 0.1225 # plano inclinado
 global quit
 quit = 0
@@ -32,7 +33,7 @@ t = 0.00004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.20
+y_h = 0.30
 
 #Tamaño de cada letra en ancho y alto
 global size

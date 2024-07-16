@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<robot name="fixed_world" xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <!-- Fix robot to Gazebo world -->
+  <joint name="fixed" type="fixed">
+      <parent link="world"/>
+      <child link="base_link"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+  </joint> 
+  
+</robot>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot name="archie" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="ee_marker" default="false"/>
+
+  <link name="world" />
+
+  <!-- Robot base 6 joints -->
+  <xacro:include filename="$(find archie_description)/urdf/fixed_world.xacro"/>
+  <xacro:include filename="$(find archie_description)/urdf/manipulator.xacro"/>
+
+  <!-- 6 joints transmitions-->
+  <xacro:include filename="$(find archie_description)/urdf/gazebo.xacro"/>
+
+  <xacro:manipulator prefix=""/>
+  <xacro:manipulator_gazebo prefix=""/>
+
+  <!-- robot marcador end effector -->
+  <xacro:if value="$(arg ee_marker)">
+    <xacro:include filename="$(find archie_description)/urdf/ee_marker.xacro"/>
+  </xacro:if>
+
+</robot>

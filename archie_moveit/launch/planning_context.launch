@@ -6,10 +6,10 @@
   <arg name="robot_description" default="robot_description"/>
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro  '$(find archie_description)/urdf/manipulator.xacro'"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro ee_marker:=true '$(find archie_description)/urdf/manipulator_main.xacro'"/>
 
   <!-- The semantic description that corresponds to the URDF -->
-  <param name="$(arg robot_description)_semantic" textfile="$(find archie_moveit)/config/manipulator_robot.srdf" />
+  <param name="$(arg robot_description)_semantic" textfile="$(find archie_moveit)/config/archie.srdf" />
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
