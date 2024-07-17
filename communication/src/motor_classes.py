@@ -97,6 +97,7 @@ class XCseries_motor(Motor):
         global l_pid
         super().__init__(usb_port, dxl_baud_rate, list_ids,portHandler,packetHandler,r)
         #Define constant values and addresses
+        self.addr_operating_mode = 11
         self.addr_torque_enable = 64
         self.addr_goal_position = 116
         self.addr_present_position = 132
@@ -115,6 +116,9 @@ class XCseries_motor(Motor):
         self.min_angle_deg = 0
         self.addr_velocity_limit = 44 #size = 4 Bytes, Initial Value = 250, Range = 0 - 1023, Unit = 0.29 rev/min
         self.dict_range = max_min_range_dict
+        self.addr_goal_pwm = 100
+        self.addr_present_pwm = 124
+        self.addr_goal_pwm = 36
 
         self.angle_zero = (self.maximum_position_value-self.minimum_position_value)//2 +1
 
