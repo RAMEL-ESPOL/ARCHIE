@@ -42,6 +42,9 @@ These projects belong respectively to:
 * https://pypi.org/project/spatialmath-rospy/
 * https://pypi.org/project/spatialmath-python/
 
+```
+sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
+```
 
 
 ## 2. Structure of Packages
