@@ -119,20 +119,20 @@ def get_load(list_motors):# Read present position
 def get_velocities(list_motors):# Read present position
     present_vel = [0,0,0,0,0,0]  
     # Syncread present position
-    dxl_comm_result = groupSyncRead.txRxPacket()
+    dxl_comm_result = groupSyncReadVel.txRxPacket()
     if dxl_comm_result != COMM_SUCCESS:
         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
     
     for motor in list_motors:
         for id in motor.list_ids:
             # Check if groupsyncread data of Dynamixel#1 is available
-            dxl_getdata_result = groupSyncRead.isAvailable(id, 128 , 4)
+            dxl_getdata_result = groupSyncReadVel.isAvailable(id, 128 , 4)
             if dxl_getdata_result != True:
                 print("[ID:%03d] groupSyncRead getdata failed" % id)
             # Get Dynamixel present position value
-            present_vel[id]= groupSyncRead.getData(id, 128 , 4)
+            #present_vel[id], dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, id, motor.addr_present_velocity)
+            present_vel[id]= groupSyncReadVel.getData(id, 128 , 4)
 
-    rospy.logerr(present_vel)
     return present_vel
 
 def get_motor_data(list_motors):
@@ -173,7 +173,8 @@ def joint_state_publisher(list_motors,num_joints):
                 general_joint_position_state[id]=motor.angleConversion(general_joint_position[id],True,id) 
                 #print("El joint del ID ", id, " es: ", general_joint_position_state[id])
     #Publish the new joint state
-    joints_states.position = general_joint_position_state
+    joints_states.velocity = get_velocities(list_motors)
+    #joints_states.position = general_joint_position_state
     joint_state_pub.publish(joints_states)
 
 
@@ -217,6 +218,7 @@ if __name__ == '__main__':
     # Initialize GroupSyncRead instace for Present Position
 
     groupSyncRead = GroupSyncRead(portHandler, packetHandler, ee.addr_present_position, 4)
+    groupSyncReadVel = GroupSyncRead(portHandler, packetHandler, ee.addr_present_velocity, 4)
 
     for m in list_motors:
         for id in m.list_ids:
@@ -233,8 +235,6 @@ if __name__ == '__main__':
 
     # Subscribe desired joint position
     rospy.Subscriber('/joint_goals', JointState,set_sync_positions,(list_motors,False),queue_size= 5)
-
-    print("subcribir")
 
     while not rospy.is_shutdown():
         #se lama a la funcion joint state publisher para publicar los /joint_states a ROS
