@@ -65,7 +65,7 @@
   </include>
 
 
-  <node name="move_arm_node" pkg="archie_master" type="move_arm.py" respawn="false" output="screen">
+  <node name="move_arm_node" pkg="archie_master" type="move_arm.py" respawn="false" output="screen" if="$(arg use_rviz)">
   </node>
 
 </launch>
