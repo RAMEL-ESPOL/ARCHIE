@@ -173,8 +173,8 @@ def joint_state_publisher(list_motors,num_joints):
                 general_joint_position_state[id]=motor.angleConversion(general_joint_position[id],True,id) 
                 #print("El joint del ID ", id, " es: ", general_joint_position_state[id])
     #Publish the new joint state
-    joints_states.velocity = get_velocities(list_motors)
-    #joints_states.position = general_joint_position_state
+    #joints_states.velocity = get_velocities(list_motors)
+    joints_states.position = general_joint_position_state
     joint_state_pub.publish(joints_states)
 
 
