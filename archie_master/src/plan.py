@@ -16,7 +16,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.10 #plano perpendicular
+pen = 0.22 #plano perpendicular
 #pen = 0.217 #plano perpendicular
 #pen = 0.1225 # plano inclinado
 global quit
