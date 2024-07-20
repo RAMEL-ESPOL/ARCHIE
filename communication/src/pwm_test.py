@@ -28,6 +28,7 @@ ADDR_PRO_TORQUE_ENABLE      = 64               # Control table address is differ
 ADDR_PRO_GOAL_PWM           = 100
 ADDR_PRO_PRESENT_PWM        = 124
 ADDR_PRO_PRESENT_VEL        = 128
+ADDR_PRO_PRESENT_POS        = 132
 
 
 # Protocol version
@@ -100,7 +101,7 @@ while 1:
 
     while 1: 
         i = i+1 
-        pwm = 885                  #PWM range is -885 to 885  
+        pwm = 250                  #PWM range is -885 to 885  
 
         # Write goal position
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_PWM, convert_hex(pwm))
