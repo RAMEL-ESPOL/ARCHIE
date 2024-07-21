@@ -24,7 +24,7 @@ def move_to_target(goal_position):
         current_positions = list(np.array(joint_states.position, float))
 
         # Calcula los torques de gravedad para la posición actual
-        gravity_torques = calculate_gravity_torque(current_positions)
+        gravity_torques = calculate_torque(current_positions)
 
         # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
         position_error = np.array(goal_position) - np.array(current_positions)
