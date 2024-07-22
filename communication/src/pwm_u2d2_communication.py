@@ -25,6 +25,8 @@ def convert_to_signed_32bit(val):
     return val
 
 def convert_hex(pwm):
+    pwm = pwm*200/1.2
+    pwm = 300 if abs(pwm) > 885 else pwm
     if pwm < 0:
         pwm = (1 << 16) + pwm
     return pwm
@@ -71,6 +73,7 @@ def calculate_torque(current_positions: JointState):
     gravity_force = mass_vector * gravity
     gravity_compensation = np.dot(jac_t, gravity_force)
 
+    print(gravity_compensation)
     return gravity_compensation
 
 def move_to_target(goal_position: JointState):
@@ -97,7 +100,7 @@ def set_sync_pwm(total_torques):
     print("""=====================================================================================Lista de motores""")
 
     for id in range(6):
-        new_pwm = convert_hex(total_torques[id]*200/1.2)
+        new_pwm = convert_hex(total_torques[id])
         param_goal_position = [DXL_LOBYTE(DXL_LOWORD(new_pwm)), DXL_HIBYTE(DXL_LOWORD(new_pwm)), DXL_LOBYTE(DXL_HIWORD(new_pwm)), DXL_HIBYTE(DXL_HIWORD(new_pwm))]
         # Add Dynamixel#1 goal position value to the Syncwrite parameter storage
         dxl_addparam_result = groupSyncWritePWM.addParam(id, param_goal_position)
@@ -216,16 +219,6 @@ if __name__ == '__main__':
     
     rospy.spin()    
 
-    #Setting to default control mode (Position Control Mode) 
-    for id in range(6):     
-        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_OPERATING_MODE, POS_CONTROL_MODE)
-        if dxl_comm_result != COMM_SUCCESS:
-            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-        elif dxl_error != 0:
-            print("%s" % packetHandler.getRxPacketError(dxl_error))
-        else:
-            print("Operating mode for motor", str(id), " changed to Position Control Mode.")
-
     # Disable the torque
     for id in range(6):
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
@@ -235,6 +228,16 @@ if __name__ == '__main__':
             print("%s" % packetHandler.getRxPacketError(dxl_error))
         else:
             print("Torque of Motor ",id," is off")
+
+    #Setting to default control mode (Position Control Mode) 
+    for id in range(6):     
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_OPERATING_MODE, POS_CONTROL_MODE)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Operating mode for motor", str(id), " changed to Position Control Mode.")
 
     # Clear syncread parameter storage
     groupSyncReadPos.clearParam()
