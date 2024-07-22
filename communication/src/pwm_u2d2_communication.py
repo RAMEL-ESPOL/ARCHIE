@@ -13,16 +13,6 @@ from getch import getch
 import numpy as np
 import moveit_commander
 
-ADDR_OPERATING_MODE         = 11               # Control table address is different in Dynamixel model
-ADDR_PRO_TORQUE_ENABLE      = 64               # Control table address is different in Dynamixel model
-ADDR_PRO_GOAL_PWM           = 100
-ADDR_PRO_PRESENT_PWM        = 124
-ADDR_PRO_PRESENT_VEL        = 128
-ADDR_PRO_PRESENT_POS        = 132
-TORQUE_ENABLE               = 1                # Value for enabling the torque
-TORQUE_DISABLE              = 0                # Value for disabling the torque
-PWM_CONTROL_MODE            = 16               # Value for extended position control mode (operating mode)
-
 
 def convert_to_signed_16bit(val):
     if val > 0x7FFF:
@@ -39,7 +29,7 @@ def convert_hex(pwm):
         pwm = (1 << 16) + pwm
     return pwm
 
-def motor_angle_to_radian(self, motor_angle_val):
+def motor_angle_to_radian( motor_angle_val):
 
     min_value_angle = 0
     max_value_angle = 4095 
@@ -74,8 +64,8 @@ def get_positions():# Read present position
     return present_positions
 
 
-def calculate_torque(joints: JointState):
-    jac_t = np.transpose(group.get_jacobian_matrix(list(np.array(joints.position,float))))
+def calculate_torque(current_positions: JointState):
+    jac_t = np.transpose(group.get_jacobian_matrix(current_positions))
     gravity = -9.81
     mass_vector = np.transpose(np.array([0.102, 0.101, 0.102, 0.105, 0.102, 0.05],float))
     gravity_force = mass_vector * gravity
@@ -92,7 +82,7 @@ def move_to_target(goal_position: JointState):
     gravity_torques = calculate_torque(current_positions)
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
-    position_error = np.array(goal_position) - np.array(current_positions)
+    position_error = np.array(goal_position.position) - np.array(current_positions)
     k_p = 10  # Ganancia proporcional (ajusta según sea necesario)
     position_torques = k_p * position_error
 
@@ -107,7 +97,7 @@ def set_sync_pwm(total_torques):
     print("""=====================================================================================Lista de motores""")
 
     for id in range(6):
-        new_pwm = convert_hex(total_torques[id]*885/1.2)
+        new_pwm = convert_hex(total_torques[id]*200/1.2)
         param_goal_position = [DXL_LOBYTE(DXL_LOWORD(new_pwm)), DXL_HIBYTE(DXL_LOWORD(new_pwm)), DXL_LOBYTE(DXL_HIWORD(new_pwm)), DXL_HIBYTE(DXL_HIWORD(new_pwm))]
         # Add Dynamixel#1 goal position value to the Syncwrite parameter storage
         dxl_addparam_result = groupSyncWritePWM.addParam(id, param_goal_position)
@@ -139,14 +129,56 @@ def joint_state_publisher(current_positions, efforts):
 
 if __name__ == '__main__':
 
+    ADDR_OPERATING_MODE         = 11               # Control table address is different in Dynamixel model
+    ADDR_PRO_TORQUE_ENABLE      = 64               # Control table address is different in Dynamixel model
+    ADDR_PRO_GOAL_PWM           = 100
+    ADDR_PRO_PRESENT_PWM        = 124
+    ADDR_PRO_PRESENT_VEL        = 128
+    ADDR_PRO_PRESENT_POS        = 132
+
+
+    # Protocol version
+    PROTOCOL_VERSION            = 2.0               # See which protocol version is used in the Dynamixel
+
+    # Default setting
+    DXL_ID                      = 5                 # Dynamixel ID : 5
+    BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
+    DEVICENAME                  = '/dev/ttyUSB0'           #'/dev/ttyUSB0'    # Check which port is being used on your controller
+                                                    # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
+
+    TORQUE_ENABLE               = 1                 # Value for enabling the torque
+    TORQUE_DISABLE              = 0                 # Value for disabling the torque
+    PWM_CONTROL_MODE            = 16                         # Value for extended position control mode (operating mode)
+    POS_CONTROL_MODE            = 3
+
+    index = 0
+
+    portHandler = PortHandler(DEVICENAME)
+
+    packetHandler = PacketHandler(PROTOCOL_VERSION)
+
+    # Open port
+    if portHandler.openPort():
+        print("Succeeded to open the port")
+    else:
+        print("Failed to open the port")
+        print("Press any key to terminate...")
+        getch()
+        quit()
+
+
+    # Set port baudrate
+    if portHandler.setBaudRate(BAUDRATE):
+        print("Succeeded to change the baudrate")
+    else:
+        print("Failed to change the baudrate")
+        print("Press any key to terminate...")
+        getch()
+        quit()
+
+
     rospy.init_node("motor_communication_pwm")
     r =rospy.Rate(10) # 10hz
-
-    usb_port = rospy.get_param('~usb_port')
-    dxl_baud_rate = rospy.get_param('~dxl_baud_rate')
-
-    portHandler = PortHandler(usb_port)
-    packetHandler = PacketHandler(2.0)
 
     # Set operating mode to pwm control mode
     for id in range(6):     
@@ -166,7 +198,6 @@ if __name__ == '__main__':
             print("%s" % packetHandler.getRxPacketError(dxl_error))
         else:
             print("Torque of Motor ",id," is on")
-
     # Initialize GroupSyncWrite/Read instance
     groupSyncWritePWM       = GroupSyncWrite(portHandler, packetHandler, ADDR_PRO_GOAL_PWM, 4)
     groupSyncReadPos        = GroupSyncRead (portHandler, packetHandler, ADDR_PRO_PRESENT_POS, 4)
@@ -174,10 +205,7 @@ if __name__ == '__main__':
 
     for id in range(6):
         # Add parameter storage for Dynamixel present position value
-        dxl_addparam_resultPWM = groupSyncWritePWM.addParam(id)
         dxl_addparam_resultPos = groupSyncReadPos.addParam(id)
-        if dxl_addparam_resultPWM != True:
-            print("[ID:%03d] groupSyncWritePWM addparam failed" % id)
         if dxl_addparam_resultPos != True:
             print("[ID:%03d] groupSyncReadPos addparam failed" % id)
 
@@ -187,6 +215,26 @@ if __name__ == '__main__':
     group           = moveit_commander.MoveGroupCommander("arm_group")
     
     rospy.spin()    
+
+    #Setting to default control mode (Position Control Mode) 
+    for id in range(6):     
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_OPERATING_MODE, POS_CONTROL_MODE)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Operating mode for motor", str(id), " changed to Position Control Mode.")
+
+    # Disable the torque
+    for id in range(6):
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Torque of Motor ",id," is off")
 
     # Clear syncread parameter storage
     groupSyncReadPos.clearParam()
