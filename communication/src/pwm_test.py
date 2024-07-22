@@ -77,7 +77,7 @@ if dxl_comm_result != COMM_SUCCESS:
 elif dxl_error != 0:
     print("%s" % packetHandler.getRxPacketError(dxl_error))
 else:
-    print("Operating mode changed to extended position control mode.")
+    print("Operating mode changed to PWM control mode.")
 
 # Enable Dynamixel Torque
 dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL_ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
@@ -101,7 +101,7 @@ while 1:
 
     while 1: 
         i = i+1 
-        pwm = 250                  #PWM range is -885 to 885  
+        pwm = -885                  #PWM range is -885 to 885  
 
         # Write goal position
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_PWM, convert_hex(pwm))
