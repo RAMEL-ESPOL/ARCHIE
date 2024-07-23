@@ -16,7 +16,7 @@ from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
-pen = 0.22 #plano perpendicular
+pen = 0.213 #plano perpendicular
 #pen = 0.217 #plano perpendicular
 #pen = 0.1225 # plano inclinado
 global quit
@@ -29,15 +29,15 @@ global rmatrix
 rmatrix = SE3.Rx(theta,'deg')
 
 global t
-t = 0.01
+t = 0.0004
 
 #Altura máxima a la que llegará cada letra en Y
 global y_h 
-y_h = 0.30
+y_h = 0.25
 
 #Tamaño de cada letra en ancho y alto
 global size
-size = 0.02
+size = 0.035
 
 #Espacio entre cada letra
 global space
@@ -160,7 +160,7 @@ def plane_rotation(waypoints : list):
     return way
     
 def square(wpose, waypoints: list):
-    square_size = size*3
+    square_size = size
     figure = "Square (" + str(square_size) + "x" + str(square_size) + ")"
     figure_message = "_square"
     
