@@ -140,7 +140,7 @@ def plan_B(wpose, waypoints : list):
 
     (wpose, waypoints) = move_pen(wpose, waypoints, size*0.15, -size*0.15)
 
-    (wpose, waypoints) = move_pen(wpose, waypoints, 0, 0.2)
+    (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.2)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.15, -size*0.15)
 
