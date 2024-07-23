@@ -79,7 +79,11 @@ sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
 
 2. Run the executable python file we would like to use, for example:
    ```
-   roslaunch archie_master plan.py
+   roslaunch archie_master plan.launch
+   ```
+2.1. You could also run:
+   ```
+   roslaunch archie_master write_word.launch
    ```
 
 #### 3.1.3 Gazebo Simulation
