@@ -85,7 +85,7 @@ def move_to_target(state_position: JointState):
     position_error = np.array(state_position.position) - np.array(current_positions)
 
     rospy.logerr(position_error)
-    k_p = np.array([5, 40, 20, 5, 5, 1])
+    k_p = np.array([1, 1, 1, 1, 1, 1])
     #k_p = 4  # Ganancia proporcional (ajusta según sea necesario)
     position_torques =  np.dot(position_error,k_p)
 
@@ -100,10 +100,9 @@ def set_sync_pwm(total_torques):
     print("""Lista de motores =====================================================================================""")
 
     total_pwm = total_torques*885/1.5
-    for t in total_pwm:
-        t = (round(t) if t < 885 and t > 0 else
-            (round(t) if t >-885 and t < 0 else
-            (885      if t > 885 else (-885))))
+    for id in range(len(total_pwm)):
+        total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
+                        (885      if total_pwm[id] > 885 else (-885)))
     total_pwm = np.array(total_pwm,int)
     rospy.logwarn(total_pwm)
     for id in range(6):
