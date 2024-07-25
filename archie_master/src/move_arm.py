@@ -133,6 +133,8 @@ def write_data(posiciones, pre):
     
 
 if __name__ == "__main__":
+    rospy.sleep(5)
+
     rospy.init_node("move_arm_node")
     moveit_commander.roscpp_initialize(sys.argv)
     pub             = rospy.Publisher ("/joint_goals" , JointState, queue_size=10)
