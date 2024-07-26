@@ -118,7 +118,7 @@ Setup the Robot, turn on and connect the USB cable to your computer.
 
 4. Run the executable python file we would like to use, for example:
    ```
-   roslaunch archie_master write_word.py
+   roslaunch archie_master write_word.launch
    ```
 
 
