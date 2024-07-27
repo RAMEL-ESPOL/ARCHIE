@@ -77,12 +77,12 @@ def calculate_torque(current_positions: JointState):
     grav_vector = kdl.Vector(0, 0, -9.81)  # relative to kdl chain base link
     dyn_kdl = kdl.ChainDynParam(chain, grav_vector)
     jt_positions = kdl.JntArray(6)
-    jt_positions[0] = 0.0
-    jt_positions[1] = 0.0
-    jt_positions[2] = 0.0
-    jt_positions[3] = 0.0
-    jt_positions[4] = 0.0
-    jt_positions[5] = 0.0
+    jt_positions[0] = current_positions.positions[0]
+    jt_positions[1] = current_positions.positions[1]
+    jt_positions[2] = current_positions.positions[2]
+    jt_positions[3] = current_positions.positions[3]
+    jt_positions[4] = current_positions.positions[4]
+    jt_positions[5] = current_positions.positions[5]
 
     grav_matrix = kdl.JntArray(6)
     dyn_kdl.JntToGravity(jt_positions, grav_matrix)
