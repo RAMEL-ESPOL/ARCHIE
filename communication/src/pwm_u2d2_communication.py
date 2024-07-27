@@ -56,7 +56,7 @@ def get_positions():# Read present position
     if dxl_comm_result != COMM_SUCCESS:
         print("Falla en get_positions: %s" % packetHandler.getTxRxResult(dxl_comm_result))
     
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         # Check if groupsyncread data of Dynamixel#1 is available
         dxl_getdata_result = groupSyncReadPos.isAvailable(id, ADDR_PRO_PRESENT_POS , 4)
         if dxl_getdata_result != True:
@@ -68,7 +68,7 @@ def get_positions():# Read present position
     return present_positions
 
 
-def calculate_torque(current_positions: JointState):
+def gravity_compensation(current_positions):
     robot_urdf = URDF.from_parameter_server()
     success, kdl_tree = treeFromUrdfModel(robot_urdf)
     #kdl_tree = kdl.treeFromUrdfModel(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
@@ -76,61 +76,29 @@ def calculate_torque(current_positions: JointState):
 
     grav_vector = kdl.Vector(0, 0, -9.81)  # relative to kdl chain base link
     dyn_kdl = kdl.ChainDynParam(chain, grav_vector)
-    jt_positions = kdl.JntArray(6)
-    jt_positions[0] = current_positions.positions[0]
-    jt_positions[1] = current_positions.positions[1]
-    jt_positions[2] = current_positions.positions[2]
-    jt_positions[3] = current_positions.positions[3]
-    jt_positions[4] = current_positions.positions[4]
-    jt_positions[5] = current_positions.positions[5]
+    jt_positions = kdl.JntArray(NUM_MOTORS)
+    jt_positions[0] = current_positions[0]
+    jt_positions[1] = current_positions[1]
+    jt_positions[2] = current_positions[2]
+    jt_positions[3] = current_positions[3]
+    jt_positions[4] = current_positions[4]
+    jt_positions[5] = current_positions[5]
 
-    grav_matrix = kdl.JntArray(6)
+    grav_matrix = kdl.JntArray(NUM_MOTORS)
     dyn_kdl.JntToGravity(jt_positions, grav_matrix)
 
     gravity_compensating_jt_torques = [grav_matrix[i] for i in range(grav_matrix.rows())]
 
-    # jac_t = np.transpose(group.get_jacobian_matrix(current_positions))
-    # gravity = -9.81
-    # mass_vector = np.transpose(np.array([0.102, 0.101, 0.102, 0.105, 0.102, 0.05],float))
-    # gravity_force = mass_vector * gravity
-    # gravity_compensation = np.dot(jac_t, gravity_force)
-    # print()
-    # rospy.logwarn(gravity_compensating_jt_torques)
-    # rospy.logwarn(gravity_compensation)
-    # print()
-    return gravity_compensating_jt_torques
-
-def move_to_target(state_position: JointState):
-
-    motor_positions = get_positions()
-    current_positions = list(np.array(motor_positions, float))
-
-    # Calcula los torques de gravedad para la posición actual
-    gravity_torques = calculate_torque([0,0,0,0,0,0])
-
-    # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
-    position_error = np.array(state_position.position) - np.array(current_positions)
-
-    #k_p = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5])
-    k_p = 2  # Ganancia proporcional (ajusta según sea necesario)
-    #position_torques =  np.dot(position_error,k_p)
-    position_torques = position_error*k_p
-
-    effort = (gravity_torques)# + position_torques)
-    joint_state_publisher(motor_positions, effort)
-    set_sync_pwm(np.array(effort))
-
-        
+    return gravity_compensating_jt_torques    
 
 def set_sync_pwm(total_torques):
-    print("""=====================================================================================""")
 
-    total_pwm = total_torques*885/1.5
+    total_pwm = total_torques*885/1.6
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
                         (885      if total_pwm[id] > 885 else (-885)))
     total_pwm = np.array(total_pwm,int)
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         new_pwm = convert_hex(total_pwm[id])
         param_goal_pwm = [DXL_LOBYTE(DXL_LOWORD(new_pwm)), 
                           DXL_HIBYTE(DXL_LOWORD(new_pwm)), 
@@ -152,11 +120,32 @@ def set_sync_pwm(total_torques):
     print("=====================================================================================")
 
 
+def move_to_target(state_position: JointState):
+
+    motor_positions = get_positions()
+    current_positions = list(np.array(motor_positions, float))
+
+    # Calcula los torques de gravedad para la posición actual
+    gravity_torques = gravity_compensation(state_position.positions)
+
+    # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
+    position_error = np.array(state_position.position) - np.array(current_positions)
+
+    #k_p = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5])
+    k_p = 2  # Ganancia proporcional (ajusta según sea necesario)
+    #position_torques =  np.dot(position_error,k_p)
+    position_torques = position_error*k_p
+
+    effort = (gravity_torques)# + position_torques)
+    joint_state_publisher(motor_positions, effort)
+    set_sync_pwm(np.array(effort))
+
+
 def joint_state_publisher(current_positions, efforts):
     joints_states = JointState()
     joints_states.header = Header()
     joints_states.header.stamp = rospy.Time.now()
-    joints_states.name = ['joint_'+str(id+1) for id in range(6)]
+    joints_states.name = ['joint_'+str(id+1) for id in range(NUM_MOTORS)]
     
     #Publish the new joint state
     joints_states.position = current_positions
@@ -172,6 +161,7 @@ if __name__ == '__main__':
     ADDR_PRO_PRESENT_PWM        = 124
     ADDR_PRO_PRESENT_VEL        = 128
     ADDR_PRO_PRESENT_POS        = 132
+    NUM_MOTORS                  = 6
 
 
     # Protocol version
@@ -218,11 +208,18 @@ if __name__ == '__main__':
     groupSyncWritePos       = GroupSyncWrite(portHandler, packetHandler, ADDR_PRO_PRESENT_POS, 4)
     groupSyncReadPos        = GroupSyncRead (portHandler, packetHandler, ADDR_PRO_PRESENT_POS, 4)
 
+    for id in range(NUM_MOTORS):
+        # Add parameter storage for Dynamixel present position value
+        dxl_addparam_resultPos = groupSyncReadPos.addParam(id)
+        if dxl_addparam_resultPos != True:
+            print("[ID:%03d] groupSyncReadPos addparam failed" % id)
+
+
     rospy.init_node("motor_communication_pwm")
     r =rospy.Rate(10) # 10hz
 
     # Turn on motors' torque
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -231,7 +228,7 @@ if __name__ == '__main__':
         else:
             print("Torque of Motor",id,"is on")
     # Set archie to home position
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         param_goal_position = [DXL_LOBYTE(DXL_LOWORD(2048)), 
                                DXL_HIBYTE(DXL_LOWORD(2048)), 
                                DXL_LOBYTE(DXL_HIWORD(2048)), 
@@ -241,7 +238,7 @@ if __name__ == '__main__':
     
     dxl_comm_result = groupSyncWritePos.txPacket()
     if dxl_comm_result != COMM_SUCCESS:
-        print("Hubo un fallo")
+        print("Failed to set ARCHIE to home position")
         print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
     else:
         print("ARCHIE at home position")
@@ -249,7 +246,7 @@ if __name__ == '__main__':
     rospy.sleep(3)
 
     # Disable the torque
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -260,7 +257,7 @@ if __name__ == '__main__':
 
 
     # Set operating mode to pwm control mode
-    for id in range(6):     
+    for id in range(NUM_MOTORS):     
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_OPERATING_MODE, PWM_CONTROL_MODE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -269,7 +266,7 @@ if __name__ == '__main__':
         else:
             print("Operating mode for motor", str(id), "changed to PWM control mode.")
     # Turn on motor's torque
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -279,21 +276,15 @@ if __name__ == '__main__':
             print("Torque of Motor",id,"is on")
     
 
-    for id in range(6):
-        # Add parameter storage for Dynamixel present position value
-        dxl_addparam_resultPos = groupSyncReadPos.addParam(id)
-        if dxl_addparam_resultPos != True:
-            print("[ID:%03d] groupSyncReadPos addparam failed" % id)
-
+    
     #Publish current robot state
     joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
     subGoalState    = rospy.Subscriber('/joint_goals', JointState, callback = move_to_target, queue_size= 5)
-    group           = moveit_commander.MoveGroupCommander("arm_group")
     
     rospy.spin()    
 
     # Disable the torque
-    for id in range(6):
+    for id in range(NUM_MOTORS):
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
@@ -303,7 +294,7 @@ if __name__ == '__main__':
             print("Torque of Motor",id,"is off")
 
     #Setting to default control mode (Position Control Mode) 
-    for id in range(6):     
+    for id in range(NUM_MOTORS):     
         dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_OPERATING_MODE, POS_CONTROL_MODE)
         if dxl_comm_result != COMM_SUCCESS:
             print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
