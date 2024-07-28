@@ -227,15 +227,18 @@ if __name__ == '__main__':
             print("%s" % packetHandler.getRxPacketError(dxl_error))
         else:
             print("Torque of Motor",id,"is on")
+
     # Set archie to home position
     for id in range(NUM_MOTORS):
         param_goal_position = [DXL_LOBYTE(DXL_LOWORD(2048)), 
                                DXL_HIBYTE(DXL_LOWORD(2048)), 
                                DXL_LOBYTE(DXL_HIWORD(2048)), 
                                DXL_HIBYTE(DXL_HIWORD(2048))]
-        # Add Dynamixel#1 goal position value to the Syncwrite parameter storage
+
         dxl_addparam_result = groupSyncWritePos.addParam(id, param_goal_position)
-    
+        if dxl_addparam_result != True:
+            print("[ID:%03d] groupSyncWritePos addparam failed" % id)
+
     dxl_comm_result = groupSyncWritePos.txPacket()
     if dxl_comm_result != COMM_SUCCESS:
         print("Failed to set ARCHIE to home position")
@@ -243,7 +246,8 @@ if __name__ == '__main__':
     else:
         print("ARCHIE at home position")
 
-    rospy.sleep(3)
+    groupSyncWritePos.clearParam()
+    rospy.sleep(1)
 
     # Disable the torque
     for id in range(NUM_MOTORS):
