@@ -4,9 +4,8 @@ import rospy
 import roslib
 import os
 import PyKDL as kdl
-from urdf_parser_py.urdf import URDF
 import os
-from kdl_parser_py.urdf import treeFromUrdfModel
+from kdl_parser_py.urdf import treeFromFile
 
 # Uses Dynamixel SDK library
 from motor_classes import *
@@ -15,7 +14,6 @@ from std_msgs.msg import Header
 from dynamixel_sdk import * 
 from getch import getch
 import numpy as np
-import moveit_commander
 
 
 def convert_to_signed_16bit(val):
@@ -69,9 +67,7 @@ def get_positions():# Read present position
 
 
 def gravity_compensation(current_positions):
-    robot_urdf = URDF.from_parameter_server()
-    success, kdl_tree = treeFromUrdfModel(robot_urdf)
-    #kdl_tree = kdl.treeFromUrdfModel(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
+    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
     chain = kdl_tree.getChain("base_link", "link_6")
 
     grav_vector = kdl.Vector(0, 0, -9.81)  # relative to kdl chain base link
@@ -98,6 +94,8 @@ def set_sync_pwm(total_torques):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
                         (885      if total_pwm[id] > 885 else (-885)))
     total_pwm = np.array(total_pwm,int)
+    rospy.logwarn(total_pwm)
+
     for id in range(NUM_MOTORS):
         new_pwm = convert_hex(total_pwm[id])
         param_goal_pwm = [DXL_LOBYTE(DXL_LOWORD(new_pwm)), 
@@ -126,17 +124,15 @@ def move_to_target(state_position: JointState):
     current_positions = list(np.array(motor_positions, float))
 
     # Calcula los torques de gravedad para la posición actual
-    gravity_torques = gravity_compensation(state_position.positions)
+    gravity_torques = gravity_compensation(state_position.position)
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    #k_p = np.array([0.5, 0.5, 0.5, 0.5, 0.5, 0.5])
-    k_p = 2  # Ganancia proporcional (ajusta según sea necesario)
-    #position_torques =  np.dot(position_error,k_p)
-    position_torques = position_error*k_p
+    k_p = np.array([3, 2, 2, 2, 2, 2])
+    position_torques =  (position_error*k_p)
 
-    effort = (gravity_torques)# + position_torques)
+    effort = (gravity_torques + position_torques)
     joint_state_publisher(motor_positions, effort)
     set_sync_pwm(np.array(effort))
 
@@ -217,48 +213,6 @@ if __name__ == '__main__':
 
     rospy.init_node("motor_communication_pwm")
     r =rospy.Rate(10) # 10hz
-
-    # Turn on motors' torque
-    for id in range(NUM_MOTORS):
-        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
-        if dxl_comm_result != COMM_SUCCESS:
-            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-        elif dxl_error != 0:
-            print("%s" % packetHandler.getRxPacketError(dxl_error))
-        else:
-            print("Torque of Motor",id,"is on")
-
-    # Set archie to home position
-    for id in range(NUM_MOTORS):
-        param_goal_position = [DXL_LOBYTE(DXL_LOWORD(2048)), 
-                               DXL_HIBYTE(DXL_LOWORD(2048)), 
-                               DXL_LOBYTE(DXL_HIWORD(2048)), 
-                               DXL_HIBYTE(DXL_HIWORD(2048))]
-
-        dxl_addparam_result = groupSyncWritePos.addParam(id, param_goal_position)
-        if dxl_addparam_result != True:
-            print("[ID:%03d] groupSyncWritePos addparam failed" % id)
-
-    dxl_comm_result = groupSyncWritePos.txPacket()
-    if dxl_comm_result != COMM_SUCCESS:
-        print("Failed to set ARCHIE to home position")
-        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-    else:
-        print("ARCHIE at home position")
-
-    groupSyncWritePos.clearParam()
-    rospy.sleep(1)
-
-    # Disable the torque
-    for id in range(NUM_MOTORS):
-        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, ADDR_PRO_TORQUE_ENABLE, TORQUE_DISABLE)
-        if dxl_comm_result != COMM_SUCCESS:
-            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
-        elif dxl_error != 0:
-            print("%s" % packetHandler.getRxPacketError(dxl_error))
-        else:
-            print("Torque of Motor",id,"is off")
-
 
     # Set operating mode to pwm control mode
     for id in range(NUM_MOTORS):     
