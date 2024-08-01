@@ -21,10 +21,10 @@ def convert_to_signed_16bit(val):
         val -= 0x10000
     return val
 
-def convert_to_signed_32bit(val):
+def convert_to_rpm(val):
     if val > 0x7FFFFFFF:
         val -= 0x100000000
-    return val
+    return val*0.229
 
 def convert_hex(pwm):
     if pwm < 0:
@@ -78,8 +78,7 @@ def get_velocities():# Read present position
         if dxl_getdata_result != True:
             print("[ID:%03d] groupSyncRead getdata failed" % id)
         # Get Dynamixel present position value
-        present_vel[id]= groupSyncReadVel.getData(id, ADDR_PRO_PRESENT_VEL , 4)
-
+        present_vel[id]= convert_to_rpm(groupSyncReadVel.getData(id, ADDR_PRO_PRESENT_VEL , 4))
     return present_vel
 
 def gravity_compensation(current_positions):
@@ -105,8 +104,6 @@ def gravity_compensation(current_positions):
 
 def set_sync_pwm(total_pwm):
 
-    rospy.logwarn(total_pwm)
-
     for id in range(NUM_MOTORS):
         new_pwm = convert_hex(total_pwm[id])
         param_goal_pwm = [DXL_LOBYTE(DXL_LOWORD(new_pwm)), 
@@ -126,8 +123,6 @@ def set_sync_pwm(total_pwm):
     # Clear syncwrite parameter storage
     groupSyncWritePWM.clearParam()
 
-    print("=====================================================================================")
-
 
 def move_to_target(state_position: JointState):
 
@@ -141,7 +136,7 @@ def move_to_target(state_position: JointState):
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    k_p = np.array([3, 3, 2, 2, 2, 2])
+    k_p = np.array([3, 2, 2, 2, 2, 2])
     position_torques =  (position_error*k_p)
 
     total_pwm = (gravity_torques + position_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
@@ -154,6 +149,13 @@ def move_to_target(state_position: JointState):
 
     joint_state_publisher(motor_positions, motor_velocities, motor_efforts)
     set_sync_pwm(np.array(total_pwm))
+
+    rospy.logwarn(f"PWM: {total_pwm}")
+    rospy.logwarn(f"Vel: {motor_velocities}")
+    rospy.logwarn(f"Par: {motor_efforts}")
+    print("=====================================================================================")
+
+
 
 
 def joint_state_publisher(motor_positions, motor_velocities, motor_efforts):
