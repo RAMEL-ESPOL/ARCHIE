@@ -101,7 +101,7 @@ while 1:
 
     while 1: 
         i = i+1 
-        pwm = -885                  #PWM range is -885 to 885  
+        pwm = 885                  #PWM range is -885 to 885  
 
         # Write goal position
         dxl_comm_result, dxl_error = packetHandler.write4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_GOAL_PWM, convert_hex(pwm))
@@ -117,12 +117,8 @@ while 1:
             print("%s" % packetHandler.getRxPacketError(dxl_error))
 
         
-        for DXL_ID in [0,1,2,3,4,5]:
-            dxl_present_vel, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_VEL)
-            #vel = groupSyncRead.getData(DXL_ID, ADDR_PRO_PRESENT_VEL , 4)
-            #print("[ID:%03d] PresVel:%03d" % (DXL_ID, vel))
-            print("[ID:%03d] GoalPwm:%03d  PresPwm:%03d  PresVel:%03d" % (DXL_ID, pwm, convert_to_signed_16bit(dxl_present_pwm), convert_to_signed_32bit(dxl_present_vel)))
-        #print("[ID:%03d] GoalPwm:%03d  PresPwm:%03d  PresVel:%03d" % (DXL_ID, pwm, convert_to_signed_16bit(dxl_present_pwm), convert_to_signed_32bit(dxl_present_vel)))
+        dxl_present_vel, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_VEL)
+        print("[ID:%03d] GoalPwm:%03d  PresPwm:%03d  PresVel:%03d" % (DXL_ID, pwm, convert_to_signed_16bit(dxl_present_pwm), convert_to_signed_32bit(dxl_present_vel)*0.229))
         print("\n")    
         if i ==50:
             i=0
