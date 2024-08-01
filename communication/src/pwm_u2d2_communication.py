@@ -65,6 +65,22 @@ def get_positions():# Read present position
 
     return present_positions
 
+def get_velocities():# Read present position
+    present_vel = [0,0,0,0,0,0]  
+    # Syncread present position
+    dxl_comm_result = groupSyncReadVel.txRxPacket()
+    if dxl_comm_result != COMM_SUCCESS:
+        print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+    
+    for id in range(NUM_MOTORS):
+        # Check if groupsyncread data of Dynamixel#1 is available
+        dxl_getdata_result = groupSyncReadVel.isAvailable(id, ADDR_PRO_PRESENT_VEL , 4)
+        if dxl_getdata_result != True:
+            print("[ID:%03d] groupSyncRead getdata failed" % id)
+        # Get Dynamixel present position value
+        present_vel[id]= groupSyncReadVel.getData(id, ADDR_PRO_PRESENT_VEL , 4)
+
+    return present_vel
 
 def gravity_compensation(current_positions):
     success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
@@ -87,13 +103,8 @@ def gravity_compensation(current_positions):
 
     return gravity_compensating_jt_torques    
 
-def set_sync_pwm(total_torques):
+def set_sync_pwm(total_pwm):
 
-    total_pwm = total_torques*885/1.6
-    for id in range(len(total_pwm)):
-        total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
-                        (885      if total_pwm[id] > 885 else (-885)))
-    total_pwm = np.array(total_pwm,int)
     rospy.logwarn(total_pwm)
 
     for id in range(NUM_MOTORS):
@@ -120,32 +131,41 @@ def set_sync_pwm(total_torques):
 
 def move_to_target(state_position: JointState):
 
-    motor_positions = get_positions()
+    motor_positions  = get_positions()
+    motor_velocities = get_velocities()
     current_positions = list(np.array(motor_positions, float))
 
     # Calcula los torques de gravedad para la posición actual
-    gravity_torques = gravity_compensation(state_position.position)
+    gravity_torques = gravity_compensation(motor_positions)
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    k_p = np.array([3, 2, 2, 2, 2, 2])
+    k_p = np.array([3, 3, 2, 2, 2, 2])
     position_torques =  (position_error*k_p)
 
-    effort = (gravity_torques + position_torques)
-    joint_state_publisher(motor_positions, effort)
-    set_sync_pwm(np.array(effort))
+    total_pwm = (gravity_torques + position_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
+    for id in range(len(total_pwm)):
+        total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
+                        (885      if total_pwm[id] > 885 else (-885)))
+    total_pwm = np.array(total_pwm,int)
+    
+    motor_efforts = total_pwm/np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
+
+    joint_state_publisher(motor_positions, motor_velocities, motor_efforts)
+    set_sync_pwm(np.array(total_pwm))
 
 
-def joint_state_publisher(current_positions, efforts):
+def joint_state_publisher(motor_positions, motor_velocities, motor_efforts):
     joints_states = JointState()
     joints_states.header = Header()
     joints_states.header.stamp = rospy.Time.now()
-    joints_states.name = ['joint_'+str(id+1) for id in range(NUM_MOTORS)]
+    joints_states.name = ['joint_'+str(id) for id in range(NUM_MOTORS)]
     
     #Publish the new joint state
-    joints_states.position = current_positions
-    joints_states.effort = efforts
+    joints_states.position = motor_positions
+    joints_states.velocity = motor_velocities
+    joints_states.effort = motor_efforts
     joint_state_pub.publish(joints_states)
 
 
@@ -200,15 +220,21 @@ if __name__ == '__main__':
         quit()
 
     # Initialize GroupSyncWrite/Read instance
-    groupSyncWritePWM       = GroupSyncWrite(portHandler, packetHandler, ADDR_PRO_GOAL_PWM, 4)
+    groupSyncWritePWM       = GroupSyncWrite(portHandler, packetHandler, ADDR_PRO_GOAL_PWM   , 4)
     groupSyncWritePos       = GroupSyncWrite(portHandler, packetHandler, ADDR_PRO_PRESENT_POS, 4)
     groupSyncReadPos        = GroupSyncRead (portHandler, packetHandler, ADDR_PRO_PRESENT_POS, 4)
+    groupSyncReadVel        = GroupSyncRead (portHandler, packetHandler, ADDR_PRO_PRESENT_VEL, 4)
 
     for id in range(NUM_MOTORS):
         # Add parameter storage for Dynamixel present position value
         dxl_addparam_resultPos = groupSyncReadPos.addParam(id)
+        dxl_addparam_resultVel = groupSyncReadVel.addParam(id)
+
         if dxl_addparam_resultPos != True:
             print("[ID:%03d] groupSyncReadPos addparam failed" % id)
+        if dxl_addparam_resultVel != True:
+            print("[ID:%03d] groupSyncReadVel addparam failed" % id)
+        
 
 
     rospy.init_node("motor_communication_pwm")
