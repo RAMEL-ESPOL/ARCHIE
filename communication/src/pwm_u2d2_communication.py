@@ -14,6 +14,7 @@ from std_msgs.msg import Header
 from dynamixel_sdk import * 
 from getch import getch
 import numpy as np
+from archie_master.msg import MotorData
 
 
 def convert_to_signed_16bit(val):
@@ -153,6 +154,14 @@ def move_to_target(state_position: JointState):
     rospy.logwarn(f"PWM: {total_pwm}")
     rospy.logwarn(f"Vel: {motor_velocities}")
     rospy.logwarn(f"Par: {motor_efforts}")
+    
+    motor = MotorData()
+    motor.position = motor_positions
+    motor.error    = position_error
+    motor.velocity = motor_velocities
+    motor.effort   = motor_efforts
+
+    motor_state_pub.publish(motor)
     print("=====================================================================================")
 
 
@@ -265,6 +274,7 @@ if __name__ == '__main__':
     
     #Publish current robot state
     joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
+    motor_state_pub = rospy.Publisher ("/motor_data" , MotorData, queue_size=1)
     subGoalState    = rospy.Subscriber('/joint_goals', JointState, callback = move_to_target, queue_size= 5)
     
     rospy.spin()    
