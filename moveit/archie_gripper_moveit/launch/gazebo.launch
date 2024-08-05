@@ -5,10 +5,7 @@
   <arg name="paused" default="false" doc="Start Gazebo paused"/>
   <arg name="world_name" default="worlds/empty.world" doc="Gazebo world file"/>
   <arg name="world_pose" default="-x 0 -y 0 -z 0 -R 0 -P 0 -Y 0" doc="Pose to spawn the robot at"/>
-  <arg name="initial_joint_positions" default=" -J joint_1 0 -J joint_2 0 -J joint_3 0 -J joint_4 0 -J joint_5 0 -J joint_6 0" doc="Initial joint configuration of the robot"/>
-	<arg name="ee_marker" default="false" />
-  <arg name="gripper" default="false" />
-
+  <arg name="initial_joint_positions" default=" -J garra1_joint 0 -J joint_1 0 -J joint_2 0 -J joint_3 0 -J joint_4 0 -J joint_5 0" doc="Initial joint configuration of the robot"/>
 
   <!-- Start Gazebo paused to allow the controllers to pickup the initial pose -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch" pass_all_args="true">
@@ -16,8 +13,7 @@
   </include>
 
   <!-- Set the robot urdf on the parameter server -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find archie_description)/urdf/manipulator_main.xacro 
-    ee_marker:=$(arg ee_marker) gripper:=$(arg gripper)"/>
+  <param name="robot_description" textfile="$(find archie_gripper_moveit)/config/gazebo_archie.urdf" />
 
   <!-- Unpause the simulation after loading the robot model -->
   <arg name="unpause" value="$(eval '' if arg('paused') else '-unpause')" />
@@ -27,10 +23,12 @@
     respawn="false" output="screen" />
 
   <!-- Load the controller parameters onto the parameter server -->
-  <include file="$(find archie_description)/launch/manipulator_control.launch"/>
+  <rosparam file="$(find archie_gripper_moveit)/config/gazebo_controllers.yaml" />
+  <include file="$(dirname)/ros_controllers.launch"/>
 
-  <!-- Load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="joint_state_controller arm_controller ee_group_controller"/>
+  <!-- Spawn the Gazebo ROS controllers -->
+  <node name="gazebo_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller" />
 
+  <!-- Given the published joint states, publish tf for the robot links -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 </launch>

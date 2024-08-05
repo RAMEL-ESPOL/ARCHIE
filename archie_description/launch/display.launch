@@ -1,9 +1,10 @@
 <launch>
   <arg name="model" />
 	<arg name="ee_marker" default="false" />
+	<arg name="gripper" default="false" />
 
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find archie_description)/urdf/manipulator_main.xacro 
-    ee_marker:=$(arg ee_marker)"/>
+    ee_marker:=$(arg ee_marker) gripper:=$(arg gripper)"/>
   <node
     name="joint_state_publisher_gui"
     pkg="joint_state_publisher_gui"

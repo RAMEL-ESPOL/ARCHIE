@@ -2,6 +2,7 @@
 <robot name="archie" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:arg name="ee_marker" default="false"/>
+  <xacro:arg name="gripper" default="false"/>
 
   <link name="world" />
 
@@ -18,6 +19,11 @@
   <!-- robot marcador end effector -->
   <xacro:if value="$(arg ee_marker)">
     <xacro:include filename="$(find archie_description)/urdf/ee_marker.xacro"/>
+  </xacro:if>
+
+  <!-- robot gripper end effector -->
+  <xacro:if value="$(arg gripper)">
+    <xacro:include filename="$(find archie_description)/urdf/linear_gripper.xacro"/>
   </xacro:if>
 
 </robot>

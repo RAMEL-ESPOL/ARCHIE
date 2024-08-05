@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="linear_gripper">
+
+  <link name="world" />
+  <joint name="world-base_link-fixed" type="fixed">
+      <parent link="world" />
+      <child link="base_garra" />
+      <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0" />
+  </joint>
+  
+  <link
+    name="base_garra">
+    <inertial>
+      <origin
+        xyz="2.43400515935624E-05 -0.0222726851326523 -0.00468941271488052"
+        rpy="0 0 0" />
+      <mass
+        value="0.0436302934538374" />
+      <inertia
+        ixx="1.27632292456254E-05"
+        ixy="3.91715915406858E-12"
+        ixz="-3.68663709229167E-11"
+        iyy="4.68221472466098E-05"
+        iyz="2.01653176853106E-06"
+        izz="3.71475202993965E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/base_garra.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/base_garra.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="crank_link">
+    <inertial>
+      <origin
+        xyz="1.05026479379742E-14 3.47848114946994E-16 0.000467452621116676"
+        rpy="0 0 0" />
+      <mass
+        value="0.00350851496756579" />
+      <inertia
+        ixx="3.19724320292965E-07"
+        ixy="2.66160320937908E-09"
+        ixz="6.0367591315158E-24"
+        iyy="2.95209200964066E-07"
+        iyz="-3.85767754058442E-23"
+        izz="6.03810346826692E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/crank_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/crank_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="crank_joint"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_garra" />
+    <child
+      link="crank_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="1.57"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="connector1_link">
+    <inertial>
+      <origin
+        xyz="0.0164173228619063 0.000893610320964873 0.00406907236546323"
+        rpy="0 0 0" />
+      <mass
+        value="0.00125402622472388" />
+      <inertia
+        ixx="4.20666799363896E-08"
+        ixy="2.53680421569102E-08"
+        ixz="-4.75428119507082E-09"
+        iyy="1.50473930727253E-07"
+        iyz="-2.58779996009099E-10"
+        izz="1.8913300763271E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/connector1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/connector1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="connector1_joint"
+    type="fixed">
+    <origin
+      xyz="0.012926 0.0013872 0.0025"
+      rpy="0 0 0" />
+    <parent
+      link="crank_link" />
+    <child
+      link="connector1_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="garra1_link">
+    <inertial>
+      <origin
+        xyz="-0.0114365446427457 -0.0273254161497786 0.0126193151551262"
+        rpy="0 0 0" />
+      <mass
+        value="0.0129151722919399" />
+      <inertia
+        ixx="4.56136669016415E-06"
+        ixy="-7.57893155901127E-07"
+        ixz="1.30678714130048E-07"
+        iyy="1.56497753313465E-06"
+        iyz="4.70140142051799E-07"
+        izz="4.37741925701727E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/garra1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.909803921568627 0.443137254901961 0.0313725490196078 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/garra1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="garra1_joint"
+    type="fixed">
+    <origin
+      xyz="0.030052 -0.010387 0.0058"
+      rpy="0 0 0" />
+    <parent
+      link="connector1_link" />
+    <child
+      link="garra1_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="connector2_link">
+    <inertial>
+      <origin
+        xyz="-0.0163971359223257 0.00120870298352432 0.00406907236546324"
+        rpy="0 0 0" />
+      <mass
+        value="0.00125402622472388" />
+      <inertia
+        ixx="5.02534840731669E-08"
+        ixy="3.82625499690246E-08"
+        ixz="4.74843527317406E-09"
+        iyy="1.42287126590476E-07"
+        iyz="-3.50027462658348E-10"
+        izz="1.8913300763271E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/connector2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.101960784313725 0.101960784313725 0.101960784313725 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/connector2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="connector2_joint"
+    type="fixed">
+    <origin
+      xyz="-0.012926 -0.0013872 0.0025"
+      rpy="0 0 0" />
+    <parent
+      link="crank_link" />
+    <child
+      link="connector2_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="garra2_link">
+    <inertial>
+      <origin
+        xyz="0.0107138733533343 -0.0461502259428729 0.0118413499297606"
+        rpy="0 0 0" />
+      <mass
+        value="0.0139907716479628" />
+      <inertia
+        ixx="6.18149224790953E-06"
+        ixy="1.14234373139681E-06"
+        ixz="-2.2512730807088E-07"
+        iyy="1.7849809657204E-06"
+        iyz="8.52444326235767E-07"
+        izz="6.00971716825658E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/garra2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.909803921568627 0.443137254901961 0.0313725490196078 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://archie_description/meshes/gripper/garra2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="garra2_joint"
+    type="fixed">
+    <origin
+      xyz="-0.028481 0.014137 0.0058"
+      rpy="0 0 0" />
+    <parent
+      link="connector2_link" />
+    <child
+      link="garra2_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>

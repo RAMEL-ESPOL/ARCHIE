@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: archie_description
+    relative_path: urdf/manipulator_main.xacro
+    xacro_args: gripper:=true
+  SRDF:
+    relative_path: config/archie.srdf
+  CONFIG:
+    author_name: erick mendoza
+    author_email: eridamen@espol.edu.ec
+    generated_timestamp: 1722833852
