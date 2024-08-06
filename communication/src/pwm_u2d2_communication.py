@@ -16,7 +16,6 @@ from getch import getch
 import numpy as np
 from archie_master.msg import MotorData
 
-
 def convert_to_signed_16bit(val):
     if val > 0x7FFF:
         val -= 0x10000
@@ -138,9 +137,12 @@ def move_to_target(state_position: JointState):
     position_error = np.array(state_position.position) - np.array(current_positions)
 
     k_p = np.array([3, 2, 2, 2, 2, 2])
-    position_torques =  (position_error*k_p)
+    c_p = np.array([3, 2, 2, 2, 2, 2])
 
-    total_pwm = (gravity_torques + position_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
+    error_torques = (position_error*k_p)
+    damp_torques  = (np.array(motor_velocities, float)*c_p) #primero convertimos vel a rad/s
+
+    total_pwm = (gravity_torques + error_torques - damp_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
                         (885      if total_pwm[id] > 885 else (-885)))
