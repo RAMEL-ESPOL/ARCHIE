@@ -15,6 +15,7 @@ from dynamixel_sdk import *
 from getch import getch
 import numpy as np
 from archie_master.msg import MotorData
+import math
 
 def convert_to_signed_16bit(val):
     if val > 0x7FFF:
@@ -136,16 +137,16 @@ def move_to_target(state_position: JointState):
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    k_p = np.array([3, 2, 2, 2, 2, 2])
-    c_p = np.array([3, 2, 2, 2, 2, 2])
+    k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
+    c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
 
     error_torques = (position_error*k_p)
-    damp_torques  = (np.array(motor_velocities, float)*c_p) #primero convertimos vel a rad/s
+    damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
 
     total_pwm = (gravity_torques + error_torques - damp_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
     for id in range(len(total_pwm)):
-        total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 885 and total_pwm[id] > -885) else
-                        (885      if total_pwm[id] > 885 else (-885)))
+        total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 700 and total_pwm[id] > -700) else
+                        (700      if total_pwm[id] > 700 else (-700)))
     total_pwm = np.array(total_pwm,int)
     
     motor_efforts = total_pwm/np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
@@ -156,6 +157,7 @@ def move_to_target(state_position: JointState):
     rospy.logwarn(f"PWM: {total_pwm}")
     rospy.logwarn(f"Vel: {motor_velocities}")
     rospy.logwarn(f"Par: {motor_efforts}")
+    rospy.logwarn(f"Err: {position_error*180/math.pi}")
     
     motor = MotorData()
     motor.position = motor_positions
