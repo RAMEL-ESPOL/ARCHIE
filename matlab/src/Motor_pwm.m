@@ -1,13 +1,14 @@
-eff = importdata('matlab/data_pwm/0_motor_effort.txt');
-err = importdata('matlab/data_pwm/0_motor_error.txt');
-pos = importdata('matlab/data_pwm/0_motor_position.txt');
-vel = importdata('matlab/data_pwm/0_motor_velocity.txt');
+ndoc = 11;
+eff = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_effort.txt'  ));
+err = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_error.txt'   ));
+pos = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_position.txt'));
+vel = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_velocity.txt'));
 
 colors = lines(6); % Define a set of colors
 
 % Plot Motor Positions
 figure(1)
-sgtitle('Motor Positions', 'FontSize', 15); % Super title for the entire figure
+sgtitle('Motor Positions with Vel Control start in other position', 'FontSize', 15); % Super title for the entire figure
 for i = 1:6
     subplot(3,2,i)
     grid on
@@ -21,7 +22,7 @@ ylabel('Position (rad)', 'FontSize', 10); % Add a single y-axis label
 
 % Plot Motor Velocities
 figure(2)
-sgtitle('Motor Velocities', 'FontSize', 15); % Super title for the entire figure
+sgtitle('Motor Velocities with Vel Control start in other position', 'FontSize', 15); % Super title for the entire figure
 for i = 1:6
     subplot(3,2,i)
     grid on
@@ -35,7 +36,7 @@ ylabel('Velocity (RPM)', 'FontSize', 10); % Add a single y-axis label
 
 % Plot Motor Effort
 figure(3)
-sgtitle('Motor Effort', 'FontSize', 15); % Super title for the entire figure
+sgtitle('Motor Effort with Vel Control start in other position', 'FontSize', 15); % Super title for the entire figure
 for i = 1:6
     subplot(3,2,i)
     grid on
@@ -49,7 +50,7 @@ ylabel('Effort (Nm)', 'FontSize', 10); % Add a single y-axis label
 
 % Plot Motor Position Error
 figure(4)
-sgtitle('Motor Position Error', 'FontSize', 15); % Super title for the entire figure
+sgtitle('Motor Position Error with Vel Control start in other position', 'FontSize', 15); % Super title for the entire figure
 for i = 1:6
     subplot(3,2,i)
     grid on
