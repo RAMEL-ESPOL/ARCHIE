@@ -82,6 +82,27 @@ def get_velocities():# Read present position
         present_vel[id]= convert_to_rpm(groupSyncReadVel.getData(id, ADDR_PRO_PRESENT_VEL , 4))
     return present_vel
 
+def calculate_jacobian(current_positions):
+    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
+    chain = kdl_tree.getChain("base_link", "link_6")
+
+    jt_positions = kdl.JntArray(NUM_MOTORS)
+    for i in range(NUM_MOTORS):
+        jt_positions[i] = current_positions[i]
+
+    jacobian = kdl.Jacobian(NUM_MOTORS)
+    jac_solver = kdl.ChainJntToJacSolver(chain)
+    jac_solver.JntToJac(jt_positions, jacobian)
+
+    jacobian_matrix = []
+    for i in range(jacobian.rows()):
+        row = []
+        for j in range(jacobian.columns()):
+            row.append(jacobian[i, j])
+        jacobian_matrix.append(row)
+
+    return jacobian_matrix
+
 def gravity_compensation(current_positions):
     success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
     chain = kdl_tree.getChain("base_link", "link_6")
@@ -89,12 +110,8 @@ def gravity_compensation(current_positions):
     grav_vector = kdl.Vector(0, 0, -9.81)  # relative to kdl chain base link
     dyn_kdl = kdl.ChainDynParam(chain, grav_vector)
     jt_positions = kdl.JntArray(NUM_MOTORS)
-    jt_positions[0] = current_positions[0]
-    jt_positions[1] = current_positions[1]
-    jt_positions[2] = current_positions[2]
-    jt_positions[3] = current_positions[3]
-    jt_positions[4] = current_positions[4]
-    jt_positions[5] = current_positions[5]
+    for i in range(NUM_MOTORS):
+        jt_positions[i] = current_positions[i]
 
     grav_matrix = kdl.JntArray(NUM_MOTORS)
     dyn_kdl.JntToGravity(jt_positions, grav_matrix)
@@ -143,6 +160,7 @@ def move_to_target(state_position: JointState):
     error_torques = (position_error*k_p)
     damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
 
+    jacobian = calculate_jacobian(state_position.position)
     total_pwm = (gravity_torques + error_torques - damp_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 700 and total_pwm[id] > -700) else
@@ -167,8 +185,6 @@ def move_to_target(state_position: JointState):
 
     motor_state_pub.publish(motor)
     print("=====================================================================================")
-
-
 
 
 def joint_state_publisher(motor_positions, motor_velocities, motor_efforts):
