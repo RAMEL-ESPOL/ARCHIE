@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Gazebo options -->
+  <arg name="gui" default="true"/>
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+  </include>
+
+  <!-- Spawn a basic box in the world -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param robot_description -model test_box"
+        respawn="false" output="screen"/>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find archie_description)/urdf/box.xacro"/>
+</launch>
+

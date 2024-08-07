@@ -1,21 +1,34 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="ee_marker" default="false"/>
-  <arg name="use_rviz"  default="true"/>
+  <arg name="gripper" default="false"/>
+  <arg name="use_rviz" default="true"/>
   <!-- MoveIt options -->
   <arg name="pipeline" default="ompl" doc="Planning pipeline to use with MoveIt"/>
-  
-<!-- Launch Gazebo and spawn the robot -->
+
+  <!-- Launch Gazebo and spawn the robot -->
   <include file="$(find archie_description)/launch/gazebo.launch">
     <arg name="ee_marker" value="$(arg ee_marker)"/>
+    <arg name="gripper" value="$(arg gripper)"/>
   </include> 
 
-  <!-- Launch MoveIt -->
-  <include file="$(find archie_moveit)/launch/move_arm_rviz_gazebo.launch" pass_all_args="true">
-    <arg name="use_rviz" value="$(arg use_rviz)" />
-    <!-- robot_description is loaded by gazebo.launch, to enable Gazebo features -->
-    <arg name="load_robot_description" value="false" />
-    <arg name="moveit_controller_manager" value="ros_control" />
-  </include>
+  <!-- Conditional launch for MoveIt -->
+  <group if="$(arg gripper)">
+    <include file="$(find archie_gripper_moveit)/launch/demo.launch" pass_all_args="true">
+      <arg name="use_rviz" value="$(arg use_rviz)" />
+      <!-- robot_description is loaded by gazebo.launch, to enable Gazebo features -->
+      <arg name="load_robot_description" value="false" />
+      <arg name="moveit_controller_manager" value="ros_control" />
+    </include>
+  </group>
+
+  <group if="$(arg ee_marker)">
+    <include file="$(find archie_moveit)/launch/move_arm_rviz.launch" pass_all_args="true">
+      <arg name="use_rviz" value="$(arg use_rviz)" />
+      <!-- robot_description is loaded by gazebo.launch, to enable Gazebo features -->
+      <arg name="load_robot_description" value="false" />
+      <arg name="moveit_controller_manager" value="ros_control" />
+    </include>
+  </group>
 
 </launch>

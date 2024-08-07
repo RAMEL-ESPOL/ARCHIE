@@ -29,6 +29,7 @@
   <depend>joint_state_publisher</depend>
   <depend>joint_state_publisher_gui</depend>
   <depend>gazebo</depend>
+  <depend>gazebo_ros</depend>
   <depend>moveit_simple_controller_manager</depend>
 
   <build_export_depend>roscpp</build_export_depend>
@@ -48,5 +49,7 @@
 
   <export>
     <architecture_independent />
+    <gazebo_ros gazebo_model_path= "${prefix}/model"/>
+    <gazebo_ros plugin_path= "${prefix}/lib" gazebo_media_path= "${prefix}"/>
   </export>
 </package>

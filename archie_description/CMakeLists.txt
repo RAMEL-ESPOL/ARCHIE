@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
 		urdf
 		xacro
 		message_generation
+		gazebo_ros
 	)
 
 catkin_package(CATKIN_DEPENDS
@@ -18,6 +19,8 @@ catkin_package(CATKIN_DEPENDS
 		roscpp
 		rospy
 		std_msgs
+		gazebo_ros
+
 	)
 
 find_package(roslaunch)
