@@ -64,6 +64,11 @@
   <group if="$(arg gripper)">
       <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
         args="joint_state_controller arm_controller ee_group_controller"/>
-    </group>
-    
+  </group>
+
+  <group if="$(eval arg('gripper') == 'false' and arg('ee_marker') == 'false')">
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+      args="joint_state_controller arm_controller"/>
+  </group>
+       
 </launch>
