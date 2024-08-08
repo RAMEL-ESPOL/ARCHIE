@@ -104,9 +104,9 @@ def grab_object(size):
     joint_goal = ee_group.get_current_joint_values()
     joint_goal = [0.0,0.0]
     if size=="medium":
-        joint_goal = [0.01,0.0]
+        joint_goal = [0.012,0.0]
     if size=="small":
-        joint_goal = [0.02,0.0]
+        joint_goal = [0.019,0.0]
 
     ee_group.go(joint_goal, wait=True)
 

@@ -12,7 +12,7 @@
 
   <!-- Start Gazebo paused to allow the controllers to pickup the initial pose -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch" pass_all_args="true">
-    <!--arg name="world_name" value="$(find archie_description)/worlds/plain.world"/-->
+    <arg name="world_name" value="$(find archie_description)/worlds/plain.world"/>
     <arg name="paused" value="true"/>
   </include>
 
@@ -41,23 +41,29 @@
     </include>
 
     <!--> Spawnear un bowl para el deposito del pick and place-->
-    <!--include file="$(find archie_description)/launch/spawn_sdf.launch">
+    <include file="$(find archie_description)/launch/spawn_sdf.launch">
       <arg name="robot_name" value="bowl" />
-      <arg name="x" value="0.3" />
+      <arg name="x" value="0.25" />
       <arg name="y" value="0.0" />
-      <arg name="z" value="-0.1" />
+      <arg name="z" value="-0.2" />
       <arg name="roll" value="0"/>
       <arg name="pitch" value="0"/>
       <arg name="yaw" value="0.0" />
       <arg name="sdf_robot_file" value="$(find archie_description)/models/bowl/model.sdf" />
-    </include-->
+    </include>
   </group>
 
   <!-- Load the controller parameters onto the parameter server -->
   <include file="$(find archie_description)/launch/manipulator_control.launch"/>
 
-  <!-- Load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
-    output="screen" args="joint_state_controller arm_controller ee_group_controller"/>
+  <group if="$(arg ee_marker)">
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+      args="joint_state_controller arm_controller"/>
+  </group>
 
+  <group if="$(arg gripper)">
+      <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="joint_state_controller arm_controller ee_group_controller"/>
+    </group>
+    
 </launch>
