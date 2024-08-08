@@ -98,10 +98,35 @@ def calculate_jacobian(current_positions):
     for i in range(jacobian.rows()):
         row = []
         for j in range(jacobian.columns()):
-            row.append(jacobian[i, j])
+            row.append(round(jacobian[i, j],4))
         jacobian_matrix.append(row)
 
     return jacobian_matrix
+
+def calculate_mass_matrix(current_positions):
+    # Cargar el URDF y crear el árbol de KDL
+    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
+    chain = kdl_tree.getChain("base_link", "link_6")
+
+    # Crear el vector de posiciones articulares
+    jt_positions = kdl.JntArray(NUM_MOTORS)
+    for i in range(NUM_MOTORS):
+        jt_positions[i] = current_positions[i]
+
+    # Crear la matriz de masas y el solver
+    mass_matrix = kdl.JntSpaceInertiaMatrix(NUM_MOTORS)
+    dyn_kdl = kdl.ChainDynParam(chain, kdl.Vector.Zero())
+    dyn_kdl.JntToMass(jt_positions, mass_matrix)
+
+    # Convertir la matriz de masas a una matriz de Python
+    mass_matrix_py = []
+    for i in range(mass_matrix.rows()):
+        row = []
+        for j in range(mass_matrix.columns()):
+            row.append(round(mass_matrix[i, j],4))
+        mass_matrix_py.append(row)
+
+    return mass_matrix_py
 
 def gravity_compensation(current_positions):
     success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
@@ -160,7 +185,24 @@ def move_to_target(state_position: JointState):
     error_torques = (position_error*k_p)
     damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
 
-    jacobian = calculate_jacobian(state_position.position)
+    print("\n","Jacobian Matrix:")
+    jacobian_matrix = calculate_jacobian(state_position.position)
+    print(jacobian_matrix[0])
+    print(jacobian_matrix[1])
+    print(jacobian_matrix[2])
+    print(jacobian_matrix[3])
+    print(jacobian_matrix[4])
+    print(jacobian_matrix[5])
+
+    print("\n","Mass Matrix:")
+    mass_matrix = calculate_mass_matrix(state_position.position)
+    print(mass_matrix[0])
+    print(mass_matrix[1])
+    print(mass_matrix[2])
+    print(mass_matrix[3])
+    print(mass_matrix[4])
+    print(mass_matrix[5])
+    
     total_pwm = (gravity_torques + error_torques - damp_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 700 and total_pwm[id] > -700) else
