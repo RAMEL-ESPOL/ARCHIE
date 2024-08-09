@@ -82,9 +82,7 @@ def get_velocities():# Read present position
         present_vel[id]= convert_to_rpm(groupSyncReadVel.getData(id, ADDR_PRO_PRESENT_VEL , 4))
     return present_vel
 
-def calculate_jacobian(current_positions):
-    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
-    chain = kdl_tree.getChain("base_link", "link_6")
+def calculate_jacobian(current_positions, chain):
 
     jt_positions = kdl.JntArray(NUM_MOTORS)
     for i in range(NUM_MOTORS):
@@ -103,10 +101,7 @@ def calculate_jacobian(current_positions):
 
     return jacobian_matrix
 
-def calculate_mass_matrix(current_positions):
-    # Cargar el URDF y crear el árbol de KDL
-    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
-    chain = kdl_tree.getChain("base_link", "link_6")
+def calculate_mass_matrix(current_positions, chain):
 
     # Crear el vector de posiciones articulares
     jt_positions = kdl.JntArray(NUM_MOTORS)
@@ -128,9 +123,7 @@ def calculate_mass_matrix(current_positions):
 
     return mass_matrix_py
 
-def gravity_compensation(current_positions):
-    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
-    chain = kdl_tree.getChain("base_link", "link_6")
+def gravity_compensation(current_positions, chain):
 
     grav_vector = kdl.Vector(0, 0, -9.81)  # relative to kdl chain base link
     dyn_kdl = kdl.ChainDynParam(chain, grav_vector)
@@ -173,8 +166,12 @@ def move_to_target(state_position: JointState):
     motor_velocities = get_velocities()
     current_positions = list(np.array(motor_positions, float))
 
+    # Cargar el URDF y crear el árbol de KDL
+    success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
+    chain = kdl_tree.getChain("base_link", "link_6")
+
     # Calcula los torques de gravedad para la posición actual
-    gravity_torques = gravity_compensation(motor_positions)
+    gravity_torques = gravity_compensation(motor_positions, chain)
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
@@ -186,7 +183,7 @@ def move_to_target(state_position: JointState):
     damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
 
     print("\n","Jacobian Matrix:")
-    jacobian_matrix = calculate_jacobian(state_position.position)
+    jacobian_matrix = calculate_jacobian(state_position.position, chain)
     print(jacobian_matrix[0])
     print(jacobian_matrix[1])
     print(jacobian_matrix[2])
@@ -195,7 +192,7 @@ def move_to_target(state_position: JointState):
     print(jacobian_matrix[5])
 
     print("\n","Mass Matrix:")
-    mass_matrix = calculate_mass_matrix(state_position.position)
+    mass_matrix = calculate_mass_matrix(state_position.position, chain)
     print(mass_matrix[0])
     print(mass_matrix[1])
     print(mass_matrix[2])
