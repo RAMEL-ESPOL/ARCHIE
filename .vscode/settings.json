@@ -6,5 +6,6 @@
         "/home/juan/catkin_ws/devel/lib/python3/dist-packages",
         "/opt/ros/noetic/lib/python3/dist-packages"
     ],
-    "cmake.sourceDirectory": "/home/erick/catkin_ws/src/manipulator/submodules/rosserial/rosserial_mbed"
+    "cmake.sourceDirectory": "/home/erick/catkin_ws/src/manipulator/submodules/rosserial/rosserial_mbed",
+    "ros.distro": "noetic"
 }
