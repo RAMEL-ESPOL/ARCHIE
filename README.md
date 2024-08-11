@@ -54,8 +54,7 @@ sudo apt-get install ros-noetic-kdl-parser-py
 pip install pybind11
 ```
 
-You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace. The installation instructions can be found in
-[INSTALL.md](orocos_kdl/INSTALL.md).
+You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace. The installation instructions can be found in the orocos repository.
 
 
 
