@@ -95,6 +95,7 @@ disp('Transformada del efector final usando parámetros DH:')
 disp(double(subs(T_efector, jointVars, jointVal)));
 disp('Transformada del efector final usando urdf:')
 disp(trans_urdf);
+disp(massMatrix(robot, jointVal));
 
 % Función para crear la matriz de transformación usando los parámetros DH
 function T = dh_transform(theta, d, a, alpha)

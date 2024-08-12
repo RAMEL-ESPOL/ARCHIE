@@ -1,3 +1,7 @@
+robot = importrobot('archie_description\urdf\manipulator.urdf');
+robot.DataFormat = 'row';
+robot.Gravity = [0 0 -9.81];
+
 ndoc = 11;
 eff = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_effort.txt'  ));
 err = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_error.txt'   ));
@@ -62,3 +66,5 @@ end
 xlabel('Iterations', 'FontSize', 10); % Add a single x-axis label
 ylabel('Position Error (rad)', 'FontSize', 10); % Add a single y-axis label
 
+disp("Matriz de masa:")
+disp(massMatrix(robot, [0 0 0 0 0 0]));
