@@ -37,10 +37,8 @@ sudo pip install spatialmath-python
 ```
 sudo pip install -U numpy
 ```
-These projects belong respectively to:
+These projects belong respectively to [SpatialMath Rospy](https://pypi.org/project/spatialmath-rospy/) and [SpatialMath Python](https://pypi.org/project/spatialmath-python/).
 
-* https://pypi.org/project/spatialmath-rospy/
-* https://pypi.org/project/spatialmath-python/
 
 ```
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
@@ -54,7 +52,7 @@ sudo apt-get install ros-noetic-kdl-parser-py
 pip install pybind11
 ```
 
-You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace. The installation instructions can be found in the orocos repository.
+You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace `${ros_workspace}/src`. The installation instructions can be found in the orocos repository.
 
 
 
