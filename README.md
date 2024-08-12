@@ -46,6 +46,17 @@ These projects belong respectively to:
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
 ```
 
+If you are going to work at the PWM mode:
+```
+sudo apt-get install ros-noetic-kdl-parser-py
+```
+```
+pip install pybind11
+```
+
+You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace. The installation instructions can be found in the orocos repository.
+
+
 
 ## 2. Structure of Packages
 
