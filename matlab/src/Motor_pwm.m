@@ -64,7 +64,7 @@ for i = 1:6
     legend(strcat("Joint ", num2str(i-1), " (rad)"))
 end
 xlabel('Iterations', 'FontSize', 10); % Add a single x-axis label
-ylabel('Position Error (rad)', 'FontSize', 10); % Add a single y-axis label
+ylabel('Positsion Error (rad)', 'FontSize', 10); % Add a single y-axis label
 
-disp("Matriz de masa:")
-disp(massMatrix(robot, [0 0 0 0 0 0]));
+% disp("Matriz de masa:")
+% disp(massMatrix(robot, [0 0 0 0 0 0]));
