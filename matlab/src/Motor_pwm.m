@@ -65,6 +65,3 @@ for i = 1:6
 end
 xlabel('Iterations', 'FontSize', 10); % Add a single x-axis label
 ylabel('Positsion Error (rad)', 'FontSize', 10); % Add a single y-axis label
-
-% disp("Matriz de masa:")
-% disp(massMatrix(robot, [0 0 0 0 0 0]));
