@@ -245,6 +245,16 @@ if __name__ == '__main__':
         joint_state_publisher(list_motors, num_joints)
         r.sleep()
         
+    # Disable the torque
+    for id in range(num_joints):
+        dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, id, 64, 0)
+        if dxl_comm_result != COMM_SUCCESS:
+            print("%s" % packetHandler.getTxRxResult(dxl_comm_result))
+        elif dxl_error != 0:
+            print("%s" % packetHandler.getRxPacketError(dxl_error))
+        else:
+            print("Torque of Motor",id,"is off")
+
     # Clear syncread parameter storage
     groupSyncRead.clearParam()
 
