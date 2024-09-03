@@ -14,7 +14,7 @@
 
   <!-- Conditional launch for MoveIt -->
   <group if="$(arg gripper)">
-    <include file="$(find archie_gripper_moveit)/launch/demo.launch" pass_all_args="true">
+    <include file="$(find archie_gripper_moveit)/launch/move_arm_rviz.launch" pass_all_args="true">
       <arg name="use_rviz" value="$(arg use_rviz)" />
       <!-- robot_description is loaded by gazebo.launch, to enable Gazebo features -->
       <arg name="load_robot_description" value="false" />
