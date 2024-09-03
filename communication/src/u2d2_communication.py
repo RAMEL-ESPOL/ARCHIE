@@ -126,12 +126,12 @@ def get_velocities(list_motors):# Read present position
     for motor in list_motors:
         for id in motor.list_ids:
             # Check if groupsyncread data of Dynamixel#1 is available
-            dxl_getdata_result = groupSyncReadVel.isAvailable(id, 128 , 4)
+            dxl_getdata_result = groupSyncReadVel.isAvailable(id, motor.addr_present_velocity , 4)
             if dxl_getdata_result != True:
                 print("[ID:%03d] groupSyncRead getdata failed" % id)
             # Get Dynamixel present position value
             #present_vel[id], dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, id, motor.addr_present_velocity)
-            present_vel[id]= groupSyncReadVel.getData(id, 128 , 4)
+            present_vel[id]= groupSyncReadVel.getData(id, motor.addr_present_velocity , 4)
 
     return present_vel
 
@@ -225,7 +225,10 @@ if __name__ == '__main__':
         for id in m.list_ids:
             # Add parameter storage for Dynamixel present position value
             dxl_addparam_result = groupSyncRead.addParam(id)
+            dxl_addparam_resultVel = groupSyncReadVel.addParam(id)
             if dxl_addparam_result != True:
+                print("[ID:%03d] groupSyncRead addparam failed" % id)
+            if dxl_addparam_resultVel != True:
                 print("[ID:%03d] groupSyncRead addparam failed" % id)
     
 

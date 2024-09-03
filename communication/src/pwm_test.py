@@ -28,6 +28,7 @@ ADDR_PRO_TORQUE_ENABLE      = 64               # Control table address is differ
 ADDR_PRO_GOAL_PWM           = 100
 ADDR_PRO_PRESENT_PWM        = 124
 ADDR_PRO_PRESENT_VEL        = 128
+ADDR_PRO_PRESENT_POS        = 132
 
 
 # Protocol version
@@ -76,7 +77,7 @@ if dxl_comm_result != COMM_SUCCESS:
 elif dxl_error != 0:
     print("%s" % packetHandler.getRxPacketError(dxl_error))
 else:
-    print("Operating mode changed to extended position control mode.")
+    print("Operating mode changed to PWM control mode.")
 
 # Enable Dynamixel Torque
 dxl_comm_result, dxl_error = packetHandler.write1ByteTxRx(portHandler, DXL_ID, ADDR_PRO_TORQUE_ENABLE, TORQUE_ENABLE)
@@ -116,12 +117,8 @@ while 1:
             print("%s" % packetHandler.getRxPacketError(dxl_error))
 
         
-        for DXL_ID in [0,1,2,3,4,5]:
-            dxl_present_vel, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_VEL)
-            #vel = groupSyncRead.getData(DXL_ID, ADDR_PRO_PRESENT_VEL , 4)
-            #print("[ID:%03d] PresVel:%03d" % (DXL_ID, vel))
-            print("[ID:%03d] GoalPwm:%03d  PresPwm:%03d  PresVel:%03d" % (DXL_ID, pwm, convert_to_signed_16bit(dxl_present_pwm), convert_to_signed_32bit(dxl_present_vel)))
-        #print("[ID:%03d] GoalPwm:%03d  PresPwm:%03d  PresVel:%03d" % (DXL_ID, pwm, convert_to_signed_16bit(dxl_present_pwm), convert_to_signed_32bit(dxl_present_vel)))
+        dxl_present_vel, dxl_comm_result, dxl_error = packetHandler.read4ByteTxRx(portHandler, DXL_ID, ADDR_PRO_PRESENT_VEL)
+        print("[ID:%03d] GoalPwm:%03d  PresPwm:%03d  PresVel:%03d" % (DXL_ID, pwm, convert_to_signed_16bit(dxl_present_pwm), convert_to_signed_32bit(dxl_present_vel)*0.229))
         print("\n")    
         if i ==50:
             i=0

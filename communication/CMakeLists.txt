@@ -12,6 +12,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   roscpp
   sensor_msgs
+  archie_master
 )
 
 ## System dependencies are found with CMake's conventions
@@ -107,6 +108,7 @@ catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES communication
 #  CATKIN_DEPENDS rospy std_msgs
+  CATKIN_DEPENDS roscpp rospy std_msgs archie_master
 #  DEPENDS system_lib
 )
 
