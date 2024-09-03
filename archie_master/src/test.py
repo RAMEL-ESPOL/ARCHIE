@@ -100,9 +100,9 @@ rospy.sleep(0.5)
 
 wpose = group.get_current_pose().pose
 waypoints = []
-(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.2, 0.2)
+(wpose, waypoints) = set_pen(wpose, waypoints, -0.15, 0.15, 0.2)
 
-data_writing_publisher.publish("_precision_x0_y20_z20")
+data_writing_publisher.publish("_precision_x_15_y15_z20")
 rospy.sleep(1)
 plan  = group.compute_cartesian_path(waypoints, t, 0.0)[0]
 
