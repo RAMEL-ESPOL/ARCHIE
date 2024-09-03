@@ -37,6 +37,10 @@ def addBox(name, x, y, z, sx, sy, sz, scene):
     # Add the box in the scene
     scene.add_box(box_name, box_pose, size=(sx, sy, sz))
 
+def remove_box(name, timeout=4):
+    box_name = name
+    scene.remove_world_object(box_name)
+
 def home():
     joint_goal = arm_group.get_current_joint_values()
     joint_goal = [0, 0, 0, 0, 0, 0]
@@ -113,6 +117,11 @@ def lose_object():
     ee_group.detach_object("garra1_link")
     rospy.loginfo("ARCHIE dropped the object")
 
+def check_quit():
+    global quit
+    if input("Press 'q' to quit or any other key to continue: ") == "q":
+        quit = 1
+
 # Main execution
 moveit_commander.roscpp_initialize(sys.argv)
 rospy.init_node('planning_node')
@@ -132,13 +141,8 @@ data_writing_publisher.publish(("_none"))
 # Grasping group for attach in rviz
 grasping_group = "ee_group"
 
-# ADD BOX rviz
-addBox("box", 0, 0.3, 0.01, 0.02, 0.02, 0.02, scene)
-wpose = arm_group.get_current_pose().pose
-rospy.logerr(wpose)
 
 # Initialize gazebo_gripper only if gazebo is used
-#Se usa un parametro _use_gazebo para ver si esta prendido el gazebo
 if use_gazebo:
     gazebo_gripper = RoboticGripper()
     gazebo_gripper._Robot_Name = "robot"
@@ -146,23 +150,27 @@ if use_gazebo:
     gazebo_gripper._Box_Model_Name = "box"
     gazebo_gripper._Box_Link_Name = "link"
 
-move_cartesian_path(0, 0.24, 0.0407)
-
-rospy.sleep(0.1)
-rospy.logerr(arm_group.get_current_joint_values())
-grab_object("medium")
-
-rospy.sleep(0.1)
-
-move_joints(-1.5699811638948276, 0.35076022743452813, -0.17050017674796938, 0, 0.014684045245539014, 0)
-
-rospy.sleep(0.1)
-
-lose_object()
-
-rospy.sleep(0.1)
-
-move_joints(0, 0, 0, 0, 0, 0)
-
+# Main loop for continuous pick and place
 while not rospy.is_shutdown() and quit == 0:
-    rospy.sleep(1)
+    # ADD BOX rviz
+    addBox("box", 0, 0.3, 0.01, 0.02, 0.02, 0.02, scene)
+    wpose = arm_group.get_current_pose().pose
+    rospy.logerr(wpose)
+    move_cartesian_path(0, 0.24, 0.0407)
+    rospy.sleep(0.1)
+    rospy.logerr(arm_group.get_current_joint_values())
+    grab_object("medium")
+    rospy.sleep(0.1)
+    move_joints(-1.5699811638948276, 0.35076022743452813, -0.17050017674796938, 0, 0.014684045245539014, 0)
+    rospy.sleep(0.1)
+    lose_object()
+    rospy.sleep(0.1)
+    remove_box("box")
+    move_joints(0, 0, 0, 0, 0, 0)
+    
+    # Check if the user wants to quit
+    check_quit()
+
+# Return to home position when loop exits
+home()
+
