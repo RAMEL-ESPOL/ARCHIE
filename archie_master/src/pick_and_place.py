@@ -54,7 +54,7 @@ def move_cartesian_path(px, py, pz):
 
     wpose = arm_group.get_current_pose().pose 
     wpose.position.x = px
-    wpose.position.y = py if py != 0 else wpose.position.y
+    wpose.position.y = py
     wpose.position.z = pz
     waypoints.append(copy.deepcopy(wpose))
 
@@ -81,8 +81,6 @@ def move_joints(j0, j1, j2, j3, j4, j5):
         arm_group.execute(plan, wait=True)
     else:
         rospy.logerr("Failed to generate a valid plan for the joint values provided.")
-
-    return arm_group.get_current_pose().pose  
 
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
@@ -126,7 +124,7 @@ def check_quit():
 
 # Main execution
 moveit_commander.roscpp_initialize(sys.argv)
-rospy.init_node('pick_and_place_node')
+rospy.init_node('planning_node')
 
 # Parse arguments to determine if gazebo is used
 use_gazebo = rospy.get_param('~use_gazebo', False)
@@ -153,42 +151,25 @@ if use_gazebo:
     gazebo_gripper._Box_Link_Name = "link"
 
 # Main loop for continuous pick and place
-wpose = move_joints(0, 0, 0, 0, 0, 0)
-
-# ADD BOX rviz
-addBox("box", wpose.position.x, wpose.position.y + 0.06, 0.01, 0.02, 0.02, 0.02, scene)
-
-try:
-    while not rospy.is_shutdown() and quit == 0:
-        wpose = move_joints(0, 0, 0, 0, 0, 0)
-        move_cartesian_path(wpose.position.x, wpose.position.y, 0.0407)
-        rospy.sleep(0.1)
-        grab_object("medium")
-        rospy.sleep(0.1)
-        
-        wpose = move_joints(0.6, 0, 0, 0, 0, 0)
-        move_cartesian_path(wpose.position.x, wpose.position.y, 0.0407)
-        rospy.sleep(0.1)
-        lose_object()
-        wpose = move_joints(0.6, 0, 0, 0, 0, 0)
-        rospy.sleep(0.5)
-
-        move_cartesian_path(wpose.position.x, wpose.position.y, 0.0407)
-        rospy.sleep(0.1)
-        grab_object("medium")
-        wpose = move_joints(0, 0, 0, 0, 0, 0)
-        rospy.sleep(0.1)
-        wpose = move_joints(0, 0, 0, 0, 0, 0)
-        move_cartesian_path(wpose.position.x, wpose.position.y, 0.0407)
-        rospy.sleep(0.1)
-        lose_object()
-
-        rospy.sleep(0.1)
+while not rospy.is_shutdown() and quit == 0:
+    # ADD BOX rviz
+    addBox("box", 0, 0.3, 0.01, 0.02, 0.02, 0.02, scene)
+    wpose = arm_group.get_current_pose().pose
+    rospy.logerr(wpose)
+    move_cartesian_path(0, 0.24, 0.0407)
+    rospy.sleep(0.1)
+    rospy.logerr(arm_group.get_current_joint_values())
+    grab_object("medium")
+    rospy.sleep(0.1)
+    move_joints(-1.5699811638948276, 0.35076022743452813, -0.17050017674796938, 0, 0.014684045245539014, 0)
+    rospy.sleep(0.1)
+    lose_object()
+    rospy.sleep(0.1)
+    remove_box("box")
+    move_joints(0, 0, 0, 0, 0, 0)
     
-except KeyboardInterrupt:
-    rospy.loginfo("Ctrl+C pressed. Exiting...")
+    # Check if the user wants to quit
+    check_quit()
 
-finally:
-    # Return to home position when loop exits
-    home()
-    remove_box()
+# Return to home position when loop exits
+home()
