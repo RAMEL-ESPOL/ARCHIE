@@ -1,0 +1,6 @@
+<launch>
+
+    <node name="pick_and_place_node" pkg="archie_master" type="pick_and_place.py" respawn="false" output="screen">
+    </node>
+
+</launch>
