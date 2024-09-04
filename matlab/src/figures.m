@@ -2,15 +2,19 @@ robot = importrobot('archie_description\urdf\manipulator2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
-show(robot)
-
 ndoc = 11;
 
-% joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h25_p22.txt')));
-% joint_states  = deg2rad(table2array(readtable('matlab/data/joint_real_states_square_t5_h25_p22.txt')));
+joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h25_p22.txt')));
+joint_states  = deg2rad(table2array(readtable('matlab/data/joint_real_states_square_t5_h25_p22.txt')));
 
-joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h20_p15.txt')));
-joint_states  = deg2rad(table2array(readtable('matlab/data/joint_real_states_square_t5_h20_p15.txt')));
+% joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h20_p15.txt')));
+% joint_states  = deg2rad(table2array(readtable('matlab/data/joint_real_states_square_t5_h20_p15.txt')));
+    
+% joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_circle_t0_h30_p22.txt')));
+% joint_states  = deg2rad(table2array(readtable('matlab/data/joint_real_states_circle_t0_h30_p22.txt')));
+
+% joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_triangle_t0_h30_p22.txt')));
+% joint_states  = deg2rad(table2array(readtable('matlab/data/joint_real_states_triangle_t0_h30_p22.txt')));
 
 cart_states = [];
 cart_goals = [];
@@ -26,10 +30,10 @@ for i=1:length(joint_goals)
 end
 
 % Aplicar condición para Z y eliminar filas donde Z >= 0.27
-cond_goals = cart_goals(:, 3) < 0.18; % Puntos en los que escribe
+cond_goals = cart_goals(:, 3) < 0.25; % Puntos en los que escribe
 cart_goals = cart_goals(cond_goals, :); % Filtrar filas completas
 
-cond_states = cart_states(:, 3) < 0.18; % Puntos en los que escribe
+cond_states = cart_states(:, 3) < 0.25; % Puntos en los que escribe
 cart_states = cart_states(cond_states, :); % Filtrar filas completas
 
 colors = lines(3); % Define a set of colors
@@ -38,10 +42,11 @@ figure(2);
 plot(cart_states(:,1), cart_states(:,2),"LineWidth",2, 'Color', colors(1,:))
 grid on
 grid minor
+xlim([-0.05, 0.05])
+ylim([0.20, 0.25])
 
 hold on
 plot(cart_goals(:,1), cart_goals(:,2),"LineWidth",2, 'Color', colors(2,:))
 grid on
 grid minor
-
-legend("Final Figure", "Expected Figure")
+legend("Final Figure", "Expected Figure","LineWidth",2, 'FontSize', 20)
