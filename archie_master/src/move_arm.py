@@ -58,7 +58,7 @@ def state_position(goal_state: JointState):
         pos = goal_state.position
     j_array = np.array(pos)*180/math.pi
     pos = list(j_array)
-    write_data(pos, "goals") #Funcion para guardar los datos
+    #write_data(pos, "goals") #Funcion para guardar los datos
     if fig != '_none': 
         plan_marker()
     else:
@@ -115,18 +115,18 @@ def figure(data_figure : str):
 def write_data(posiciones, pre):
     global new_file
     if fig != '_none':
-        if os.path.exists(os.path.join(ruta_file, "joint_" + pre + fig + ".txt")):
+        if os.path.exists(os.path.join(ruta_file, "_joint_" + pre + fig + ".txt")):
             if not new_file:
-                archivo = open(os.path.join(ruta_file, "joint_" + pre + fig + ".txt"), "w")
+                archivo = open(os.path.join(ruta_file, "_joint_" + pre + fig + ".txt"), "w")
                 archivo.write("Joint0,Joint1,Joint2,Joint3,Joint4,Joint5 \n" + ",".join(np.array(posiciones,str)) + "\n")
                 archivo.close()
                 new_file = True
             else:
-                archivo = open(os.path.join(ruta_file, "joint_" + pre + fig + ".txt"), "a")
+                archivo = open(os.path.join(ruta_file, "_joint_" + pre + fig + ".txt"), "a")
                 archivo.write(",".join(np.array(posiciones,str)) + "\n")
                 archivo.close()
         else:
-            archivo = open(os.path.join(ruta_file, "joint_" + pre + fig + ".txt"), "w")
+            archivo = open(os.path.join(ruta_file, "_joint_" + pre + fig + ".txt"), "w")
             archivo.write("Joint0,Joint1,Joint2,Joint3,Joint4,Joint5 \n" + ",".join(np.array(posiciones,str)) + "\n")
             archivo.close()
             new_file = True

@@ -115,7 +115,7 @@ def get_load(list_motors):# Read present position
     rospy.logerr(present_load)
     return present_load
 
-
+'''
 def get_velocities(list_motors):# Read present position
     present_vel = [0,0,0,0,0,0]  
     # Syncread present position
@@ -134,7 +134,7 @@ def get_velocities(list_motors):# Read present position
             present_vel[id]= groupSyncReadVel.getData(id, motor.addr_present_velocity , 4)
 
     return present_vel
-
+'''
 def get_motor_data(list_motors):
     present_positions = [0,0,0,0,0,0]
     present_load      = [0,0,0,0,0,0]
@@ -197,14 +197,17 @@ if __name__ == '__main__':
 
     #Last value is the max desired speed: value*0.229rpm is the speed in rpm
     print(dxl_baud_rate)
+
     #Mesa a 100 mm
-    """base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[1500,450,100],1:[4500,1800,800]})
+    base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[1500,450,100],1:[4500,1800,800]})
     codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[3500,1500,400],3:[300,0,30]})
-    ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[1500,500,150],5:[200,0,20]})"""
-    #Probando
+    ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[1500,500,150],5:[200,0,20]})
+
+    '''#Probando
     base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[700,500,0],1:[2000,500,500]})
     codo = XCseries_motor(usb_port,dxl_baud_rate,[2,3],portHandler,packetHandler,r,15,{2:[-1.15,2],3:[-3.14,3.14]},{2:[1500,500,0],3:[700,0,0]})
     ee   = XCseries_motor(usb_port,dxl_baud_rate,[4,5],portHandler,packetHandler,r,15,{4:[-1.15,2],5:[-3.14,3.14]},{4:[800,500,0],5:[700,500,0]})
+    '''
     
     """#Plano inclinado
     base = XCseries_motor(usb_port,dxl_baud_rate,[0,1],portHandler,packetHandler,r,15,{0:[-1.57,1.57],1:[-0.785,0.785]},{0:[2000,800,0],1:[3000,1200,200]})
@@ -219,17 +222,17 @@ if __name__ == '__main__':
 
     groupSyncRead = GroupSyncRead(portHandler, packetHandler, ee.addr_present_position, 4)
     #leer velocidades
-    groupSyncReadVel = GroupSyncRead(portHandler, packetHandler, ee.addr_present_velocity, 4)
+    #groupSyncReadVel = GroupSyncRead(portHandler, packetHandler, ee.addr_present_velocity, 4)
 
     for m in list_motors:
         for id in m.list_ids:
             # Add parameter storage for Dynamixel present position value
             dxl_addparam_result = groupSyncRead.addParam(id)
-            dxl_addparam_resultVel = groupSyncReadVel.addParam(id)
+            #dxl_addparam_resultVel = groupSyncReadVel.addParam(id)
             if dxl_addparam_result != True:
                 print("[ID:%03d] groupSyncRead addparam failed" % id)
-            if dxl_addparam_resultVel != True:
-                print("[ID:%03d] groupSyncRead addparam failed" % id)
+            #if dxl_addparam_resultVel != True:
+            #    print("[ID:%03d] groupSyncRead addparam failed" % id)
     
 
     #Publish current robot state
