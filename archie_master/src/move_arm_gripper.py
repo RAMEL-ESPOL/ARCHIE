@@ -24,7 +24,7 @@ def state_position(fake_joint_state: JointState):
         #goal_state.velocity = [10, 10, 10, 10, 10, 10]
         pos = fake_joint_state.position
         ee = pos[-2]
-        ee_rad = (ee*1.57)/0.02
+        ee_rad = -(ee*2.8)/0.02
         goal = tuple(list(pos[:-3]) + [ee_rad])
         goal_state.position = goal
         pub.publish(goal_state)

@@ -18,6 +18,7 @@ quit = 0
 global t
 t = 0.01
 
+
 def addBox(name, x, y, z, sx, sy, sz, scene):
     box_name = name
     
@@ -36,18 +37,27 @@ def addBox(name, x, y, z, sx, sy, sz, scene):
     
     # Add the box in the scene
     scene.add_box(box_name, box_pose, size=(sx, sy, sz))
+    rospy.sleep(0.1)
 
 def remove_box(name, timeout=4):
     box_name = name
     scene.remove_world_object(box_name)
+    rospy.sleep(0.1)
 
 def home():
     joint_goal = arm_group.get_current_joint_values()
     joint_goal = [0, 0, 0, 0, 0, 0]
+    arm_group.set_joint_value_target(joint_goal)
+    
+    # Plan the trajectory
+    success, plan, _, _ = arm_group.plan()
 
-    arm_group.go(joint_goal, wait=True)
+    # Check if the plan is successful
+    if success and len(plan.joint_trajectory.points) > 0:
+        arm_group.execute(plan, wait=True)
+    else:
+        rospy.logerr("Failed to generate a valid plan for the joint values provided.")
     rospy.loginfo("ARCHIE is at home position.")
-    return wpose
 
 def move_cartesian_path(px, py, pz):
     waypoints = []
@@ -68,6 +78,20 @@ def move_cartesian_path(px, py, pz):
     display_trajectory_publisher.publish(display_trajectory)
     
     arm_group.execute(plan, wait=True)
+    rospy.sleep(0.1)
+
+def move_xyz(px,py,pz):
+    q =[]
+    orientation = arm_group.get_current_pose().pose 
+    q.append(orientation.orientation.x)
+    q.append(orientation.orientation.y)
+    q.append(orientation.orientation.z)
+    q.append(orientation.orientation.w)
+    arm_group.set_orientation_target([-0.70,-0.7,0,0])
+    arm_group.set_position_target([px,py,pz])
+    arm_group.go()
+
+    rospy.sleep(0.1)
 
 def move_joints(j0, j1, j2, j3, j4, j5):
     # Set the target joint values
@@ -81,6 +105,7 @@ def move_joints(j0, j1, j2, j3, j4, j5):
         arm_group.execute(plan, wait=True)
     else:
         rospy.logerr("Failed to generate a valid plan for the joint values provided.")
+    rospy.sleep(0.10)
 
 def loginfog(msg: str):
     rospy.loginfo("\033[92m%s\033[0m" % msg)
@@ -95,7 +120,6 @@ def grab_object(size):
 
     ee_group.go(joint_goal, wait=True)
 
-    touch_links = robot.get_link_names(group=ee_group.get_name())
     ee_group.attach_object("box", "garra1_link", touch_links)
 
     # Attach object using gazebo_gripper only if gazebo is enabled
@@ -103,24 +127,22 @@ def grab_object(size):
         gazebo_gripper.attach_Object()
 
     rospy.loginfo("ARCHIE picked the object")
+    rospy.sleep(0.1)
 
 def lose_object():
-    joint_goal = ee_group.get_current_joint_values()
-    joint_goal = [0.0, 0.0]
-    ee_group.go(joint_goal, wait=True)
-
     # Detach object using gazebo_gripper only if gazebo is enabled
     if use_gazebo:
         gazebo_gripper.detach_Object()
 
-    touch_links = robot.get_link_names(group=ee_group.get_name())
     ee_group.detach_object("garra1_link")
-    rospy.loginfo("ARCHIE dropped the object")
 
-def check_quit():
-    global quit
-    if input("Press 'q' to quit or any other key to continue: ") == "q":
-        quit = 1
+    joint_goal = ee_group.get_current_joint_values()
+    joint_goal = [0.0, 0.0]
+
+    ee_group.go(joint_goal, wait=True)
+
+    rospy.loginfo("ARCHIE dropped the object")
+    rospy.sleep(0.1)
 
 # Main execution
 moveit_commander.roscpp_initialize(sys.argv)
@@ -141,6 +163,8 @@ data_writing_publisher.publish(("_none"))
 # Grasping group for attach in rviz
 grasping_group = "ee_group"
 
+touch_links = robot.get_link_names(group=ee_group.get_name())
+
 
 # Initialize gazebo_gripper only if gazebo is used
 if use_gazebo:
@@ -150,26 +174,100 @@ if use_gazebo:
     gazebo_gripper._Box_Model_Name = "box"
     gazebo_gripper._Box_Link_Name = "link"
 
+def menu():
+    global quit    
+    print("Menú:")
+    print("1. Pick and place (derecha)")
+    print("2. Pick and Place (izquierda)")
+    print("3. Mano izquierda")
+    print("q. SALIR")
+
+    option = input("Seleccione una opción: ")
+
+    if option == '1':
+        move_joints(0, 0, 0, 0, 0, 0)
+        
+        move_cartesian_path(0, 0.24, 0.045)
+
+        grab_object("medium")
+
+        move_joints(-1.57, 0, 0, 0, 0, 0)
+
+        move_joints(-1.57, -0.5703597221921625, -0.4866665737397319, 0, 1.057, 0)
+
+        lose_object()
+
+        move_joints(-1.57, 0, 0, 0, 0, 0)
+
+        move_joints(-1.57, -0.5703597221921625, -0.4866665737397319, 0, 1.057, 0)
+
+        grab_object("medium")
+
+        move_joints(0, 0, 0, 0, 0, 0)
+
+        move_cartesian_path(0, 0.24, 0.045)
+
+        lose_object()
+
+        move_joints(0, 0, 0, 0, 0, 0)
+    elif option == '2':
+
+        move_joints(0, 0, 0, 0, 0, 0)
+
+        move_cartesian_path(0, 0.24, 0.045)
+
+        grab_object("medium")
+
+        move_joints(1.57, 0, 0, 0, 0, 0)
+
+        move_joints(1.57, -0.5703597221921625, -0.4866665737397319, 0, 1.057, 0)
+
+        lose_object()
+
+        move_joints(1.57, 0, 0, 0, 0, 0)
+
+        move_joints(1.57, -0.5703597221921625, -0.4866665737397319, 0, 1.057, 0)
+
+        grab_object("medium")
+
+        move_joints(0, 0, 0, 0, 0, 0)
+
+        move_cartesian_path(0, 0.24, 0.045)
+
+        lose_object()
+
+        move_joints(0, 0, 0, 0, 0, 0)
+
+    elif option == '3':
+
+        move_joints(0, 0, 0, 0, 0, 0)
+
+        move_cartesian_path(0, 0.24, 0.045)
+        
+        grab_object("medium")
+
+        move_joints(-1.5699811638948276, 0.35076022743452813, -0.17050017674796938, 0, 0.014684045245539014, 0)
+
+        lose_object()
+
+        remove_box("box")
+        
+        move_joints(0, 0, 0, 0, 0, 0)
+        
+
+    elif option == 'q':
+        quit = 1
+
+    else:
+        print("Opción inválida")
+
 # Main loop for continuous pick and place
 while not rospy.is_shutdown() and quit == 0:
-    # ADD BOX rviz
+    #ADD BOX rviz
+    #rospy.logerr(arm_group.get_current_joint_values())
     addBox("box", 0, 0.3, 0.01, 0.02, 0.02, 0.02, scene)
-    wpose = arm_group.get_current_pose().pose
-    rospy.logerr(wpose)
-    move_cartesian_path(0, 0.24, 0.0407)
-    rospy.sleep(0.1)
-    rospy.logerr(arm_group.get_current_joint_values())
-    grab_object("medium")
-    rospy.sleep(0.1)
-    move_joints(-1.5699811638948276, 0.35076022743452813, -0.17050017674796938, 0, 0.014684045245539014, 0)
-    rospy.sleep(0.1)
-    lose_object()
-    rospy.sleep(0.1)
-    remove_box("box")
-    move_joints(0, 0, 0, 0, 0, 0)
-    
-    # Check if the user wants to quit
-    check_quit()
+    menu()
 
 # Return to home position when loop exits
 home()
+remove_box("box")
