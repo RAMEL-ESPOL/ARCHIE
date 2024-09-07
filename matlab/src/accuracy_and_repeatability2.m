@@ -2,8 +2,8 @@ robot = importrobot('archie_description\urdf\manipulator2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
-experiments = 7;
-samples = 10;
+experiments = 11;
+samples = 6;
 cart_states = [];
 target_points = [];
 
@@ -122,6 +122,74 @@ for i=1:samples
     x_target = 0*1000;
     y_target = 0.15*1000;
     z_target = 0.20*1000;
+    
+    target_points = [target_points; x_target, y_target, z_target];
+end
+
+for i=1:samples
+    % Construir el nombre del archivo
+    filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x05_y16_z17.txt');
+    
+    % Leer estados reales
+    joint_states = deg2rad(table2array(readtable(filename_real)));
+    tform_states = getTransform(robot, joint_states(end, : ), 'link_6'); 
+    pos_states = tform2trvec(tform_states)*1000;
+    cart_states = [cart_states; pos_states];
+    
+    x_target = 0.05*1000;
+    y_target = 0.16*1000;
+    z_target = 0.17*1000;
+    
+    target_points = [target_points; x_target, y_target, z_target];
+end
+
+for i=1:samples
+    % Construir el nombre del archivo
+    filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x0_y16_z30.txt');
+    
+    % Leer estados reales
+    joint_states = deg2rad(table2array(readtable(filename_real)));
+    tform_states = getTransform(robot, joint_states(end, : ), 'link_6'); 
+    pos_states = tform2trvec(tform_states)*1000;
+    cart_states = [cart_states; pos_states];
+    
+    x_target = 0*1000;
+    y_target = 0.16*1000;
+    z_target = 0.30*1000;
+    
+    target_points = [target_points; x_target, y_target, z_target];
+end
+
+for i=1:samples
+    % Construir el nombre del archivo
+    filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x0_y30_z22.txt');
+    
+    % Leer estados reales
+    joint_states = deg2rad(table2array(readtable(filename_real)));
+    tform_states = getTransform(robot, joint_states(end, : ), 'link_6'); 
+    pos_states = tform2trvec(tform_states)*1000;
+    cart_states = [cart_states; pos_states];
+    
+    x_target = 0*1000;
+    y_target = 0.30*1000;
+    z_target = 0.22*1000;
+    
+    target_points = [target_points; x_target, y_target, z_target];
+end
+
+for i=1:samples
+    % Construir el nombre del archivo
+    filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x15_y16_z23.txt');
+    
+    % Leer estados reales
+    joint_states = deg2rad(table2array(readtable(filename_real)));
+    tform_states = getTransform(robot, joint_states(end, : ), 'link_6'); 
+    pos_states = tform2trvec(tform_states)*1000;
+    cart_states = [cart_states; pos_states];
+    
+    x_target = -0.15*1000;
+    y_target = 0.16*1000;
+    z_target = 0.23*1000;
     
     target_points = [target_points; x_target, y_target, z_target];
 end
