@@ -7,7 +7,7 @@ import moveit_commander
 import moveit_msgs.msg
 import geometry_msgs.msg
 from std_msgs.msg import String
-from gazebo_gripper import *
+#from gazebo_gripper import *
 
 # Altura del lápiz
 global z
