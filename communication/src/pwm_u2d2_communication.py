@@ -16,6 +16,7 @@ from getch import getch
 import numpy as np
 from archie_master.msg import MotorData
 import math
+import time
 
 def convert_to_signed_16bit(val):
     if val > 0x7FFF:
@@ -162,6 +163,7 @@ def set_sync_pwm(total_pwm):
 
 def move_to_target(state_position: JointState):
 
+    current_time = time.time() - start_time
     motor_positions  = get_positions()
     motor_velocities = get_velocities()
     current_positions = list(np.array(motor_positions, float))
@@ -176,8 +178,15 @@ def move_to_target(state_position: JointState):
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
-    c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
+    if current_time > 10:
+        k_p = np.array([7, 5.5, 4, 2, 2, 2])
+        c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
+    else:
+        k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
+        # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
+        c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
+
+    print(current_time)
 
     error_torques = (position_error*k_p)
     damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
@@ -269,6 +278,8 @@ if __name__ == '__main__':
     portHandler = PortHandler(DEVICENAME)
 
     packetHandler = PacketHandler(PROTOCOL_VERSION)
+
+    start_time = time.time()
 
     # Open port
     if portHandler.openPort():
