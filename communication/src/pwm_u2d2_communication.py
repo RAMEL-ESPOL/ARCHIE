@@ -178,13 +178,17 @@ def move_to_target(state_position: JointState):
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    if current_time > 10:
-        k_p = np.array([7, 5.5, 4, 2, 2, 2])
-        c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
-    else:
-        k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
-        # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
-        c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
+    k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
+    # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
+    c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
+
+    # if current_time > 10:
+    #     k_p = np.array([5, 5.5, 4, 2, 2, 2])
+    #     c_p = np.array([0.5, 0.8, 0.15, 0.4, 0.1, 0.1])
+    # else:
+    #     k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
+    #     # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
+    #     c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
 
     print(current_time)
 
