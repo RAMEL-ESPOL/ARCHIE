@@ -2,8 +2,8 @@ robot = importrobot('archie_description\urdf\manipulator2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
-experiments = 7;
-samples = 10;
+experiments = 11;
+samples = 6;
 errors = zeros(samples*experiments, 3); % Para almacenar errores en X, Y y Z
 percent_errors = zeros(samples*experiments, 3); % Para almacenar errores porcentuales
 
@@ -45,6 +45,27 @@ for j = 1:experiments
             x_target = 0;
             y_target = 0.15;
             z_target = 0.2;
+        elseif j == 8
+            filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x05_y16_z17.txt');
+            x_target = 0.05;
+            y_target = 0.16;
+            z_target = 0.17;
+        elseif j == 9
+            filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x0_y16_z30.txt');
+            x_target = 0;
+            y_target = 0.16;
+            z_target = 0.30;
+        elseif j == 10
+            filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x0_y30_z22.txt');
+            x_target = 0;
+            y_target = 0.30;
+            z_target = 0.22;
+        elseif j == 11
+            filename_real = strcat('matlab/data/', num2str(i), '_joint_real_states_precision_x15_y16_z23.txt');
+            x_target = -0.15;
+            y_target = 0.16;
+            z_target = 0.23;
+        
         end
 
         % Leer estados reales
@@ -117,7 +138,7 @@ std_magnitude_error = zeros(experiments, 1);  % Para la desviación estándar de
 
 for j = 1:experiments
     % Obtener los errores de los 10 samples correspondientes al experimento j
-    errors_j = errors((j-1)*samples + 1 : j*samples, :);
+    errors_j = error_abs((j-1)*samples + 1 : j*samples, :);
 
     % Calcular promedio y desviación estándar para X, Y y Z
     mean_errors(j, :) = mean(errors_j);

@@ -3,12 +3,13 @@ robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
 n = 6;
-% jointVal = rand(1,n)
+jointVal = rand(1,n)
 
-jointVal = [0,0,0,0,0,0];
+% jointVal = [0,0,0,0,0,0];
 
 k_p = eye(n,n).*[3 3.5 2.5 2 2 2];
-c_p = eye(n,n).*[0.2 0.6 0.15 0.4 0.1 0.1];
+% c_p = eye(n,n).*[0.2 0.6 0.15 0.4 0.1 0.1]; Antiguo
+c_p = eye(n,n).*[0.1740    0.5546    0.2957    0.0673    0.0595    0.0023];
 
 M = massMatrix(robot, jointVal);
 M_inv = inv(M)
