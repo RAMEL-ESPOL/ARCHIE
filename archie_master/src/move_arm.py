@@ -65,19 +65,34 @@ def state_position(goal_state: JointState):
         marker.points.clear()
         marker_array.markers.append(marker)
 
+global marker_id
+marker_id = 0
+
 def plan_marker():
     global marker_array
     global marker
     global pen
+    global marker_id
+    
     pose = group.get_current_pose(group.get_end_effector_link())
-    if (pose.pose.position.z <= pen + 0.005) and (pose.pose.position.z >= pen - 0.005):
+
+    if (pose.pose.position.z <= pen + 0.001) and (pose.pose.position.z >= pen - 0.001):
         p = Point() 
         p = pose.pose.position
         p.z = pen - 0.165
         
         marker.points.append(p)
+        marker.id = marker_id
         marker_array.markers.append(marker)
+
+        # Publicamos solo el último punto para mantener el rendimiento
+        marker_array.markers = [marker]
         marker_pub.publish(marker_array)
+
+        rospy.sleep(0.01)  # Ajusta este valor según la velocidad deseada
+
+        # Incrementamos el ID para el próximo marcador
+        marker_id += 1
 
 #Recibimos un msg de tipo JointState a traves del topico real_joint_state y lo guardamos para posteriormente hacer un controlador
 def real_callback(real_state: JointState):
