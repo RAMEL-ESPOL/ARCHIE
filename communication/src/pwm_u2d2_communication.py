@@ -195,24 +195,25 @@ def move_to_target(state_position: JointState):
     error_torques = (position_error*k_p)
     damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
 
-    print("\n","Jacobian Matrix:")
-    jacobian_matrix = calculate_jacobian(state_position.position, chain)
-    print(jacobian_matrix[0])
-    print(jacobian_matrix[1])
-    print(jacobian_matrix[2])
-    print(jacobian_matrix[3])
-    print(jacobian_matrix[4])
-    print(jacobian_matrix[5])
+    # print("\n","Jacobian Matrix:")
+    # jacobian_matrix = calculate_jacobian(state_position.position, chain)
+    # print(jacobian_matrix[0])
+    # print(jacobian_matrix[1])
+    # print(jacobian_matrix[2])
+    # print(jacobian_matrix[3])
+    # print(jacobian_matrix[4])
+    # print(jacobian_matrix[5])
 
-    print("\n","Mass Matrix:")
-    mass_matrix = calculate_mass_matrix(state_position.position, chain)
-    print(mass_matrix[0])
-    print(mass_matrix[1])
-    print(mass_matrix[2])
-    print(mass_matrix[3])
-    print(mass_matrix[4])
-    print(mass_matrix[5])
+    # print("\n","Mass Matrix:")
+    # mass_matrix = calculate_mass_matrix(state_position.position, chain)
+    # print(mass_matrix[0])
+    # print(mass_matrix[1])
+    # print(mass_matrix[2])
+    # print(mass_matrix[3])
+    # print(mass_matrix[4])
+    # print(mass_matrix[5])
     
+    # Se convierte el torque calculado a pwm que tiene un rango de -885 - 885
     total_pwm = (gravity_torques + error_torques - damp_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 700 and total_pwm[id] > -700) else
