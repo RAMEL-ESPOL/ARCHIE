@@ -1,14 +1,16 @@
-joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h30_p22.txt')));
-t = linspace(0, 10, 327);
-input_data = [t', zeros(327, 6)];
+% joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h30_p22.txt')));
 
-robot = importrobot('archie_description\urdf\manipulator.urdf');
+% joint_goals = zeros(30000, 6);
+joint_goals_step = [-1.57 1.57/2 -1.57/2 1.57/3 1.57 1.57];
+% input_data = [(linspace(0, 5, length(joint_goals)))', joint_goals];
+
+robot = importrobot('archie_description\urdf\manipulator2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
-n = 6;
-k_p = eye(n,n).*[3 3.5 2.5 2 2 0];
-c_p = eye(n,n).*[0.1697    0.4348    0.2545    0.0558    0.0509    0.0];
+k_p = [3 3.5 2.5 2 2 0];
+c_p = [0.1977    0.6622    0.3440    0.0615    0.0679    0.0026];
 
 
-out = sim("manipulator_torque");
+out = sim("manipulator_pid_torque");
+
