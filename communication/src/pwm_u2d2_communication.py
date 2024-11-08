@@ -178,10 +178,6 @@ def move_to_target(state_position: JointState):
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
-    # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
-    c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
-
     # if current_time > 10:
     #     k_p = np.array([5, 5.5, 4, 2, 2, 2])
     #     c_p = np.array([0.5, 0.8, 0.15, 0.4, 0.1, 0.1])
@@ -189,6 +185,27 @@ def move_to_target(state_position: JointState):
     #     k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
     #     # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
     #     c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
+
+    # PID1
+    # k_p = np.array([3, 3.5, 2.5, 2, 2, 0])
+    # c_p = np.array([0.1977,    0.6622,    0.3440,    0.0615 ,   0.0679,    0.0026])
+    
+    # PID2
+    # k_p = np.array([2, 2.5, 1.5, 1, 1, 1])
+    # c_p = np.array([0.2451,    0.3936,    0.2219,    0.0530,    0.0421,    0.0016])
+
+    # PID3
+    # k_p = np.array([3.7, 4, 3, 2, 2, 0.02])
+    # c_p = np.array([0.3333,    0.4978,    0.3138,    0.0749,    0.0595,    0.0009])
+
+    # PID4
+    # k_p = np.array([3.9, 4.2, 3, 2, 2, 0.02])
+    # c_p = np.array([0.3333,    0.4978,    0.3138,    0.0749,    0.0595,    0.0009])
+
+    # PID5
+    k_p = np.array([4.3, 4.5, 3.4, 2, 2.5, 0.02])
+    c_p = np.array([0.3593,    0.5280,    0.3341,    0.0749,    0.0665,    0.0002])
+
 
     print(current_time)
 
