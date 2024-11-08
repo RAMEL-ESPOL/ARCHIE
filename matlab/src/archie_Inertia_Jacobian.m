@@ -1,16 +1,17 @@
-joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5_h30_p22.txt')));
-
-simu_decimation = 2;
-step_time = 0.005;
-stop_time = 10;
-% joint_goals = zeros(30000, 6);
-joint_goals_step = [-1.57 1.57/2 -1.57/2 1.57/3 1.57 1.57];
-input_data = [(linspace(0, stop_time, length(joint_goals)))', joint_goals];
-
 robot = importrobot('archie_description\urdf\manipulator.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
+
+jointVal = [0 0 0 0 0 0];
+
+M = massMatrix(robot, jointVal) % Define la matriz de inercia del sistema
+
+J = geometricJacobian(robot, jointVal,'link_6')
+
+
+
+% Diferentes valores de PD y PID usados hasta ahora
 % PID1
 k_p = [3 3.5 2.5 2 2 0];
 c_p = [0.1977    0.6622    0.3440    0.0615    0.0679    0.0026];
@@ -45,11 +46,3 @@ i_p = [0.1 10 5 0.1 0.1 0.1];
 % PID7
 k_p = [4.3 4.5 3.4 2 2.5 0.02];
 c_p = [0.3593    0.58    0.38    0.0749    0.0665    0.0002];
-i_p = [0.1 10 5 0.1 0.1 0.1];
-
-
-% simulink_model = "matlab\src\Simulink\manipulator_pid_torque";
-% open_system(simulink_model);
-% simIn = Simulink.SimulationInput(simulink_model);
-% simIn = setModelParameter(simIn, "StopTime", num2str(stop_time));
-out = sim("matlab\src\Simulink\manipulator_pid_torque");
