@@ -2,7 +2,7 @@ joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5
 
 simu_decimation = 2;
 step_time = 0.005;
-stop_time = 10;
+stop_time = 5;
 % joint_goals = zeros(30000, 6);
 joint_goals_step = [-1.57 1.57/2 -1.57/2 1.57/3 1.57 1.57];
 input_data = [(linspace(0, stop_time, length(joint_goals)))', joint_goals];
@@ -47,9 +47,4 @@ k_p = [4.3 4.5 3.4 2 2.5 0.02];
 c_p = [0.3593    0.58    0.38    0.0749    0.0665    0.0002];
 i_p = [0.1 10 5 0.1 0.1 0.1];
 
-
-% simulink_model = "matlab\src\Simulink\manipulator_pid_torque";
-% open_system(simulink_model);
-% simIn = Simulink.SimulationInput(simulink_model);
-% simIn = setModelParameter(simIn, "StopTime", num2str(stop_time));
-out = sim("matlab\src\Simulink\manipulator_pid_torque");
+out = sim("matlab\src\Simulink\manipulator_pid_torque", 'StopTime', num2str(stop_time));
