@@ -6,7 +6,7 @@ joint_error_simu  = (joint_states_simu - joint_goals)*180/pi;% Convertimos a gra
 
 t = time_real;
 
-n = 7;
+n = 1;
 method = "traj";
 
 colors = lines(7);
@@ -20,6 +20,8 @@ for i=1:6
     set(gca,'FontSize',10);    
 end
 xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Error (degrees)', 'FontSize', 12); set(gca,'FontSize',10);
+exportgraphics(gcf, strcat(method, "_PID", num2str(n), "_error.png"), "Resolution", 300)
+
 
 figure();sgtitle(strcat('Input/Output Response (PID', num2str(n), ')'));
 for i=1:6   
@@ -30,3 +32,4 @@ for i=1:6
     set(gca,'FontSize',10);    
 end
 xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Position (degrees)', 'FontSize', 12); set(gca,'FontSize',10);
+exportgraphics(gcf, strcat(method, "_PID", num2str(n), "_in_out.png"), "Resolution", 300)
