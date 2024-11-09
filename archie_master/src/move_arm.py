@@ -156,7 +156,7 @@ if __name__ == "__main__":
     marker_pub      = rospy.Publisher ("/visualization_marker_array", MarkerArray, queue_size = 2)
     subGoalState    = rospy.Subscriber("/joint_states", JointState, callback = state_position)
     subRealState    = rospy.Subscriber("/real_joint_states", JointState, callback = real_callback)
-    subWritingData  = rospy.Subscriber("/figure_writing", String, callback = figure)
+    #subWritingData  = rospy.Subscriber("/figure_writing", String, callback = figure)
     group           = moveit_commander.MoveGroupCommander("arm_group")
 
     rospy.logwarn("The move_arm_node has been started")
