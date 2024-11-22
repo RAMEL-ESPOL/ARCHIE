@@ -2,21 +2,28 @@
 syms q1 q2 q3 q4 q5 q6 real
 jointVars = [q1 q2 q3 q4 q5 q6];
 
-% Parámetros DH: [theta d a alpha]
-DH_params = [
-    q1+pi/2, 0.09, 0.02, pi/2;
-    q2+pi/2, 0.00, 0.20, 0.0 ;
-    q3     , 0.00, 0.02, pi/2;
-    q4     , 0.23,-0.02,-pi/2;
-    q5-pi/2, 0.00, 0.00, pi/2;
-    q6     , 0.04, 0.00, 0.0 ;
-];
+% % Parámetros DH: [theta d a alpha]
+% DH_params = [
+%     q1+pi/2, 0.09, 0.02, pi/2;
+%     q2+pi/2, 0.00, 0.20, 0.0 ;
+%     q3     , 0.00, 0.02, pi/2;
+%     q4     , 0.23,-0.02,-pi/2;
+%     q5-pi/2, 0.00, 0.00, pi/2;
+%     q6     , 0.04, 0.00, 0.0 ;
+% ];
 
+DH_params = [
+    q1+pi/2, 0.09, 0  , pi/2;
+    q2+pi/2, 0.00, 0.20, 0.0 ;
+    q3     , 0.00, 0  , pi/2;
+    q4     , 0.2515, 0,-pi/2;
+    q5-pi/2, 0.00, 0.00, pi/2;
+    q6     , 0.0252, 0.00, 0.0 ;
+];
 % Inicializar la transformación total como la identidad
 T = eye(4);
 
-% Crear una celda para almacenar las transformaciones homogéneas
-T_matrices = cell(1, size(DH_params, 1));
+
 
 % Recorrer cada fila de los parámetros DH para calcular las transformaciones
 for i = 1:size(DH_params, 1)
@@ -26,7 +33,7 @@ for i = 1:size(DH_params, 1)
     alpha = DH_params(i, 4);
     
     T = T * dh_transform(theta, d, a, alpha);
-    T_matrices{i} = T;
+    T_matrices(:, :, i) = T;
 end
 
 % La última transformación T contiene la posición del efector final
@@ -42,8 +49,8 @@ for i = 1:6
     % (z_i-1) X (P_eff - P_i-1)
     %  z_i-1
     if i > 1
-        R_efector = T_matrices{i-1}(1:3, 1:3);
-        J(1:3, i) = cross(R_efector(:, 3), pos_efector - T_matrices{i-1}(1:3,4));
+        R_efector = T_matrices(1:3, 1:3, i);
+        J(1:3, i) = cross(R_efector(:, 3), pos_efector - T_matrices(1:3,4,i));
         J(4:6, i) = R_efector(:, 3);
     else
         J(1:3, i) = cross(transpose([0 0 1]), pos_efector - transpose([0 0 0]));
