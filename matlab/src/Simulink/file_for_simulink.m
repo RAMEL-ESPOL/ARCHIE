@@ -3,7 +3,7 @@ joint_goals   = deg2rad(table2array(readtable('matlab/data/joint_goals_square_t5
 simu_decimation = 1;
 step_time = 0.1;
 stop_time = 3;
-n_pid = 1;
+n_pid = 6;
 
 % joint_goals = zeros(30000, 6);
 joint_goals_step = [-1.57 1.57/2 -1.57/2 1.57/3 1.57 1.57];
@@ -38,6 +38,12 @@ pid_array(:,:,4) = [
 pid_array(:,:,5) = [
     4.3 4.5 3.4 2 2.5 0.02;
     0.3593    0.5280    0.3341    0.0749    0.0665    0.0002;
+    0 0 0 0 0 0
+];
+
+pid_array(:,:,6) = [
+    1 1 1 1 1 1;
+    0 0 0 0 0 0;
     0 0 0 0 0 0
 ];
 
