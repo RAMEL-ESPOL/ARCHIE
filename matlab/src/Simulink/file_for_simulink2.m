@@ -44,6 +44,11 @@ pid_array(:,:,5) = [
     0 0 0 0 0 0
 ];
 
+pid_array(:,:,6) = [
+    1 1 1 1 1 1;
+    0 0 0 0 0 0;
+    0 0 0 0 0 0
+];
 
 k_p = pid_array(1,:,n_pid);
 c_p = pid_array(2,:,n_pid);
