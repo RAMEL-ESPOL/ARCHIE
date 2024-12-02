@@ -1,6 +1,6 @@
 <launch>
   <arg name="usb_port"                default="/dev/ttyUSB0"/>
-  <arg name="dxl_baud_rate"           default="1000000"/>
+  <arg name="dxl_baud_rate"           default="2000000"/>
 
   <node name="motor_communication_pwm" pkg="communication" type="pwm_u2d2_communication.py" output="screen">
     <param name="usb_port" value="$(arg usb_port)" />
