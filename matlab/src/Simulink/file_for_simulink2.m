@@ -1,14 +1,14 @@
-ndoc  = 16;
+ndoc  = 17;
 n_pid = 5;
+frec  = 30;
 
 joint_error_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_error.txt'));joint_states_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_position.txt'));joint_goals = joint_error_real + joint_states_real;
 
-time_real= linspace(0.1, length(joint_goals)*0.1, length(joint_goals));
+time_real= linspace(1/frec, length(joint_goals)/frec, length(joint_goals));
 
 simu_decimation = 1;
-step_time = 0.1;
+step_time = 1/frec;
 stop_time = time_real(length(time_real));
-
 
 input_data = [time_real', joint_goals];
 
