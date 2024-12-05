@@ -12,8 +12,6 @@ from std_msgs.msg import Header
 from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 import math
-from spatialmath_rospy import to_spatialmath, to_ros
-from spatialmath import SE3, SO3
 
 #Altura cuando se levanta el l
 def home():
@@ -84,21 +82,6 @@ def down_pen(wpose, waypoints : list, pen):
     waypoints.append(copy.deepcopy(wpose))
 
     return wpose, waypoints
-
-
-def plane_rotation(waypoints : list, theta):
-    rmatrix = SE3.Ry(theta,'deg')
-    way = []
-    for i in range(len(waypoints)):
-        #Primer elemento del producto es la parte de traslación de la matriz de transformación la cual usa las coordenadas cartsianas de cada pose (wpose)
-        #Segundo y tercer elementos del producto son las rotaciones necesarias para que el efector final esté perpendicular al plano XY
-        T = (SE3(waypoints[i].position.x, waypoints[i].position.y, waypoints[i].position.z)) * (SE3.Rz(-88, 'deg')) * (SE3.Rx(180, 'deg'))
-      
-        #La matriz T representa la orientación y posición del efector final con respecto al plano XY original, al multiplicarla por 
-        #la matriz de rotación obtenemos la orientación y posición del efector con respecto al plano con la inclinación indicada
-        way.append(copy.deepcopy(to_ros(rmatrix*T)))
-    return way
-
 
 def move_pen(wpose, waypoints : list, d_x : float, d_y: float, cond: bool = 0, d_z : float = 0):
     """Se copia la pose actual para únicamente modificar las coordenadas cartesianas y que la orientación del efector final no se vea modificada, de esta manera mantenemos el lápiz perpendicular al suelo"""
@@ -1220,11 +1203,6 @@ def triangle(wpose, waypoints: list, data_writing_publisher, size: float, x_i: f
     (wpose, waypoints) = move_pen(wpose, waypoints, -size*math.cos(60*math.pi/180), y_h, 1)
     
     (wpose, waypoints) = up_pen(wpose, waypoints, pen)
-        
-    waypoints = (plane_rotation(waypoints, theta) if theta != 0 else waypoints)
-
-    data_writing_publisher.publish("_" + str("triangle").lower() + "," + str(pen))
-
 
     return (waypoints, wpose)
 
@@ -1529,8 +1507,6 @@ def write(wpose, waypoints: list, robot, scene, group, display_trajectory_publis
                                  (plan_exclamation      (wpose,waypoints,size2,space2,y_h2,pen) if w == "!" else
                                  [])))))))))))))))))))))))))))))))))))))))))))))
         
-        waypoints = (plane_rotation(waypoints, theta) if theta != 0 else waypoints)
-
         data_writing_publisher.publish("_" + str(word).lower() + "," + str(pen))
 
 
@@ -1560,8 +1536,6 @@ if __name__ == "__main__":
     theta = 0
 
     global rmatrix
-    rmatrix = SE3.Ry(theta,'deg')
-
     x_i = -0.5
 
 
