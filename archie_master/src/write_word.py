@@ -364,8 +364,6 @@ def plan_J(wpose, waypoints : list):
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
-
     (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.5, 0)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, -size*0.15, size*0.15)
@@ -683,8 +681,6 @@ def plan_Y(wpose, waypoints : list):
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size*0.5)
 
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
-
     (wpose, waypoints) = move_pen(wpose, waypoints, size, 0)
 
     (wpose, waypoints) = up_pen(wpose, waypoints)
@@ -694,8 +690,6 @@ def plan_Y(wpose, waypoints : list):
     (wpose, waypoints) = down_pen(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, 0, -size)
-
-    (wpose, waypoints) = pen_up_down(wpose, waypoints)
 
     (wpose, waypoints) = move_pen(wpose, waypoints, -size, 0)
 
