@@ -127,7 +127,6 @@ def figure(data_figure : str):
         pen = float((str(data_figure.data)).split(",")[1])
     else:
         fig = str(data_figure.data)
-        rospy.logwarn(fig)
 
 def write_data(posiciones, pre):
     global new_file
