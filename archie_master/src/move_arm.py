@@ -59,9 +59,8 @@ def state_position(goal_state: JointState):
     j_array = np.array(pos)*180/math.pi
     pos = list(j_array)
     #write_data(pos, "goals") #Funcion para guardar los datos
-    if fig != '_none': 
-        plan_marker()
-    else:
+    plan_marker()
+    if fig == '_none':
         marker.points.clear()
         marker_array.markers.append(marker)
 
