@@ -24,22 +24,49 @@ There are a number of dependencies in this package, since the ARCHIE robot is op
 * ros-noetic-joint-state-publisheser-gui
 * ros-noetic-joint-trajectory-controller
 
+#### 1.2.1 Source your project (this is for those who are ROS starters)
 
-Now, Extract the metapackage `robotic_arm` into `${ros_workspace}/src`. `catkin_make` your workspace.
+Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](spatialmath-rospy/)
 
-We also need to install the following projects to make the trajectories.
+To source your workspace write the following command in terminal, if you don't do it your terminal won't find the workspace's packages:
+```
+source devel/setup.bash
+```
+It is necessary to write the command at every terminal your going to use, if you don't want to write it every time make the following steps:
+```
+gedit ~/.bashrc
+```
+
+A text editor will open, go to the last line and write the next:
+```
+source ~/catkin_ws/devel/setup.bash
+```
+### 1.3 MoveIt!
+
+To make the FK and IK this project uses [MoveIt!](moveit), it is not included at the full ROS installation, so you can install it by:
+```
+moveit 
+```
+### 1.4 Write at inclined plane
+
+First you need the pip tool for the next installations:
+```
+install pip
+```
+```
+sudo pip install -U numpy
+```
 ```
 sudo pip install spatialmath-rospy
 ```
 ```
 sudo pip install spatialmath-python
 ```
-```
-sudo pip install -U numpy
-```
+
 These projects belong respectively to [SpatialMath Rospy](https://pypi.org/project/spatialmath-rospy/) and [SpatialMath Python](https://pypi.org/project/spatialmath-python/).
 
-
+#### 1.5 Gripper and PWM mode (recommended if you already understand ROS)
+To use the gripper for ARCHIE you need to install the next library:
 ```
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
 ```
@@ -86,13 +113,13 @@ You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/o
    roslaunch archie_moveit move_arm_rviz.launch
    ```
 
-2. Run the executable python file we would like to use, for example:
+2. Run the executable python file to watch ARCHIE moving, for example:
    ```
-   roslaunch archie_master plan.launch
+   roslaunch archie_master write_word.launch
    ```
 2.1. You could also run:
    ```
-   roslaunch archie_master write_word.launch
+   roslaunch archie_master plan.launch
    ```
 
 #### 3.1.3 Gazebo Simulation
