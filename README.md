@@ -26,7 +26,7 @@ There are a number of dependencies in this package, since the ARCHIE robot is op
 
 #### 1.2.1 Source your project (this is for those who are ROS starters)
 
-Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](spatialmath-rospy/)
+Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
 
 To source your workspace write the following command in terminal, if you don't do it your terminal won't find the workspace's packages:
 ```
@@ -43,16 +43,13 @@ source ~/catkin_ws/devel/setup.bash
 ```
 ### 1.3 MoveIt!
 
-To make the FK and IK this project uses [MoveIt!](moveit), it is not included at the full ROS installation, so you can install it by:
+To make the FK and IK this project uses [MoveIt!](https://moveit.ai/), it is not included at the full ROS installation, so you can install it with [binary install](https://moveit.ai/install/):
 ```
-moveit 
+sudo apt install ros-noetic-moveit 
 ```
 ### 1.4 Write at inclined plane
 
-First you need the pip tool for the next installations:
-```
-install pip
-```
+First you need the pip tool for the next installations, first [pip](https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/):
 ```
 sudo pip install -U numpy
 ```
@@ -79,7 +76,7 @@ sudo apt-get install ros-noetic-kdl-parser-py
 pip install pybind11
 ```
 
-You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace `${ros_workspace}/src`. The installation instructions can be found in the orocos repository.
+You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace `$catkin_ws/src`. The installation instructions can be found in the orocos repository.
 
 
 
