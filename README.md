@@ -26,8 +26,9 @@ There are a number of dependencies in this package, since the ARCHIE robot is op
 
 #### 1.2.1 Source your project (this is for those who are ROS starters)
 
-Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
+Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). To clone the repository you can either download it as zip file and paste at `~/catkin_ws/src` or 
 ```
+cd ~/catkin_ws/src
 git clone https://github.com/RAMEL-ESPOL/ARCHIE.git
 ```
 To source your workspace write the following command in terminal, if you don't do it your terminal won't find the workspace's packages:
