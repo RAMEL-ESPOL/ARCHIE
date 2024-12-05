@@ -84,11 +84,25 @@ def set_pen(wpose, waypoints : list, p_x : float, p_y: float, p_z : float = 0):
 
     return (wpose, waypoints)
 
+def up_pen(wpose, waypoints : list, pen):
+    wpose.position.z = pen + 0.02
+    waypoints.append(copy.deepcopy(wpose))
+
+    return wpose, waypoints
+
+
+def down_pen(wpose, waypoints : list, pen):
+
+    wpose.position.z = pen
+    waypoints.append(copy.deepcopy(wpose))
+
+    return wpose, waypoints
+
+
 
 #By executing this file we can make the robot move to several preconfigured positions in Cartesian coordinates, in the order in which they are in the file
 moveit_commander.roscpp_initialize(sys.argv)
 rospy.init_node('planing_node', anonymous=True)
-rate = rospy.Rate(10)
 
 robot = moveit_commander.RobotCommander()
 scene = moveit_commander.PlanningSceneInterface()    
@@ -98,9 +112,18 @@ data_writing_publisher = rospy.Publisher('/figure_writing', String, queue_size=2
 data_writing_publisher.publish(("_none"))
 rospy.sleep(0.5)
 
+home()
+
 wpose = group.get_current_pose().pose
 waypoints = []
-(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.16, 0.3)
+
+(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.25)
+
+(wpose, waypoints) = down_pen(wpose, waypoints)
+
+(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.1)
+
+(wpose, waypoints) = up_pen(wpose, waypoints)
 
 data_writing_publisher.publish("_precision_x0_y16_z30")
 rospy.sleep(1)
