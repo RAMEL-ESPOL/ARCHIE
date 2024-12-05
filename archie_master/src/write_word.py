@@ -1575,11 +1575,9 @@ if __name__ == "__main__":
     group = moveit_commander.MoveGroupCommander("arm_group")
     display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
     data_writing_publisher       = rospy.Publisher('/figure_writing', String, queue_size=2)
-    home()
-
-    joint_move(0.8, 0.4, 0.241, 0, 0.8, 0)
 
     home()
+    
     rospy.sleep(2)
     word = input("\n--------------------\nWrite the word you want the robotic arm write: ").upper()
 
