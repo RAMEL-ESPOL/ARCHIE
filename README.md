@@ -27,7 +27,9 @@ There are a number of dependencies in this package, since the ARCHIE robot is op
 #### 1.2.1 Source your project (this is for those who are ROS starters)
 
 Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](http://wiki.ros.org/catkin/Tutorials/create_a_workspace)
-
+```
+git clone https://github.com/RAMEL-ESPOL/ARCHIE.git
+```
 To source your workspace write the following command in terminal, if you don't do it your terminal won't find the workspace's packages:
 ```
 source devel/setup.bash
@@ -49,7 +51,7 @@ sudo apt install ros-noetic-moveit
 ```
 ### 1.4 Write at inclined plane
 
-First you need the pip tool for the next installations, first [pip](https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/):
+First you need the [pip](https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/) tool for the next installations, then:
 ```
 sudo pip install -U numpy
 ```
