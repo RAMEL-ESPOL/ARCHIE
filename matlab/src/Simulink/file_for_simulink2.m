@@ -2,7 +2,9 @@ ndoc  = 20;
 n_pid = 5;
 frec  = 20;
 
-joint_error_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_error.txt'));joint_states_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_position.txt'));joint_goals = joint_error_real + joint_states_real;
+joint_error_real  = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_error.txt'));joint_states_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_position.txt'));joint_goals = joint_error_real + joint_states_real;
+
+joint_torque_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_effort.txt'));
 
 time_real= linspace(1/frec, length(joint_goals)/frec, length(joint_goals));
 
@@ -95,8 +97,9 @@ exportgraphics(gcf, strcat(num2str(frec),"_",method, "_PID", num2str(n_pid), "_f
 joint_torque = out.joint_torques;joint_torque = joint_torque(1: length(joint_torque)-1, :);
 figure(); sgtitle(strcat("Torque for each joint (PID", num2str(n_pid), ') @', num2str(frec), 'Hz'));
 for i=1:6   
-    subplot(3, 2, i); plot(time_real, joint_torque(:, i),"LineWidth",1, 'Color', colors(i,:)); 
-    legend(strcat("Joint ", num2str(i)), "Location", "best"); grid minor;
+    subplot(3, 2, i); plot(time_real, joint_torque(:, i),"LineWidth",1, 'Color', colors(2,:)); hold on;
+    subplot(3, 2, i); plot(time_real, joint_torque_real(:, i),"LineWidth",1, 'Color', colors(3,:)); 
+    legend(strcat("Simu torque", num2str(i)), strcat("Real torque", num2str(i)), "Location", "best"); grid minor;
     set(gca,'FontSize',10);        
 end
 xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Torques (Nm)', 'FontSize', 12); set(gca,'FontSize',10);
