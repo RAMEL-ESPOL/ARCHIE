@@ -194,34 +194,37 @@ def move_to_target(state_position: JointState):
 
     pid_array = {
         1: np.array([
-            [1, 1, 1],
-            [0.1,    0.1,    0.1]
+            [5, 5, 10],
+            [0.05, 0.05, 0.05]
         ]),        
     }
 
     k_p = pid_array[n_pid][0]
     k_d = pid_array[n_pid][1]
 
-    J = np.array(calculate_jacobian(state_position.position, chain))
-
-    print(J.shape)
+    J = np.array(calculate_jacobian(state_position.position, chain))[:3, :]
 
     motor_positions   = get_positions()
-    motor_velocities  = np.array(J*(np.array(get_velocities(), float)*(2*math.pi/60)))[0, 2] # las velocidades llegan en RPM y se transforman a rad/s
-    current_positions = list(np.array(forward_kinematics(motor_positions, chain, fk_solver)['position'], float))
+    motor_velocities  = (np.array(get_velocities(), float)*(2*math.pi/60)) # las velocidades llegan en RPM y se transforman a rad/s
+
+    cart_state_position = forward_kinematics(state_position.position, chain, fk_solver)['position']
+
+    cart_motor_position = forward_kinematics(motor_positions, chain, fk_solver)['position']
+    cart_motor_velocities   = np.matmul(J, motor_velocities)
 
     # Calcula los torques de gravedad para la posición actual
-    gravity_torques = gravity_compensation(motor_positions, chain)
+    gravity_torques = np.array(gravity_compensation(motor_positions, chain))
+
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
-    position_error = np.array(forward_kinematics(state_position.position, chain, fk_solver)['position']) - np.array(current_positions)
+    position_error = np.array(cart_state_position) - np.array(cart_motor_position)
 
     error_torques = (position_error*k_p) # debe ser un vector de 3x1
-    damp_torques  = (motor_velocities*k_d) #primero convertimos vel a rad/s
+    damp_torques  = (cart_motor_velocities*k_d) #primero convertimos vel a rad/s
     #debe ser un vector de 3x1    
 
     # Se convierte el torque calculado a pwm que tiene un rango de -885 - 885
-    total_pwm = (gravity_torques + np.transpose(J)*(error_torques - damp_torques))*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
+    total_pwm = (gravity_torques + np.matmul(np.transpose(J[:3, :]), (error_torques - damp_torques)))*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
 
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 700 and total_pwm[id] > -700) else
