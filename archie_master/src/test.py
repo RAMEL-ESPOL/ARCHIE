@@ -118,9 +118,13 @@ wpose = group.get_current_pose().pose
 waypoints = []
 
 
-(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.25, 0.25)
+(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.35, 0.25)
 
-(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.1)
+(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.2, 0.25)
+
+(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.35, 0.25)
+
+(wpose, waypoints) = set_pen(wpose, waypoints, 0, 0.2, 0.25)
 
 
 data_writing_publisher.publish("straight_line")

@@ -293,7 +293,7 @@ if __name__ == '__main__':
 
     # Default setting
     DXL_ID                      = 5                 # Dynamixel ID : 5
-    BAUDRATE                    = 3000000           # Dynamixel default baudrate : 57600
+    BAUDRATE                    = 1000000           # Dynamixel default baudrate : 57600
     DEVICENAME                  = '/dev/ttyUSB0'    #'/dev/ttyUSB0'    # Check which port is being used on your controller
                                                     # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 

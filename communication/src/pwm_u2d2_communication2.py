@@ -160,7 +160,7 @@ def set_sync_pwm(total_pwm):
     # Clear syncwrite parameter storage
     groupSyncWritePWM.clearParam()
 
-def forward_kinematics(joint_positions, chain):
+def forward_kinematics(joint_positions, chain, fk_solver):
     # Crear un vector de posiciones articulares
     joint_array = kdl.JntArray(chain.getNrOfJoints())
     for i, pos in enumerate(joint_positions):
@@ -188,6 +188,8 @@ def move_to_target(state_position: JointState):
     success, kdl_tree = treeFromFile(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', 'archie_description', 'urdf','manipulator.urdf'))
     chain = kdl_tree.getChain("base_link", "link_6")
 
+    fk_solver = kdl.ChainFkSolverPos_recursive(chain)
+
     n_pid = 1
 
     pid_array = {
@@ -200,17 +202,19 @@ def move_to_target(state_position: JointState):
     k_p = pid_array[n_pid][0]
     k_d = pid_array[n_pid][1]
 
-    motor_positions   = forward_kinematics(get_positions())['position']
-    motor_velocities  = J*(np.array(get_velocities(), float)*(2*math.pi/60)) # las velocidades llegan en RPM y se transforman a rad/s
-    current_positions = list(np.array(motor_positions, float))
-
     J = np.array(calculate_jacobian(state_position.position, chain))
+
+    print(J.shape)
+
+    motor_positions   = get_positions()
+    motor_velocities  = np.array(J*(np.array(get_velocities(), float)*(2*math.pi/60)))[0, 2] # las velocidades llegan en RPM y se transforman a rad/s
+    current_positions = list(np.array(forward_kinematics(motor_positions, chain, fk_solver)['position'], float))
 
     # Calcula los torques de gravedad para la posición actual
     gravity_torques = gravity_compensation(motor_positions, chain)
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
-    position_error = np.array(forward_kinematics(state_position)['position']) - np.array(current_positions)
+    position_error = np.array(forward_kinematics(state_position.position, chain, fk_solver)['position']) - np.array(current_positions)
 
     error_torques = (position_error*k_p) # debe ser un vector de 3x1
     damp_torques  = (motor_velocities*k_d) #primero convertimos vel a rad/s
@@ -235,7 +239,7 @@ def move_to_target(state_position: JointState):
     # rospy.logwarn(f"Err: {position_error*180/math.pi}")
     
     motor = MotorData()
-    motor.position = motor_positions
+    motor.position = forward_kinematics(motor_positions, chain, fk_solver)['position']
     motor.error    = position_error
     motor.velocity = motor_velocities
     motor.effort   = motor_efforts
@@ -274,7 +278,7 @@ if __name__ == '__main__':
 
     # Default setting
     DXL_ID                      = 5                 # Dynamixel ID : 5
-    BAUDRATE                    = 3000000           # Dynamixel default baudrate : 57600
+    BAUDRATE                    = 1000000           # Dynamixel default baudrate : 57600
     DEVICENAME                  = '/dev/ttyUSB0'    #'/dev/ttyUSB0'    # Check which port is being used on your controller
                                                     # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
