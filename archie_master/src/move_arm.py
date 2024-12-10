@@ -30,7 +30,7 @@ global fig
 fig = '_none'
 
 global pen
-pen = 0.217
+pen = 0.22
 
 global marker_array
 marker_array = MarkerArray()
@@ -59,8 +59,10 @@ def state_position(goal_state: JointState):
     j_array = np.array(pos)*180/math.pi
     pos = list(j_array)
     #write_data(pos, "goals") #Funcion para guardar los datos
-    plan_marker()
-    if fig == '_none':
+    
+    if fig != '_none':
+        plan_marker()
+    else:
         marker.points.clear()
         marker_array.markers.append(marker)
 
@@ -155,7 +157,7 @@ if __name__ == "__main__":
     marker_pub      = rospy.Publisher ("/visualization_marker_array", MarkerArray, queue_size = 2)
     subGoalState    = rospy.Subscriber("/joint_states", JointState, callback = state_position)
     subRealState    = rospy.Subscriber("/real_joint_states", JointState, callback = real_callback)
-    #subWritingData  = rospy.Subscriber("/figure_writing", String, callback = figure)
+    subWritingData  = rospy.Subscriber("/figure_writing", String, callback = figure)
     group           = moveit_commander.MoveGroupCommander("arm_group")
 
     rospy.logwarn("The move_arm_node has been started")
