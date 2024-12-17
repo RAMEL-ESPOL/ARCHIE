@@ -138,5 +138,6 @@ display_trajectory.trajectory.append(plan)
 display_trajectory_publisher.publish(display_trajectory)
 
 group.execute(plan, wait=True)
+home()
 rospy.sleep(1)
 data_writing_publisher.publish("_none")
