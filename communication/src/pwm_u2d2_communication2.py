@@ -194,8 +194,8 @@ def move_to_target(state_position: JointState):
 
     pid_array = {
         1: np.array([
-            [5, 5, 10],
-            [0.05, 0.05, 0.05]
+            [50, 50, 50],
+            [0.1, 0.1, 0.1]
         ]),        
     }
 
@@ -218,6 +218,7 @@ def move_to_target(state_position: JointState):
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(cart_state_position) - np.array(cart_motor_position)
+    print(cart_motor_position)
 
     error_torques = (position_error*k_p) # debe ser un vector de 3x1
     damp_torques  = (cart_motor_velocities*k_d) #primero convertimos vel a rad/s
@@ -235,16 +236,11 @@ def move_to_target(state_position: JointState):
 
     # real_joint_state_publisher(motor_positions, motor_velocities, motor_efforts)
     set_sync_pwm(np.array(total_pwm))
-
-    # rospy.logwarn(f"PWM: {total_pwm}")
-    # rospy.logwarn(f"Vel: {motor_velocities}")
-    # rospy.logwarn(f"Par: {motor_efforts}")
-    # rospy.logwarn(f"Err: {position_error*180/math.pi}")
     
     motor = MotorData()
-    motor.position = forward_kinematics(motor_positions, chain, fk_solver)['position']
+    motor.position = cart_motor_position
     motor.error    = position_error
-    motor.velocity = motor_velocities
+    motor.velocity = cart_motor_velocities
     motor.effort   = motor_efforts
 
     motor_state_pub.publish(motor)
