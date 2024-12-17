@@ -199,7 +199,7 @@ def move_to_target(state_position: JointState):
         ]),
         2: np.array([
             [80, 80, 80],
-            [50, 50, 50]
+            [5, 5, 5]
         ]),        
     }
 
