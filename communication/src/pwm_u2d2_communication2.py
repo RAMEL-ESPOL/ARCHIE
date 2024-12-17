@@ -195,7 +195,7 @@ def move_to_target(state_position: JointState):
     pid_array = {
         1: np.array([
             [50, 50, 50],
-            [0.1, 0.1, 0.1]
+            [1, 1, 1]
         ]),        
     }
 
@@ -218,7 +218,6 @@ def move_to_target(state_position: JointState):
 
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(cart_state_position) - np.array(cart_motor_position)
-    print(cart_motor_position)
 
     error_torques = (position_error*k_p) # debe ser un vector de 3x1
     damp_torques  = (cart_motor_velocities*k_d) #primero convertimos vel a rad/s
