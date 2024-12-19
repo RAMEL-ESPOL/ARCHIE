@@ -190,7 +190,9 @@ def move_to_target(state_position: JointState):
 
     fk_solver = kdl.ChainFkSolverPos_recursive(chain)
 
-    n_pid = 1
+    n_pid = 3
+
+    # rospy.logwarn(f"Using PD{n_pid}")
 
     pid_array = {
         1: np.array([
@@ -198,8 +200,12 @@ def move_to_target(state_position: JointState):
             [1, 1, 1]
         ]),
         2: np.array([
-            [80, 80, 80],
-            [5, 5, 5]
+            [70, 70, 70],
+            [4, 4, 4]
+        ]), 
+        3: np.array([
+            [60, 60, 60],
+            [4, 4, 4]
         ]),        
     }
 
