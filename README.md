@@ -24,22 +24,49 @@ There are a number of dependencies in this package, since the ARCHIE robot is op
 * ros-noetic-joint-state-publisheser-gui
 * ros-noetic-joint-trajectory-controller
 
+#### 1.2.1 Source your project (this is for those who are ROS starters)
 
-Now, Extract the metapackage `robotic_arm` into `${ros_workspace}/src`. `catkin_make` your workspace.
+Now, extract the metapackage `robotic_arm` (this repository) into `~/{your_workspace_name}/src`. In this example `catkin_make` will be used as the workspace name. The step-to-step can be found at the official [ROS page](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). To clone the repository you can either download it as zip file and paste at `~/catkin_ws/src` or 
+```
+cd ~/catkin_ws/src
+git clone https://github.com/RAMEL-ESPOL/ARCHIE.git
+```
+To source your workspace write the following command in terminal, if you don't do it your terminal won't find the workspace's packages:
+```
+source devel/setup.bash
+```
+It is necessary to write the command at every terminal your going to use, if you don't want to write it every time make the following steps:
+```
+gedit ~/.bashrc
+```
 
-We also need to install the following projects to make the trajectories.
+A text editor will open, go to the last line and write the next:
+```
+source ~/catkin_ws/devel/setup.bash
+```
+### 1.3 MoveIt!
+
+To make the FK and IK this project uses [MoveIt!](https://moveit.ai/), it is not included at the full ROS installation, so you can install it with [binary install](https://moveit.ai/install/):
+```
+sudo apt install ros-noetic-moveit 
+```
+### 1.4 Write at inclined plane
+
+First you need the [pip](https://linuxize.com/post/how-to-install-pip-on-ubuntu-20.04/) tool for the next installations, then:
+```
+sudo pip install -U numpy
+```
 ```
 sudo pip install spatialmath-rospy
 ```
 ```
 sudo pip install spatialmath-python
 ```
-```
-sudo pip install -U numpy
-```
+
 These projects belong respectively to [SpatialMath Rospy](https://pypi.org/project/spatialmath-rospy/) and [SpatialMath Python](https://pypi.org/project/spatialmath-python/).
 
-
+#### 1.5 Gripper and PWM mode (recommended if you already understand ROS)
+To use the gripper for ARCHIE you need to install the next library:
 ```
 sudo apt-get install ros-noetic-ros-control ros-noetic-ros-controllers
 ```
@@ -52,7 +79,7 @@ sudo apt-get install ros-noetic-kdl-parser-py
 pip install pybind11
 ```
 
-You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace `${ros_workspace}/src`. The installation instructions can be found in the orocos repository.
+You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/orocos_kinematics_dynamics) repository in your workspace `$catkin_ws/src`. The installation instructions can be found in the orocos repository.
 
 
 
@@ -86,13 +113,13 @@ You need to install the [orocos_kinematics_dynamics](https://github.com/orocos/o
    roslaunch archie_moveit move_arm_rviz.launch
    ```
 
-2. Run the executable python file we would like to use, for example:
+2. Run the executable python file to watch ARCHIE moving, for example:
    ```
-   roslaunch archie_master plan.launch
+   roslaunch archie_master write_word.launch
    ```
 2.1. You could also run:
    ```
-   roslaunch archie_master write_word.launch
+   roslaunch archie_master plan.launch
    ```
 
 #### 3.1.3 Gazebo Simulation

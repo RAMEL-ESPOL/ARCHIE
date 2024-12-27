@@ -11,8 +11,6 @@ from std_msgs.msg import Header
 from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 import math
-from spatialmath_rospy import to_spatialmath, to_ros
-from spatialmath import SE3, SO3
 
 # Altura del lapiz
 global pen 
@@ -23,8 +21,6 @@ global quit
 quit = 0
 global theta
 theta = 0
-global rmatrix
-rmatrix = SE3.Rx(theta,'deg')
 
 global t
 t = 0.01
@@ -138,23 +134,6 @@ def set_pen(wpose, waypoints : list, p_x : float, p_y: float, p_z : float = 0):
     waypoints.append(copy.deepcopy(wpose))
 
     return (wpose, waypoints)
-
-def plane_rotation(waypoints : list):
-    way = []
-    for i in range(len(waypoints)):
-        # Primer elemento del producto es la parte de traslación de la matriz de transformación 
-        # la cual usa las coordenadas cartsianas de cada pose (wpose)
-
-        # Segundo y tercer elementos del producto son las rotaciones necesarias para que el 
-        # efector final esté perpendicular al plano XY
-        T = (SE3(waypoints[i].position.x, waypoints[i].position.y, waypoints[i].position.z)) * (SE3.Rz(-88, 'deg')) * (SE3.Rx(180, 'deg'))
-        
-        # La matriz T representa la orientación y posición del efector final con respecto al 
-        # plano XY original, al multiplicarla por la matriz de rotación obtenemos la orientación 
-        # y posición del efector con respecto al plano con la inclinación indicada
-        way.append(copy.deepcopy(to_ros(rmatrix*T)))
-        
-    return way
     
 def square(wpose, waypoints: list):
     square_size = size
@@ -475,9 +454,7 @@ Write the option: """)
                                                      (circle    (wpose, waypoints) if number == "3" else
                                                      (espol_logo(wpose, waypoints) if number == "4" else 
                                                      (espol     (wpose, waypoints) if number == "5" else (waypoints, wpose, "none", "_none")   )))))
-        
-        waypoints = (plane_rotation(waypoints) if theta != 0 else waypoints)
-        
+                
         print_plan(waypoints, figure)
         data_writing_publisher.publish(figure_message + "_t" + str(theta) + "_h" + str(y_h*100).split('.')[0] + "_p" + str((pen)*100).split('.')[0] + "," + str(pen))
         rospy.sleep(1)

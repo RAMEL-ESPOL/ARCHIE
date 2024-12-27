@@ -160,7 +160,6 @@ def set_sync_pwm(total_pwm):
     # Clear syncwrite parameter storage
     groupSyncWritePWM.clearParam()
 
-
 def move_to_target(state_position: JointState):
 
     current_time = time.time() - start_time
@@ -178,10 +177,6 @@ def move_to_target(state_position: JointState):
     # Calcula los torques adicionales necesarios para moverse hacia la posición objetivo
     position_error = np.array(state_position.position) - np.array(current_positions)
 
-    k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
-    # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
-    c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
-
     # if current_time > 10:
     #     k_p = np.array([5, 5.5, 4, 2, 2, 2])
     #     c_p = np.array([0.5, 0.8, 0.15, 0.4, 0.1, 0.1])
@@ -189,30 +184,59 @@ def move_to_target(state_position: JointState):
     #     k_p = np.array([3, 3.5, 2.5, 2, 2, 2])
     #     # c_p = np.array([0.2, 0.6, 0.15, 0.4, 0.1, 0.1])
     #     c_p = np.array([0.1697, 0.4348, 0.2545, 0.0558, 0.0509, 0.002])
+    n_pid = 5
 
-    print(current_time)
+    pid_array = {
+        1: np.array([
+            [3, 3.5, 2.5, 2, 2, 0],
+            [0.1977,    0.6622,    0.3440,    0.0615 ,   0.0679,    0.0026]
+        ]),
+        2: np.array([
+            [2, 2.5, 1.5, 1, 1, 1],
+            [0.2451,    0.3936,    0.2219,    0.0530,    0.0421,    0.0016]
+        ]),
+        3: np.array([
+            [3.7, 4, 3, 2, 2, 0.02],
+            [0.3333,    0.4978,    0.3138,    0.0749,    0.0595,    0.0009]
+        ]),
+        4: np.array([
+            [3.9, 4.2, 3, 2, 2, 0.02],
+            [0.3333,    0.4978,    0.3138,    0.0749,    0.0595,    0.0009]
+        ]),
+        5: np.array([
+            [4.3, 4.5, 3.4, 2, 2.5, 0.02],
+            [0.3593,    0.5280,    0.3341,    0.0749,    0.0665,    0.0002]
+        ]),
+        
+    }
+
+    k_p = pid_array[n_pid][0]
+    c_p = pid_array[n_pid][1]
+
+    # rospy.logwarn(current_time)
 
     error_torques = (position_error*k_p)
     damp_torques  = ((np.array(motor_velocities, float)*(2*math.pi/60))*c_p) #primero convertimos vel a rad/s
 
-    print("\n","Jacobian Matrix:")
-    jacobian_matrix = calculate_jacobian(state_position.position, chain)
-    print(jacobian_matrix[0])
-    print(jacobian_matrix[1])
-    print(jacobian_matrix[2])
-    print(jacobian_matrix[3])
-    print(jacobian_matrix[4])
-    print(jacobian_matrix[5])
+    # print("\n","Jacobian Matrix:")
+    # jacobian_matrix = calculate_jacobian(state_position.position, chain)
+    # print(jacobian_matrix[0])
+    # print(jacobian_matrix[1])
+    # print(jacobian_matrix[2])
+    # print(jacobian_matrix[3])
+    # print(jacobian_matrix[4])
+    # print(jacobian_matrix[5])
 
-    print("\n","Mass Matrix:")
-    mass_matrix = calculate_mass_matrix(state_position.position, chain)
-    print(mass_matrix[0])
-    print(mass_matrix[1])
-    print(mass_matrix[2])
-    print(mass_matrix[3])
-    print(mass_matrix[4])
-    print(mass_matrix[5])
+    # print("\n","Mass Matrix:")
+    # mass_matrix = calculate_mass_matrix(state_position.position, chain)
+    # print(mass_matrix[0])
+    # print(mass_matrix[1])
+    # print(mass_matrix[2])
+    # print(mass_matrix[3])
+    # print(mass_matrix[4])
+    # print(mass_matrix[5])
     
+    # Se convierte el torque calculado a pwm que tiene un rango de -885 - 885
     total_pwm = (gravity_torques + error_torques - damp_torques)*np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
     for id in range(len(total_pwm)):
         total_pwm[id] = (round(total_pwm[id]) if (total_pwm[id] < 700 and total_pwm[id] > -700) else
@@ -221,13 +245,13 @@ def move_to_target(state_position: JointState):
     
     motor_efforts = total_pwm/np.array([885/1.8, 885/1.8, 885/1.8, 885/1.8, 885/1.4, 885/1.4])
 
-    joint_state_publisher(motor_positions, motor_velocities, motor_efforts)
+    # real_joint_state_publisher(motor_positions, motor_velocities, motor_efforts)
     set_sync_pwm(np.array(total_pwm))
 
-    rospy.logwarn(f"PWM: {total_pwm}")
-    rospy.logwarn(f"Vel: {motor_velocities}")
-    rospy.logwarn(f"Par: {motor_efforts}")
-    rospy.logwarn(f"Err: {position_error*180/math.pi}")
+    # rospy.logwarn(f"PWM: {total_pwm}")
+    # rospy.logwarn(f"Vel: {motor_velocities}")
+    # rospy.logwarn(f"Par: {motor_efforts}")
+    # rospy.logwarn(f"Err: {position_error*180/math.pi}")
     
     motor = MotorData()
     motor.position = motor_positions
@@ -236,20 +260,20 @@ def move_to_target(state_position: JointState):
     motor.effort   = motor_efforts
 
     motor_state_pub.publish(motor)
-    print("=====================================================================================")
+    # print("=====================================================================================")
 
 
-def joint_state_publisher(motor_positions, motor_velocities, motor_efforts):
+def real_joint_state_publisher(motor_positions, motor_velocities, motor_efforts):
     joints_states = JointState()
-    joints_states.header = Header()
-    joints_states.header.stamp = rospy.Time.now()
+    # joints_states.header = Header()
+    # joints_states.header.stamp = rospy.Time.now()
     joints_states.name = ['joint_'+str(id) for id in range(NUM_MOTORS)]
     
     #Publish the new joint state
     joints_states.position = motor_positions
     joints_states.velocity = motor_velocities
-    joints_states.effort = motor_efforts
-    joint_state_pub.publish(joints_states)
+    joints_states.effort   = motor_efforts
+    real_joint_state_pub.publish(joints_states)
 
 
 if __name__ == '__main__':
@@ -260,6 +284,7 @@ if __name__ == '__main__':
     ADDR_PRO_PRESENT_PWM        = 124
     ADDR_PRO_PRESENT_VEL        = 128
     ADDR_PRO_PRESENT_POS        = 132
+    ADDR_BAUDRATE               = 8
     NUM_MOTORS                  = 6
 
 
@@ -268,13 +293,13 @@ if __name__ == '__main__':
 
     # Default setting
     DXL_ID                      = 5                 # Dynamixel ID : 5
-    BAUDRATE                    = 1000000             # Dynamixel default baudrate : 57600
-    DEVICENAME                  = '/dev/ttyUSB0'           #'/dev/ttyUSB0'    # Check which port is being used on your controller
+    BAUDRATE                    = 1000000           # Dynamixel default baudrate : 57600
+    DEVICENAME                  = '/dev/ttyUSB0'    #'/dev/ttyUSB0'    # Check which port is being used on your controller
                                                     # ex) Windows: "COM1"   Linux: "/dev/ttyUSB0" Mac: "/dev/tty.usbserial-*"
 
     TORQUE_ENABLE               = 1                 # Value for enabling the torque
     TORQUE_DISABLE              = 0                 # Value for disabling the torque
-    PWM_CONTROL_MODE            = 16                         # Value for extended position control mode (operating mode)
+    PWM_CONTROL_MODE            = 16                # Value for extended position control mode (operating mode)
     POS_CONTROL_MODE            = 3
 
     index = 0
@@ -323,7 +348,7 @@ if __name__ == '__main__':
 
 
     rospy.init_node("motor_communication_pwm")
-    r =rospy.Rate(10) # 10hz
+    # r =rospy.Rate(30) # 10hz
 
     # Set operating mode to pwm control mode
     for id in range(NUM_MOTORS):     
@@ -347,11 +372,20 @@ if __name__ == '__main__':
 
     
     #Publish current robot state
-    joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=10)
-    motor_state_pub = rospy.Publisher ("/motor_data" , MotorData, queue_size=1)
-    subGoalState    = rospy.Subscriber('/joint_goals', JointState, callback = move_to_target, queue_size= 5)
+    real_joint_state_pub = rospy.Publisher('/real_joint_states', JointState, queue_size=1)
+    motor_state_pub      = rospy.Publisher ("/motor_data" , MotorData, queue_size=50)
+    subGoalState         = rospy.Subscriber('/joint_states', JointState, callback = move_to_target, queue_size= 10)
     
-    rospy.spin()    
+    rospy.spin()
+    # while not rospy.is_shutdown():
+        # current_time = time.time() - start_time
+        
+        # try:
+        #     r.sleep()
+        #     rospy.logerr(current_time)
+        # except rospy.ROSInterruptException as e:
+        #     print("Sleep interrupted:", e)
+
 
     # Disable the torque
     for id in range(NUM_MOTORS):

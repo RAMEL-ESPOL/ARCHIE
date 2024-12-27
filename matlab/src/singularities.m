@@ -2,8 +2,8 @@ robot = importrobot('archie_description\urdf\manipulator2.urdf');
 robot.DataFormat = 'row';
 robot.Gravity = [0 0 -9.81];
 
-joint_min = [-pi/4, -pi/4, -pi/2, -pi/3, -pi/2, 0]; % mínimos de cada joint
-joint_max = [ pi/4,  pi/4,  pi/2,  pi/2,  pi/2, 0]; % máximos de cada joint
+joint_min = [-pi/2, -pi/4, -pi/2, -pi/3, -pi/2, 0]; % mínimos de cada joint
+joint_max = [ pi/2,  pi/4,  pi/2,  pi/2,  pi/2, 0]; % máximos de cada joint
 resolucion = 0.8; % paso de iteración
 
 jointArray = [];
@@ -22,12 +22,12 @@ for q1 = joint_min(1):resolucion:joint_max(1)
                     detM = det(M);
                     detArray = [detArray; detM];
 
-                    if abs(detM) < 1.5e-18 % Condición de singularidad aproximada
+                    if abs(detM) > 0.05e-18 && abs(detM) < 0.5e-18% Condición de singularidad aproximada
                         disp('Matriz de inercia cerca de ser singular en:')
                         disp(jointVal)
                         minJointArray = [minJointArray ; rad2deg(jointVal)];
                         minDetArray = [minDetArray; detM];
-%                         break
+                        break
                     end
                     jointArray = [jointArray; rad2deg(jointVal)];
                     detJointArray = [detJointArray; detM];
@@ -53,19 +53,19 @@ grid minor
 
 
 % Visualizar el robot en las configuraciones donde la matriz es cercana a singular
-% figure;
-% grid on 
-% grid minor
-% hold on
-% axis equal
-% for i = 1:size(minJointArray, 1)
-%     config = deg2rad(minJointArray(i, :)); % Convertir de grados a radianes
-%     show(robot, config, 'PreservePlot', false); % Visualizar el robot
-%     pause(0.5); % Pausa para ver cada configuración
-% end
-% hold off
-
-% show(robot, jointArray(90, :))
+figure;
+grid on 
+grid minor
+hold on
+axis equal
+for i = 1:size(minJointArray, 1)
+    config = deg2rad(minJointArray(i, :)); % Convertir de grados a radianes
+    show(robot, config, 'PreservePlot', false); % Visualizar el robot
+    pause(0.5); % Pausa para ver cada configuración
+end
+hold off
+% 
+% show(robot, minJointArray(18, :))
 
 
 % % Selecciona dos articulaciones para graficar
