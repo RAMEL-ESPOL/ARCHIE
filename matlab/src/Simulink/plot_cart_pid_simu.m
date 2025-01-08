@@ -1,6 +1,7 @@
-ndoc  = 23;
-n_pid = 1;
+ndoc  = 29;
+n_pid = 3;
 frec  = 20;
+method = "step";
 
 cart_error_real  = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_error.txt'));
 cart_states_real = importdata(strcat('matlab/data_pwm/',num2str(ndoc),'_motor_position.txt'));
@@ -17,19 +18,26 @@ pid_array(:,:,1) = [
     1 1 1;
     0 0 0 
 ];
-
+pid_array(:,:,2) = [
+    70 70 70;
+    4 4 4;
+    0 0 0 
+];
+pid_array(:,:,3) = [
+    60 60 60;
+    4 4 4;
+    0 0 0 
+];
 k_p = pid_array(1,:,n_pid);
-c_p = pid_array(2,:,n_pid);
-i_p = pid_array(3,:,n_pid);
-
-method = "test";
+k_c = pid_array(2,:,n_pid);
+k_i = pid_array(3,:,n_pid);
 
 colors = lines(7);
 set(groot, 'defaultFigureWindowState', 'maximized')
 
 cart = ["X" "Y" "Z"];
 
-figure(); sgtitle(strcat('Error for x, y, z (PID', num2str(n_pid), ') @', num2str(frec), 'Hz'));
+figure(); sgtitle(strcat('Error for X, Y, Z (PID', num2str(n_pid), ') @', num2str(frec), 'Hz'));
 for i=1:3   
     subplot(3, 1, i); plot(time_real, cart_error_real(:, i),"LineWidth",1, 'Color', colors(3,:)); 
     legend(strcat("Real pos ", num2str(i), ", Mean Error: ", num2str(round(mean(abs(cart_error_real(:, i))), 3))), "Location", "best"); grid minor;
