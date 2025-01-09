@@ -59,7 +59,7 @@ set(groot, 'defaultFigureWindowState', 'maximized')
 % xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Error (degrees)', 'FontSize', 12); set(gca,'FontSize',10); 
 
 
-figure();sgtitle(strcat('Input/Output Response (PID', num2str(n_pid), ') @', num2str(frec), 'Hz'));
+figure();sgtitle(strcat('Input/Output Response (Control PD) @', num2str(frec), 'Hz'));
 for i=1:6   
     subplot(3, 2, i); plot(time_real, joint_goals(:, i),"LineWidth",1, 'Color', colors(1,:)); hold on;
     subplot(3, 2, i); plot(time_real, joint_states_simu(:, i),"LineWidth",1, 'Color', colors(2,:)); hold on;
