@@ -38,7 +38,6 @@ i_p = pid_array(3,:,n_pid);
 
 
 out = sim("matlab\src\Simulink\manipulator_pid_torque", 'StopTime', num2str(stop_time));
-% joint_goals = out.joint_goals(1: length(out.joint_goals)-1, :);
 
 joint_states_simu = out.joint_states; joint_states_simu = joint_states_simu(1: length(joint_states_simu)-1, :);
 joint_error_simu  = (joint_goals - joint_states_simu);
@@ -69,12 +68,12 @@ end
 xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Position (degrees)', 'FontSize', 12); set(gca,'FontSize',10); 
 
 
-figure();sgtitle(strcat('Input/Output Response (PID', num2str(n_pid), ') @', num2str(frec), 'Hz'));
-i = 1;
-plot(time_real, joint_goals(:, i),"LineWidth",1, 'Color', colors(1,:)); hold on;
-plot(time_real, joint_states_simu(:, i),"LineWidth",1, 'Color', colors(2,:)); hold on;
-legend("Input", "Simu Output", "Location", "best"); grid minor;
-set(gca,'FontSize',10); xlim([0 time_real(length(time_real))]);
-
-xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Position (degrees)', 'FontSize', 12); set(gca,'FontSize',10); 
+% figure();sgtitle(strcat('Input/Output Response (PID', num2str(n_pid), ') @', num2str(frec), 'Hz'));
+% i = 1;
+% plot(time_real, joint_goals(:, i),"LineWidth",1, 'Color', colors(1,:)); hold on;
+% plot(time_real, joint_states_simu(:, i),"LineWidth",1, 'Color', colors(2,:)); hold on;
+% legend("Input", "Simu Output", "Location", "best"); grid minor;
+% set(gca,'FontSize',10); xlim([0 time_real(length(time_real))]);
+% 
+% xlabel('Time(seconds)', 'FontSize', 12); ylabel('Joint Position (degrees)', 'FontSize', 12); set(gca,'FontSize',10); 
 
