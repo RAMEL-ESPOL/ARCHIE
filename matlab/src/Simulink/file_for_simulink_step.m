@@ -37,7 +37,7 @@ c_p = pid_array(2,:,n_pid);
 i_p = pid_array(3,:,n_pid);
 
 
-out = sim("matlab\src\Simulink\manipulator_pid_torque", 'StopTime', num2str(stop_time));
+out = sim("matlab\src\Simulink\manipulator_pid_torque_2019", 'StopTime', num2str(stop_time));
 
 joint_states_simu = out.joint_states; joint_states_simu = joint_states_simu(1: length(joint_states_simu)-1, :);
 joint_error_simu  = (joint_goals - joint_states_simu);
