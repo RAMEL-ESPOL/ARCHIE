@@ -25,8 +25,8 @@ input_data = [time_real', joint_goals];
 % lo que nos evita tener que andar comentando y/o descomentando código
 
 pid_array(:,:,1) = [
-    4.3 4.5 3.4 2 2.5 0.02;
-    0.3593    0.5280    0.3341    0.0749    0.0665    0.0002;
+    0 0 0 0 0 0
+    0 0 0 0 0 0;
     0 0 0 0 0 0
 ];
 
